@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
+    <h:head>
+        <title>Albums detail</title>
+        <h:outputStylesheet name="css/main.css" />
+        <h:outputStylesheet name="css/albums.css" />
+    </h:head>
+    <h:body>
+        <div class="banner header">
+            Header
+        </div>
+        
+        <ul class="sidebar">
+            <li><a href="index.xhtml">Home</a></li>
+            <li><a href="albums.xhtml">Albums</a></li>
+            <li><a href="photos.xhtml">Photos</a></li>
+        </ul>
+
+        <div class="wrapper">
+            <h1>Album</h1>
+            
+            <div class="album-header">
+                <div class="album-cover">
+                    <h:graphicImage name="#{tableAlbumsBean.selectedAlbum.coverImage}" library="images" alt="Album Cover" />
+                </div>
+                <div class="album-info">
+                    <h:outputText value="#{tableAlbumsBean.selectedAlbum.name}" styleClass="album-name" />
+                    <h:outputText value="#{tableAlbumsBean.selectedAlbum.description}" styleClass="album-description" />
+                
+               
+                    <h:panelGrid columns="2" styleClass="album-details">
+                        <h:outputLabel value="Creation date:" />
+                        <h:outputText value="#{tableAlbumsBean.selectedAlbum.created}" />
+
+                        <h:outputLabel value="Last edited:" />
+                        <h:outputText value="#{tableAlbumsBean.selectedAlbum.lastEdited}" />
+
+                        <h:outputLabel value="No. of photos" />
+                        <h:outputText value="#{tableAlbumsBean.selectedAlbum.photos.size()}" />
+                    </h:panelGrid>
+                </div>
+            </div>
+            
+
+<!--            <h:dataTable value="#{tableAlbumsBean.selectedAlbum.photos}" var="photo" styleClass="photo-gallery">
+                <h:column>
+                    <h:graphicImage name="#{photo.fileName}" library="images" alt="#{photo.description}" />
+                </h:column>
+            </h:dataTable>-->
+            <div class="photo-gallery">
+                <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="photo">
+                    <h:graphicImage name="#{photo.fileName}" library="images" alt="#{photo.description}" />
+                </ui:repeat>
+            </div>
+        </div>
+        <div class="banner footer">
+            Footer
+        </div>
+    </h:body>
+</html>
+
