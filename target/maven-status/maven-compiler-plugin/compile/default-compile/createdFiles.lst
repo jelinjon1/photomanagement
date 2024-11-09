@@ -1,2 +1,10 @@
-photomanagement\resources\JakartaEE10Resource.class
+photomanagement\faces\CollectionPhotosBean.class
+photomanagement\services\AlbumDatabaseService.class
 photomanagement\JakartaRestConfiguration.class
+photomanagement\initializer\SystemInitializer.class
+photomanagement\faces\TableAlbumsBean.class
+photomanagement\faces\model\Photo.class
+photomanagement\resources\JakartaEE10Resource.class
+photomanagement\faces\model\Album.class
+photomanagement\services\PhotoDatabaseService.class
+photomanagement\faces\CreateAlbumBean.class

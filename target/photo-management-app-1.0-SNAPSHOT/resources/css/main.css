@@ -9,10 +9,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 body {
     margin: 0px;
 }
+
+.banner {
+    color: white;
+    text-align: center;
+    background-color: #523800;
+    
+    &.header {
+        font-size: 50px;
+        padding: 20px;
+    }
+}
+
 .wrapper {
     margin-left: 20px;
+    
+    img {
+    }
 }
-ul {
+.sidebar {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -31,6 +46,7 @@ ul {
         
         &:hover {
             background-color: #acc395;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
         
         &.active {
@@ -38,4 +54,14 @@ ul {
         }
     }
   }
+}
+
+
+table {
+    border-collapse: collapse;
+    
+    th, td {
+        padding: 10px;
+        border: 1px solid black;
+    }
 }
