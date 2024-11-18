@@ -4,11 +4,13 @@
  */
 package photomanagement.faces.model;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,10 +23,13 @@ public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String fileName;
-    private List<String> tags;
-    private String description;
+    private String fileName; //example.jpg
+    private String localPath; //dir/dir
+    @ElementCollection
+    private List<String> tags = new ArrayList<>();
+    private String description = "no description";
     private LocalDate taken = LocalDate.now();
+    private boolean selected = true;
 
     public Photo() {
     }
@@ -67,4 +72,15 @@ public class Photo {
         this.taken = taken;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public Long getId() {
+        return id;
+    }
 }

@@ -16,7 +16,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             Header
         </div>
         
-        <ul class="sidebar">
+        <ul class="topnav">
             <li><a href="index.xhtml">Home</a></li>
             <li><a class="active" href="albums.xhtml">Albums</a></li>
             <li><a href="photos.xhtml">Photos</a></li>
@@ -24,8 +24,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 
         <div class="wrapper">
             <h1>Albums</h1>
-            
-            
             
             <h:form id="listform">
                 <h:commandButton value="NEW ALBUM" action="#{tableAlbumsBean.createAlbum}"/>
@@ -60,15 +58,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             <f:facet name="header">Action</f:facet>
                             <h:commandButton value="SELECT" action="#{tableAlbumsBean.selectAlbum}"/>
                             &nbsp;
+                            <h:commandButton class="delete" value="DELETE" action="#{tableAlbumsBean.deleteAlbum}"/>
+                            &nbsp;
                             <h:commandLink value="Go to detail" action="#{tableAlbumsBean.goToDetailRedirect}"/>
                         </h:column>
                     </h:dataTable>
                 </p>
                 <h:panelGroup rendered="#{not empty tableAlbumsBean.selectedAlbum}">
-                <p>Selected album: #{tableAlbumsBean.selectedAlbum.name}, #{tableAlbumsBean.selectedAlbum.description}</p>
+                    <p>Selected album: #{tableAlbumsBean.selectedAlbum.name}, #{tableAlbumsBean.selectedAlbum.description}</p>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{empty tableAlbumsBean.selectedAlbum}">
-                <p>No album is selected.</p>
+                    <p>No album is selected.</p>
                 </h:panelGroup>
             </h:form>
         </div>

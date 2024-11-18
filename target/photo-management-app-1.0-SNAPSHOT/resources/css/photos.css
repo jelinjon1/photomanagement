@@ -6,10 +6,34 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Created on : 9. 11. 2024, 22:19:04
     Author     : Jonáš
 */
+.controls {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    
+    label, select {
+        padding: 10px 20px;
+        border: 1px solid var(--dark-green);
+    }
+}
+.action-buttons-wrapper {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+    
+    &.active{
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
 .photo-gallery {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 5px;
     margin-top: 20px;
     margin-bottom: 20px;
     justify-content: flex-start;
@@ -27,7 +51,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 .photo-wrapper {
     position: relative;
     border-radius: 5px;
-    margin: 10px;
+    margin: 5px;
     overflow: hidden;
 }
 

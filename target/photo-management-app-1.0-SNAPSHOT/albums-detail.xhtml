@@ -12,13 +12,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <title>Albums detail</title>
         <h:outputStylesheet name="css/main.css" />
         <h:outputStylesheet name="css/albums.css" />
+        <h:outputStylesheet name="css/photos.css" />
     </h:head>
     <h:body>
         <div class="banner header">
             Header
         </div>
         
-        <ul class="sidebar">
+        <ul class="topnav">
             <li><a href="index.xhtml">Home</a></li>
             <li><a href="albums.xhtml">Albums</a></li>
             <li><a href="photos.xhtml">Photos</a></li>
@@ -48,18 +49,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </h:panelGrid>
                 </div>
             </div>
-            
-
-<!--            <h:dataTable value="#{tableAlbumsBean.selectedAlbum.photos}" var="photo" styleClass="photo-gallery">
-                <h:column>
-                    <h:graphicImage name="#{photo.fileName}" library="images" alt="#{photo.description}" />
-                </h:column>
-            </h:dataTable>-->
-            <div class="photo-gallery">
-                <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="photo">
-                    <h:graphicImage name="#{photo.fileName}" library="images" alt="#{photo.description}" />
-                </ui:repeat>
-            </div>
+            <h:form>
+                <h:commandButton value="Add to Album" action="#{tableAlbumsBean.removeFromAlbum}" />
+                <div class="photo-gallery">
+                    <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="photo">
+                        <div class="photo-wrapper">
+                            <h:graphicImage class="photo" name="#{photo.fileName}" library="images" alt="#{photo.description}" />
+                            <div class="photo-details">
+                                <p>File Name: #{photo.fileName}</p>
+                                <p>Description: #{photo.description}</p>
+                                <p>Tags: #{photo.tags}</p>
+                                <p>Taken: #{photo.taken}</p>
+                                <h:selectBooleanCheckbox value="#{collectionPhotosBean.selectedPhotos[photo.id]}" />
+                            </div>
+                        </div>
+                    </ui:repeat>
+                </div>
+            </h:form>
         </div>
         <div class="banner footer">
             Footer

@@ -10,6 +10,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import photomanagement.exception.PersistenceException;
 import photomanagement.faces.model.Album;
 
 /**
@@ -44,11 +46,21 @@ public class AlbumDatabaseService {
     }
 
     @Transactional
+    public Album update(Album album) {
+        Objects.requireNonNull(album);
+        try {
+            return entityManager.merge(album);
+        } catch (RuntimeException e) {
+            throw new PersistenceException(e);
+
+        }
+    }
+
+    @Transactional
     public void deleteAlbum(Long id) {
         Album album = entityManager.find(Album.class, id);
         if (album != null) {
             entityManager.remove(album);
         }
     }
-    
 }

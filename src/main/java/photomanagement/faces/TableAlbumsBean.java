@@ -52,6 +52,11 @@ public class TableAlbumsBean implements Serializable {
         selectedAlbum = albumsList.getRowData();
     }
 
+    public void deleteAlbum() {
+        selectedAlbum = albumsList.getRowData();
+        albumDatabaseService.deleteAlbum(selectedAlbum.getId());
+    }
+
     public String goToDetailRedirect() {
         selectedAlbum = albumsList.getRowData();
         return "albums-detail.xhtml?faces-redirect=true";

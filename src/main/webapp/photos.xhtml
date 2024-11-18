@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets">
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
     <h:head>
         <title>Photo managment application</title>
         <h:outputStylesheet name="css/main.css" />
@@ -14,33 +15,62 @@
         <div class="banner header">
             Header
         </div>
-        <ul class="sidebar">
+        <ul class="topnav">
             <li><a href="index.xhtml">Home</a></li>
             <li><a href="albums.xhtml">Albums</a></li>
             <li><a class="active" href="photos.xhtml">Photos</a></li>
         </ul>
         <div class="wrapper">
             <h1>Photos</h1>
-            
-            <div class="photo-gallery">
-                <ui:repeat value="#{collectionPhotosBean.photosList}" var="photo">
-                    <div class="photo-wrapper">
-                        <h:graphicImage class="photo" name="#{photo.fileName}" library="images" alt="#{photo.description}" />
-                        <div class="photo-details">
-                            <p>File Name: #{photo.fileName}</p>
-                            <p>Description: #{photo.description}</p>
-                            <p>Tags: #{photo.tags}</p>
-                            <p>Taken: #{photo.taken}</p>
+            <h:form id="photos-form">
+                <div class="controls">
+                    <h:commandButton value="Add to album" action="#{collectionPhotosBean.addToAlbum}" />
+                    <h:selectOneMenu value="#{collectionPhotosBean.selectedAlbumId}" styleClass="album-selector">
+                        <f:selectItems value="#{collectionPhotosBean.albumOptions}" var="album" 
+                                   itemValue="#{album.id}" itemLabel="#{album.name}" />
+                    </h:selectOneMenu>
+                    
+                    <h:outputLabel id="counter" value="#{collectionPhotosBean.selectedPhotoCount} photos selected" />
+                    
+                    <h:panelGroup id="actionButtonsWrapper">
+                        <h:panelGroup 
+                            styleClass="#{collectionPhotosBean.selectedPhotoCount > 0 ? 'action-buttons-wrapper active' : 'action-buttons-wrapper'}">
+                            <h:commandButton value="Clear sellection" id="clear"/>
+                            <h:commandButton value="Delete selection" id="delete"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    
+                </div>
+                <div class="photo-gallery">
+                    <ui:repeat value="#{collectionPhotosBean.photosList}" var="photo">
+                        <div class="photo-wrapper" id="photo_#{photo.id}">
+                            <h:graphicImage class="photo" name="#{photo.fileName}" library="images" alt="#{photo.description}" />
+                            <div class="photo-details" id="detail_#{photo.id}">
+                                <p>File Name: #{photo.fileName}</p>
+                                <p>Description: #{photo.description}</p>
+                                <p>Tags: #{photo.tags}</p>
+                                <p>Taken: #{photo.taken}</p>
+                                <h:selectBooleanCheckbox value="#{collectionPhotosBean.selectedPhotos[photo.id]}">
+                                    <f:ajax render="photos-form:counter photos-form:actionButtonsWrapper" />
+                                </h:selectBooleanCheckbox>
+                            </div>
                         </div>
-                    </div>
-                </ui:repeat>
-            </div>
+                    </ui:repeat>
+                </div>
+            </h:form>
             
         </div>
 
         <div class="banner footer">
             Footer
         </div>
+        <script>
+            const element1 = document.getElementById("photos-form:actionButtonsWrapper");
+//            const element2 = document.getElementById("photos-form:delete");
+            console.log(element1);
+//            console.log(element2);
+        </script>
     </h:body>
 </html>
 

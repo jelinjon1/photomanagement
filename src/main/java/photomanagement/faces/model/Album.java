@@ -133,4 +133,11 @@ public class Album {
         this.coverImage = coverImage;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void addPhoto(Photo photo) {
+        photos.add(photo);
+    }
 }
