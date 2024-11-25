@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +28,22 @@ public class Photo {
     private String localPath; //dir/dir
     @ElementCollection
     private List<String> tags = new ArrayList<>();
-    private String description = "no description";
+    private String description = null;
     private LocalDate taken = LocalDate.now();
     private boolean selected = true;
 
     public Photo() {
     }
 
-    public Photo(String fileName, List<String> tags, String description) {
+    public Photo(String fileName, List<String> tags, String description, String localPath) {
         this.fileName = fileName;
         this.tags = tags;
         this.description = description;
+        this.localPath = localPath;
+    }
+
+    public Photo(File file, String localPath) {
+        this(file.getName(), new ArrayList<>(), null, localPath);
     }
 
     public String getFileName() {
@@ -83,4 +89,13 @@ public class Photo {
     public Long getId() {
         return id;
     }
+
+    public String getLocalPath() {
+        return localPath;
+    }
+
+    public String getRelativePathFromRoot() {
+        return localPath + "/" + fileName;
+    }
+
 }

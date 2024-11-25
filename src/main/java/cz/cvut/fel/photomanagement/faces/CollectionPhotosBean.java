@@ -9,7 +9,6 @@ import cz.cvut.fel.photomanagement.faces.model.Photo;
 import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
 import cz.cvut.fel.photomanagement.services.FileLoader;
 import cz.cvut.fel.photomanagement.services.PhotoDatabaseService;
-import cz.cvut.fel.photomanagement.services.PhotoLoader;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
@@ -26,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -44,8 +44,6 @@ public class CollectionPhotosBean implements Serializable {
     private List<Album> albumOptions;
     private Photo selectedPhoto = null;
     private Long selectedPhotoParameter;
-    @Inject
-    private PhotoLoader photoLoader;
     private DataModel<Photo> photosList;
     @Inject
     private FileLoader fileLoader;
@@ -54,14 +52,12 @@ public class CollectionPhotosBean implements Serializable {
     private String filesPathPrefix;
     private ArrayList<String> paths;
 
+
     @PostConstruct
     public void initDB() {
-        filesList = fileLoader.loadFiles();
+//        filesList = fileLoader.loadFiles();
         filesPathPrefix = fileLoader.getPhotosDirectoryPath();
         paths = new ArrayList<>();
-
-        photoLoader.loadAndPersistPhotos();
-        photosList = new ListDataModel<>(new ArrayList<>(photoDatabaseService.listAllPhotos()));
         albumOptions = albumDatabaseService.listAllAlbums();
 
         if (photosList != null) {
@@ -72,10 +68,26 @@ public class CollectionPhotosBean implements Serializable {
     }
 
     public void loadFiles() {
-        filesList = fileLoader.loadFiles(filesPath);
+        List<File> allFiles = fileLoader.loadFiles(filesPath);
+
+        filesList = new ListDataModel<>(allFiles.stream()
+                .filter(File::isDirectory)
+                .collect(Collectors.toList()));
+
+        photosList = new ListDataModel<>(allFiles.stream()
+                .filter(file -> file.isFile() && isPhoto(file))
+                .map(file -> new Photo(file, filesPath))
+                .collect(Collectors.toList()));
+    }
+
+    private boolean isPhoto(File file) {
+        String name = file.getName().toLowerCase();
+        return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".gif");
     }
 
     public String navigateTo(String fileName) {
+        System.out.println("NAVIGATING TO: " + fileName);
+
         if (fileName.length() == 0) {
             paths.clear();
         } else if (paths.contains(fileName)) {
@@ -90,9 +102,6 @@ public class CollectionPhotosBean implements Serializable {
         } else {
             paths.add(fileName);
         }
-
-        System.out.println("NAVIGATE TO:");
-        System.out.println(fileName);
         return "photos.xhtml";
     }
 
@@ -108,18 +117,17 @@ public class CollectionPhotosBean implements Serializable {
             return;
         }
 
-        for (Map.Entry<Long, Boolean> entry : selectedPhotos.entrySet()) {
-            if (entry.getValue()) { // If selected
-                Long photoId = entry.getKey();
-                for (Photo photo : photosList) {
-                    if (photo.getId().equals(photoId)) {
-                        album.addPhoto(photo);
-                        break;
-                    }
-                }
-            }
-        }
-
+//        for (Map.Entry<Long, Boolean> entry : selectedPhotos.entrySet()) {
+//            if (entry.getValue()) { // If selected
+//                Long photoId = entry.getKey();
+//                for (Photo photo : photosList) {
+//                    if (photo.getId().equals(photoId)) {
+//                        album.addPhoto(photo);
+//                        break;
+//                    }
+//                }
+//            }
+//        }
         albumDatabaseService.update(album);
         selectedPhotos.replaceAll((id, selected) -> false);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Photos added to album successfully", null));
@@ -134,7 +142,6 @@ public class CollectionPhotosBean implements Serializable {
     }
 
     public DataModel<Photo> getPhotosList() {
-        photosList = new ListDataModel<>(new ArrayList<>(photoDatabaseService.listAllPhotos()));
         return photosList;
     }
 

@@ -10,7 +10,6 @@
         <title>Photo managment application</title>
         <h:outputStylesheet name="css/main.css" />
         <h:outputStylesheet name="css/photos.css" />
-        <h:outputStylesheet name="https://fonts.googleapis.com/icon?family=Material+Icons" />
     </h:head>
     <h:body>
         <f:metadata>
@@ -37,7 +36,7 @@
             <h:form>
                 <div class="path-link-wrapper">
                 
-                    <h:commandLink value="#{collectionPhotosBean.filesPathPrefix}" action="#{collectionPhotosBean.navigateTo(path)}">
+                    <h:commandLink value="Home" action="#{collectionPhotosBean.navigateTo(path)}">
                         <f:param name="path" value=""/>
                     </h:commandLink>
                 
@@ -68,10 +67,31 @@
                     </h:panelGroup>
                 </div>
                 
-<!--            <div class="photo-gallery">
+                <div id="directories-list">
+                    <h:dataTable value="#{collectionPhotosBean.filesList}" var="file">
+                        <div class="file-wrapper" id="file_#{file.name}">
+                            <h:column>
+                                <f:facet name="header">File Name</f:facet>
+                                <h:commandLink value="#{file.name}" action="#{collectionPhotosBean.navigateTo(file.name)}">
+                                    <f:param name="path" value="/#{file.name}"/>
+                                </h:commandLink>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Number of subdirectories</f:facet>
+                                    #{file.listFiles()}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Last Modified</f:facet>
+                                    #{file.lastModified()}
+                            </h:column>
+                        </div>
+                    </h:dataTable>
+                </div>
+                
+                <div class="photo-gallery">
                     <ui:repeat value="#{collectionPhotosBean.photosList}" var="photo">
-                        <div class="photo-wrapper" id="photo_#{photo.id}">
-                            <h:graphicImage class="photo" name="#{photo.fileName}" library="images" alt="#{photo.description}" />
+                        <div class="photo-wrapper" id="photo_wrapper_#{photo.id}">
+                            <h:graphicImage class="photo" id="photo_#{photo.id}" value="#{'documentfiles'.concat(photo.relativePathFromRoot)}" alt="#{photo.description}" />
                             <div class="photo-details" id="detail_#{photo.id}">
                                 <p>File Name: #{photo.fileName}</p>
                                 <p>Description: #{photo.description}</p>
@@ -83,32 +103,6 @@
                             </div>
                         </div>
                     </ui:repeat>
-                </div>-->
-                <div id="directories-list">
-                    <h:dataTable value="#{collectionPhotosBean.filesList}" var="file">
-                        <div class="file-wrapper" id="file_#{file.name}">
-                            <h:column>
-<!--                                <h:link value="Detail" outcome="photos">
-                                    <f:param name="path" value="/#{file.name}" />
-                                </h:link>-->
-                                <h:commandLink value="Open" action="#{collectionPhotosBean.navigateTo(file.name)}">
-                                    <f:param name="path" value="/#{file.name}"/>
-                                </h:commandLink>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">File Name</f:facet>
-                                    #{file.name}
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">File Size</f:facet>
-                                    #{file.length()} bytes
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">Last Modified</f:facet>
-                                    #{file.lastModified()}
-                            </h:column>
-                        </div>
-                    </h:dataTable>
                 </div>
             </h:form>
         </div>
