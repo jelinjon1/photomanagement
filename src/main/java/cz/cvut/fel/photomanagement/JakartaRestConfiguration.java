@@ -1,4 +1,4 @@
-package photomanagement;
+package cz.cvut.fel.photomanagement;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

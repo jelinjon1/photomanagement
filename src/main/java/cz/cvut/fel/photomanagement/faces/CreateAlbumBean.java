@@ -2,16 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package photomanagement.faces;
+package cz.cvut.fel.photomanagement.faces;
 
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.util.List;
-import photomanagement.faces.model.Album;
-import photomanagement.faces.model.Photo;
-import photomanagement.services.AlbumDatabaseService;
+import cz.cvut.fel.photomanagement.faces.model.Album;
+import cz.cvut.fel.photomanagement.faces.model.Photo;
+import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
 
 /**
  *

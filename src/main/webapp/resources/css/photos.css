@@ -6,6 +6,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Created on : 9. 11. 2024, 22:19:04
     Author     : Jonáš
 */
+
+.path-link-wrapper {
+    margin: 20px 0px;
+}
 .controls {
     display: flex;
     flex-direction: row;
@@ -20,16 +24,36 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     }
 }
 .action-buttons-wrapper {
+    display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     opacity: 0;
     visibility: hidden;
     
     &.active{
+        display: box;
         opacity: 1;
         visibility: visible;
     }
 }
 
+table {
+    & th, td {
+        border: none;   
+    }
+    & thead {
+        border-bottom: 1px solid black;
+    }
+}
+
+svg {
+    width: 30px;
+    height: auto;
+}
 .photo-gallery {
     display: flex;
     flex-wrap: wrap;

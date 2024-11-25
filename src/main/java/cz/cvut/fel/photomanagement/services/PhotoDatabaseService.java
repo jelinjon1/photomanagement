@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package photomanagement.services;
+package cz.cvut.fel.photomanagement.services;
 
 import jakarta.ejb.Singleton;
 import jakarta.persistence.EntityManager;
@@ -10,7 +10,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
-import photomanagement.faces.model.Photo;
+import cz.cvut.fel.photomanagement.faces.model.Photo;
 
 /**
  *

@@ -10,19 +10,47 @@
         <title>Photo managment application</title>
         <h:outputStylesheet name="css/main.css" />
         <h:outputStylesheet name="css/photos.css" />
+        <h:outputStylesheet name="https://fonts.googleapis.com/icon?family=Material+Icons" />
     </h:head>
     <h:body>
+        <f:metadata>
+            <f:viewParam name="path" value="#{collectionPhotosBean.filesPath}" />
+            <f:event type="preRenderView"
+                     listener="#{collectionPhotosBean.loadFiles}" />
+        </f:metadata>
         <div class="banner header">
             Header
         </div>
         <ul class="topnav">
             <li><a href="index.xhtml">Home</a></li>
             <li><a href="albums.xhtml">Albums</a></li>
-            <li><a class="active" href="photos.xhtml">Photos</a></li>
+            <li>
+                <h:link value="Photos" outcome="photos" class="active">
+                    <f:param name="path" value="" />
+                </h:link>
+            </li>
         </ul>
         <div class="wrapper">
+            
             <h1>Photos</h1>
+            
+            <h:form>
+                <div class="path-link-wrapper">
+                
+                    <h:commandLink value="#{collectionPhotosBean.filesPathPrefix}" action="#{collectionPhotosBean.navigateTo(path)}">
+                        <f:param name="path" value=""/>
+                    </h:commandLink>
+                
+                    <ui:repeat value="#{collectionPhotosBean.paths}" var="path">
+                        <h:commandLink value=" > #{path}" action="#{collectionPhotosBean.navigateTo(path)}">
+                            <f:param name="path" value="/#{path}"/>
+                        </h:commandLink>
+                    </ui:repeat>
+                </div>
+            </h:form>
+            
             <h:form id="photos-form">
+                
                 <div class="controls">
                     <h:commandButton value="Add to album" action="#{collectionPhotosBean.addToAlbum}" />
                     <h:selectOneMenu value="#{collectionPhotosBean.selectedAlbumId}" styleClass="album-selector">
@@ -30,19 +58,17 @@
                                    itemValue="#{album.id}" itemLabel="#{album.name}" />
                     </h:selectOneMenu>
                     
-                    <h:outputLabel id="counter" value="#{collectionPhotosBean.selectedPhotoCount} photos selected" />
-                    
                     <h:panelGroup id="actionButtonsWrapper">
                         <h:panelGroup 
                             styleClass="#{collectionPhotosBean.selectedPhotoCount > 0 ? 'action-buttons-wrapper active' : 'action-buttons-wrapper'}">
                             <h:commandButton value="Clear sellection" id="clear"/>
                             <h:commandButton value="Delete selection" id="delete"/>
+                            <h:outputLabel id="counter" value="#{collectionPhotosBean.selectedPhotoCount} photos selected" />
                         </h:panelGroup>
                     </h:panelGroup>
-                    
-                    
                 </div>
-                <div class="photo-gallery">
+                
+<!--            <div class="photo-gallery">
                     <ui:repeat value="#{collectionPhotosBean.photosList}" var="photo">
                         <div class="photo-wrapper" id="photo_#{photo.id}">
                             <h:graphicImage class="photo" name="#{photo.fileName}" library="images" alt="#{photo.description}" />
@@ -57,20 +83,39 @@
                             </div>
                         </div>
                     </ui:repeat>
+                </div>-->
+                <div id="directories-list">
+                    <h:dataTable value="#{collectionPhotosBean.filesList}" var="file">
+                        <div class="file-wrapper" id="file_#{file.name}">
+                            <h:column>
+<!--                                <h:link value="Detail" outcome="photos">
+                                    <f:param name="path" value="/#{file.name}" />
+                                </h:link>-->
+                                <h:commandLink value="Open" action="#{collectionPhotosBean.navigateTo(file.name)}">
+                                    <f:param name="path" value="/#{file.name}"/>
+                                </h:commandLink>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">File Name</f:facet>
+                                    #{file.name}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">File Size</f:facet>
+                                    #{file.length()} bytes
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Last Modified</f:facet>
+                                    #{file.lastModified()}
+                            </h:column>
+                        </div>
+                    </h:dataTable>
                 </div>
             </h:form>
-            
         </div>
 
         <div class="banner footer">
             Footer
         </div>
-        <script>
-            const element1 = document.getElementById("photos-form:actionButtonsWrapper");
-//            const element2 = document.getElementById("photos-form:delete");
-            console.log(element1);
-//            console.log(element2);
-        </script>
     </h:body>
 </html>
 

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package photomanagement.services;
+package cz.cvut.fel.photomanagement.services;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Metadata;
@@ -22,7 +22,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.stream.Stream;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import photomanagement.faces.model.Photo;
+import cz.cvut.fel.photomanagement.faces.model.Photo;
 /**
  *
  * @author Jonáš

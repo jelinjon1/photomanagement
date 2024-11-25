@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package photomanagement.services;
+package cz.cvut.fel.photomanagement.services;
 
 import jakarta.ejb.Singleton;
 import jakarta.persistence.EntityManager;
@@ -11,8 +11,8 @@ import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import photomanagement.exception.PersistenceException;
-import photomanagement.faces.model.Album;
+import cz.cvut.fel.photomanagement.exception.PersistenceException;
+import cz.cvut.fel.photomanagement.faces.model.Album;
 
 /**
  *

@@ -1,4 +1,4 @@
-package photomanagement.resources;
+package cz.cvut.fel.photomanagement.resources;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
