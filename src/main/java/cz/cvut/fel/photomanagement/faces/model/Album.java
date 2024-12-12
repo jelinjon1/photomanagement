@@ -4,11 +4,13 @@
  */
 package cz.cvut.fel.photomanagement.faces.model;
 
+import cz.cvut.fel.photomanagement.comparator.SortByDateTaken;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,7 +29,7 @@ public class Album {
     private String description;
     private LocalDate created;
     private LocalDate lastEdited;
-    private String coverImage = "no-image.png";
+    private String coverImage = null;
 
     public Album() {
         this.created = LocalDate.now();
@@ -86,6 +88,8 @@ public class Album {
     }
 
     public List<Photo> getPhotos() {
+        Comparator sortByDate = new SortByDateTaken();
+        photos.sort(sortByDate);
         return photos;
     }
 
@@ -139,5 +143,10 @@ public class Album {
 
     public void addPhoto(Photo photo) {
         photos.add(photo);
+    }
+
+    public void deletePhoto(Photo photo) {
+        Objects.requireNonNull(photo);
+        this.photos.remove(photo);
     }
 }

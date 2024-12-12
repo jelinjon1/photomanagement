@@ -31,11 +31,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             
             <h:form id="listform">
                 <h:commandButton value="NEW ALBUM" action="#{tableAlbumsBean.createAlbum}"/>
-                <ul>
-                    <li>SELECT &ndash; select a car, displayed at the bottom, refresh whole page</li>
-                    <li>Detail &ndash; select a car, display on a new page (watch url!)</li>
-                    <li>Detail&amp;Redirect &ndash; select a car, display on a new page with updated url</li>
-                </ul>
                 <p>
                     <h:dataTable id="albumtable" value="#{tableAlbumsBean.albumsList}" var="album">
                         <h:column>

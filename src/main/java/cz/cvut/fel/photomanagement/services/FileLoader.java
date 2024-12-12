@@ -27,6 +27,17 @@ public class FileLoader {
     @ConfigProperty(name = "photos.directory.path")
     private String photosDirectoryPath;
 
+    public boolean createDirectory(String localPath, String name) {
+        File directory = Paths.get(photosDirectoryPath, localPath, name).toFile();
+        return directory.mkdirs();
+    }
+
+    public void moveToBin(String fileName, String localPath) {
+        File toMove = Paths.get(photosDirectoryPath, localPath, fileName).toFile();
+        String targetPath = Paths.get(photosDirectoryPath, localPath, "bin", fileName).toString();
+        toMove.renameTo(new File(targetPath));
+    }
+
     public List<File> loadFiles() {
         return loadFiles("");
     }
@@ -43,17 +54,10 @@ public class FileLoader {
                     .map(Path::toFile)
                     .collect(Collectors.toList());
             return filesList;
-//            DataModel<File> dataModel = new ListDataModel<>(filesList);
-//            return dataModel;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("DIRECTORIES: error pri nacitani");
             return new ArrayList<>();
-//            return new ListDataModel<>();
         }
-    }
-
-    public String getPhotosDirectoryPath() {
-        return photosDirectoryPath;
     }
 }

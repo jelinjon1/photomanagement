@@ -50,10 +50,6 @@ table {
     }
 }
 
-svg {
-    width: 30px;
-    height: auto;
-}
 .photo-gallery {
     display: flex;
     flex-wrap: wrap;
@@ -61,15 +57,14 @@ svg {
     margin-top: 20px;
     margin-bottom: 20px;
     justify-content: flex-start;
-}
-
-
-.photo-gallery img {
-    height: 300px;
-    width: auto;
-    border-radius: 5px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    object-fit: contain;
+    
+    img {
+        height: 300px;
+        width: auto;
+        border-radius: 5px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        object-fit: contain;
+    }
 }
 
 .photo-wrapper {
@@ -77,31 +72,62 @@ svg {
     border-radius: 5px;
     margin: 5px;
     overflow: hidden;
+    
+    > a {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .photo-details {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: fit-content;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        padding: 10px;
+
+        > a {
+            color: white;
+        }
+        input {
+            margin: 20px;
+        }
+        
+        &:hover {
+            opacity: 1;
+        }
+    }
 }
 
 .photo {
     height: auto;
     display: block;
-}
-
-.photo-details {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    padding: 10px;
-}
-
-.photo-wrapper:hover .photo-details {
-    opacity: 1;
+    
+    &.rating-0 {
+        filter: grayscale(100%);
+    }
+    &.rating-1 {
+        filter: grayscale(80%);
+    }
+    &.rating-2{
+        filter: grayscale(60%);
+    }
+    &.rating-3{
+        filter: grayscale(40%);
+    }
+    &.rating-4{
+        filter: grayscale(20%);
+    }
+    &.rating-5{
+    }
 }

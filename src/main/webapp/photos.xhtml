@@ -36,7 +36,7 @@
             <h:form>
                 <div class="path-link-wrapper">
                 
-                    <h:commandLink value="Home" action="#{collectionPhotosBean.navigateTo(path)}">
+                    <h:commandLink value="Home" action="#{collectionPhotosBean.navigateTo(null)}">
                         <f:param name="path" value=""/>
                     </h:commandLink>
                 
@@ -68,7 +68,7 @@
                 </div>
                 
                 <div id="directories-list">
-                    <h:dataTable value="#{collectionPhotosBean.filesList}" var="file">
+                    <h:dataTable value="#{collectionPhotosBean.filesDataModel}" var="file" rendered="#{collectionPhotosBean.filesDataModel.rowCount > 0}">
                         <div class="file-wrapper" id="file_#{file.name}">
                             <h:column>
                                 <f:facet name="header">File Name</f:facet>
@@ -77,29 +77,46 @@
                                 </h:commandLink>
                             </h:column>
                             <h:column>
-                                <f:facet name="header">Number of subdirectories</f:facet>
-                                    #{file.listFiles()}
+                                <f:facet name="header">Children</f:facet>
+                                    #{file.list().stream().count()} files
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Last Modified</f:facet>
-                                    #{file.lastModified()}
+                                    #{collectionPhotosBean.formatLastModified(file.lastModified())}
                             </h:column>
                         </div>
                     </h:dataTable>
                 </div>
                 
-                <div class="photo-gallery">
-                    <ui:repeat value="#{collectionPhotosBean.photosList}" var="photo">
-                        <div class="photo-wrapper" id="photo_wrapper_#{photo.id}">
-                            <h:graphicImage class="photo" id="photo_#{photo.id}" value="#{'documentfiles'.concat(photo.relativePathFromRoot)}" alt="#{photo.description}" />
-                            <div class="photo-details" id="detail_#{photo.id}">
-                                <p>File Name: #{photo.fileName}</p>
-                                <p>Description: #{photo.description}</p>
-                                <p>Tags: #{photo.tags}</p>
-                                <p>Taken: #{photo.taken}</p>
-                                <h:selectBooleanCheckbox value="#{collectionPhotosBean.selectedPhotos[photo.id]}">
+                <div id="photo-gallery" class="photo-gallery">
+                    <ui:repeat value="#{collectionPhotosBean.photosDataModel}" var="photo" id="ui-rep">
+                        <div class="photo-wrapper" id="photo-wrapper_#{photo.id}">
+                            
+                            <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank" id="photo-link#{photo.id}">
+                                <!--<h:graphicImage class="photo rating-#{photo.rating}" id="#{'photo_'.concat(photo.id)}" value="#{'documentfiles'.concat(photo.relativePathFromRoot)}" alt="#{photo.description}" />-->
+                                <h:graphicImage id="#{'photo_'.concat(photo.id != null ? photo.id : 'unknown')}" 
+                                                class="photo rating-#{photo.rating}" 
+                                                value="#{'documentfiles'.concat(photo.relativePathFromRoot)}"
+                                                alt="#{photo.description}" />
+                            </a>                            
+                            
+                            <div class="photo-details" id="#{'detail_'.concat(photo.id)}">
+                                
+                                <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank">
+                                    <p>#{photo.fileName}</p>
+                                </a>
+                                <p>#{photo.taken}</p>
+<!--                                <h:selectBooleanCheckbox value="#{collectionPhotosBean.selectedPhotos[photo.id]}">
                                     <f:ajax render="photos-form:counter photos-form:actionButtonsWrapper" />
-                                </h:selectBooleanCheckbox>
+                                </h:selectBooleanCheckbox>-->
+                                
+                                <p:rating value="#{photo.rating}">
+                                    <p:ajax event="rate" listener="#{collectionPhotosBean.updatePhoto(photo)}"
+                                            update="@form" />
+                                </p:rating>
+                                <h:commandButton class="delete" value="Delete" action="#{collectionPhotosBean.deletePhoto(photo)}">
+                                    <f:ajax execute="@this" render="@form"/>
+                                </h:commandButton>
                             </div>
                         </div>
                     </ui:repeat>

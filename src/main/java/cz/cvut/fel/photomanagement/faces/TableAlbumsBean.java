@@ -4,6 +4,11 @@
  */
 package cz.cvut.fel.photomanagement.faces;
 
+import cz.cvut.fel.photomanagement.faces.model.Album;
+import cz.cvut.fel.photomanagement.faces.model.Photo;
+import cz.cvut.fel.photomanagement.faces.util.CyclicIterator;
+import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
+import cz.cvut.fel.photomanagement.services.PhotoDatabaseService;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
@@ -12,8 +17,6 @@ import jakarta.faces.model.ListDataModel;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
-import cz.cvut.fel.photomanagement.faces.model.Album;
-import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
 
 /**
  *
@@ -24,9 +27,12 @@ import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
 public class TableAlbumsBean implements Serializable {
     @EJB
     private AlbumDatabaseService albumDatabaseService;
+    @EJB
+    private PhotoDatabaseService photoDatabaseService;
     private DataModel<Album> albumsList;
     private Album selectedAlbum = null;
     private String selectedAlbumParameter = null;
+    private CyclicIterator iterator = null;
 
     public TableAlbumsBean() {
     }
@@ -34,6 +40,11 @@ public class TableAlbumsBean implements Serializable {
     @PostConstruct
     public void initDB() {
         albumsList = new ListDataModel<>(new ArrayList<>(albumDatabaseService.listAllAlbums()));
+    }
+
+    public void deletePhoto(Photo photo) {
+        selectedAlbum.deletePhoto(photo);
+        albumDatabaseService.update(selectedAlbum);
     }
 
     /**
@@ -59,6 +70,7 @@ public class TableAlbumsBean implements Serializable {
 
     public String goToDetailRedirect() {
         selectedAlbum = albumsList.getRowData();
+        this.iterator = new CyclicIterator(selectedAlbum.getPhotos());
         return "albums-detail.xhtml?faces-redirect=true";
     }
 
@@ -85,5 +97,13 @@ public class TableAlbumsBean implements Serializable {
     public String createAlbum() {
         this.selectedAlbum = null;
         return "albums-new.xhtml?faces-redirect=true";
+    }
+
+    public CyclicIterator getIterator() {
+        return iterator;
+    }
+
+    public void setIterator(CyclicIterator iterator) {
+        this.iterator = iterator;
     }
 }

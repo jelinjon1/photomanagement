@@ -7,6 +7,54 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     Author     : Jonáš
 */
 
+.ui-carousel-items-container {
+    img {
+        width: 300px;
+    }
+}
+
+.photo-presentation {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 95vh;
+    gap: 20px;
+    overflow: hidden;
+    
+    .neighbor {
+        width: 200px;
+        opacity: 0.5;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    
+        &:hover {
+            opacity: 0.8;
+            transform: scale(1.1);
+        }
+        &.previous {
+        }
+        &.next {
+        }
+    }
+    .current {
+        width: 400px;
+        border: 5px solid #fff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s ease;
+        z-index: 10;
+        
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+    
+    a {
+        text-decoration: none;
+    }
+}
+
 .album-header {
     display: flex;
     align-items: flex-start;
@@ -47,18 +95,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 .photo-gallery {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px; /* Space between images */
+    gap: 15px;
     margin-top: 20px;
     margin-bottom: 20px;
     justify-content: flex-start;
+    
+    img {
+        height: 300px;
+        width: auto;
+        border-radius: 5px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        object-fit: contain;
+    }
 }
-
-
-.photo-gallery img {
-    height: 300px; /* Set a fixed height for all images */
-    width: auto; /* Maintain the aspect ratio by adjusting width automatically */
-    border-radius: 5px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    object-fit: contain; /* Ensures the image scales within the set height without cropping */
-}
-

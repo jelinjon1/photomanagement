@@ -4,13 +4,13 @@
  */
 package cz.cvut.fel.photomanagement.initializer;
 
+import cz.cvut.fel.photomanagement.faces.model.Album;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import cz.cvut.fel.photomanagement.faces.model.Album;
 
 /**
  *
@@ -29,12 +29,10 @@ public class SystemInitializer {
         Album album1 = new Album();
         album1.setName("Summer vacation 2018");
         album1.setDescription("Trip to Canada");
-        album1.setCoverImage("palm-tree.jpg");
 
         Album album2 = new Album();
         album2.setName("Winter vacation 2019");
         album2.setDescription("Trip to Europe");
-        album2.setCoverImage("bird-branch.jpg");
 
         entityManager.persist(album1);
         entityManager.persist(album2);

@@ -12,15 +12,17 @@
         <div class="banner header">
             Header
         </div>
-        <ul class="topnav">
-            <li><a class="active" href="index.xhtml">Home</a></li>
-            <li><a href="albums.xhtml">Albums</a></li>
-            <li>
-                <h:link value="Photos" outcome="photos">
-                    <f:param name="path" value="" />
-                </h:link>
-            </li>
-        </ul>
+        <h:form>
+            <ul class="topnav">
+                <li><a class="active" href="index.xhtml">Home</a></li>
+                <li><a href="albums.xhtml">Albums</a></li>
+                <li>
+                    <h:link value="Photos" outcome="photos">
+                        <f:param name="path" value="" />
+                    </h:link>
+                </li>
+            </ul>
+        </h:form>
         <div class="wrapper">
             <h1>Photomanagment</h1>
             <p>

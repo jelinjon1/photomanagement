@@ -7,7 +7,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets">
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
     <h:head>
         <title>Albums detail</title>
         <h:outputStylesheet name="css/main.css" />
@@ -34,7 +35,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             
             <div class="album-header">
                 <div class="album-cover">
-                    <h:graphicImage name="#{tableAlbumsBean.selectedAlbum.coverImage}" library="images" alt="Album Cover" />
+                    <h:graphicImage name="#{tableAlbumsBean.selectedAlbum.coverImage}" 
+                                    alt="Album Cover" 
+                                    rendered="#{tableAlbumsBean.selectedAlbum.coverImage != null}" />
                 </div>
                 <div class="album-info">
                     <h:outputText value="#{tableAlbumsBean.selectedAlbum.name}" styleClass="album-name" />
@@ -54,17 +57,60 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 </div>
             </div>
             <h:form>
-                <h:commandButton value="Add to Album" action="#{tableAlbumsBean.removeFromAlbum}" />
-                <div class="photo-gallery">
+                
+                
+<!--                <p:carousel value="#{tableAlbumsBean.selectedAlbum.photos}" var="photo" numVisible="3" numScroll="1">
+                    <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank">
+                        <h:graphicImage class="photo rating-#{photo.rating}" 
+                                        id="photo_#{photo.id}" 
+                                        value="#{'documentfiles'.concat(photo.relativePathFromRoot)}" 
+                                        alt="#{photo.description}" />
+                    </a>  
+                </p:carousel>-->
+                
+                <div id="photo-presentation" class="photo-presentation">
+                    <h:commandLink action="#{tableAlbumsBean.iterator.goToPrevious()}">
+                        <p:ajax update="@form" />
+                        <h:graphicImage class="neighbor previous" 
+                                        alt="No previous photo"
+                                        rendered="#{tableAlbumsBean.iterator.notEmpty}"
+                                        value="#{'documentfiles'.concat(tableAlbumsBean.iterator.previous.relativePathFromRoot)}"/>
+                    </h:commandLink>
+                    
+                    <a href="#{'documentfiles'.concat(tableAlbumsBean.iterator.current.relativePathFromRoot)}" 
+                       target="_blank" id="photo-link#{photo.id}">
+                        <h:graphicImage class="current" 
+                                        alt="No current photo"
+                                        value="#{'documentfiles'.concat(tableAlbumsBean.iterator.current.relativePathFromRoot)}"/>
+                    </a>
+                    
+                    <h:commandLink action="#{tableAlbumsBean.iterator.goToNext()}">
+                        <p:ajax update="@form" />
+                        <h:graphicImage class="neighbor next" 
+                                        alt="No next photo"
+                                        rendered="#{tableAlbumsBean.iterator.notEmpty}"
+                                        value="#{'documentfiles'.concat(tableAlbumsBean.iterator.next.relativePathFromRoot)}"/>
+                    </h:commandLink>
+                    
+                </div>
+                
+                <div id="photo-gallery" class="photo-gallery">
                     <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="photo">
-                        <div class="photo-wrapper">
-                            <h:graphicImage class="photo" name="#{photo.fileName}" library="images" alt="#{photo.description}" />
-                            <div class="photo-details">
+                        <div class="photo-wrapper" id="photo_wrapper_#{photo.id}">
+
+                            <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank">
+                                <h:graphicImage class="photo rating-#{photo.rating}" 
+                                                id="photo_#{photo.id}" 
+                                                value="#{'documentfiles'.concat(photo.relativePathFromRoot)}" 
+                                                alt="#{photo.description}" />
+                            </a>                            
+
+                            <div class="photo-details" id="#{'detail_'.concat(photo.id)}">
                                 <p>File Name: #{photo.fileName}</p>
-                                <p>Description: #{photo.description}</p>
-                                <p>Tags: #{photo.tags}</p>
-                                <p>Taken: #{photo.taken}</p>
-                                <h:selectBooleanCheckbox value="#{collectionPhotosBean.selectedPhotos[photo.id]}" />
+                                <p:rating value="#{photo.rating}"/>
+                                <h:commandButton class="delete" value="Delete">
+                                    <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(photo)}"/>
+                                </h:commandButton>
                             </div>
                         </div>
                     </ui:repeat>
