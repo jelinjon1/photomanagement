@@ -4,7 +4,6 @@
  */
 package cz.cvut.fel.photomanagement.faces;
 
-import cz.cvut.fel.photomanagement.comparator.SortByDateTaken;
 import cz.cvut.fel.photomanagement.faces.model.Album;
 import cz.cvut.fel.photomanagement.faces.model.Photo;
 import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
@@ -28,7 +27,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,8 +109,8 @@ public class CollectionPhotosBean implements Serializable {
                 }
             }
         }
-        Comparator dateComparator = new SortByDateTaken();
-        photosList.sort(dateComparator);
+        // Comparator dateComparator = new SortByDateTaken();
+        // photosList.sort(dateComparator);
         photosDataModel = new ListDataModel<>(photosList);
     }
 
@@ -150,6 +148,7 @@ public class CollectionPhotosBean implements Serializable {
      */
     public void deletePhoto(Photo photo) {
         if ((photo.getLocalPath().endsWith("/bin"))) {
+
             photoDatabaseService.deletePhoto(photo);
         } else {
             fileLoader.createDirectory(photo.getLocalPath(), "bin");
@@ -177,7 +176,6 @@ public class CollectionPhotosBean implements Serializable {
         }
 
         albumDatabaseService.update(album);
-//        selectedPhotos.replaceAll((id, selected) -> false);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Photos added to album successfully", null));
     }
 

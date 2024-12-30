@@ -25,6 +25,7 @@ public class Album {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private List<Photo> photos;
+    private List<AlbumPhoto> albumPhotos;
     private String name;
     private String description;
     private LocalDate created;
@@ -43,6 +44,11 @@ public class Album {
         this.created = LocalDate.now();
         this.lastEdited = this.created;
         this.coverImage = coverImage;
+    }
+
+    @Override
+    public String toString() {
+        return "Album{" + "id=" + id + ", photos=" + photos + ", albumPhotos=" + albumPhotos + ", name=" + name + ", description=" + description + ", created=" + created + ", lastEdited=" + lastEdited + ", coverImage=" + coverImage + '}';
     }
 
     @Override
@@ -69,7 +75,7 @@ public class Album {
             return false;
         }
         final Album other = (Album) obj;
-        if (!Objects.equals(this.photos, other.photos)) {
+        if (!Objects.equals(this.albumPhotos, other.albumPhotos)) {
             return false;
         }
         if (!Objects.equals(this.name, other.name)) {
@@ -87,14 +93,14 @@ public class Album {
         return Objects.equals(this.coverImage, other.coverImage);
     }
 
-    public List<Photo> getPhotos() {
+    public List<AlbumPhoto> getPhotos() {
         Comparator sortByDate = new SortByDateTaken();
-        photos.sort(sortByDate);
-        return photos;
+        albumPhotos.sort(sortByDate);
+        return albumPhotos;
     }
 
-    public void setPhotos(List<Photo> photos) {
-        this.photos = photos;
+    public void setPhotos(List<AlbumPhoto> photos) {
+        this.albumPhotos = albumPhotos;
     }
 
     public String getName() {
@@ -142,7 +148,8 @@ public class Album {
     }
 
     public void addPhoto(Photo photo) {
-        photos.add(photo);
+        AlbumPhoto ap = new AlbumPhoto(photo, this);
+        albumPhotos.add(ap); //todo add
     }
 
     public void deletePhoto(Photo photo) {

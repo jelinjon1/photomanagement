@@ -5,6 +5,8 @@
 package cz.cvut.fel.photomanagement.faces;
 
 import cz.cvut.fel.photomanagement.faces.model.Album;
+import cz.cvut.fel.photomanagement.faces.model.AlbumPhoto;
+import cz.cvut.fel.photomanagement.faces.model.AlbumPhotoCollection;
 import cz.cvut.fel.photomanagement.faces.model.Photo;
 import cz.cvut.fel.photomanagement.faces.util.CyclicIterator;
 import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
@@ -17,6 +19,7 @@ import jakarta.faces.model.ListDataModel;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -33,6 +36,9 @@ public class TableAlbumsBean implements Serializable {
     private Album selectedAlbum = null;
     private String selectedAlbumParameter = null;
     private CyclicIterator iterator = null;
+    private int activeViewIndex;
+    private DataModel<AlbumPhotoCollection> importanceCollections;
+    private int importanceThreshold = 5;
 
     public TableAlbumsBean() {
     }
@@ -40,6 +46,18 @@ public class TableAlbumsBean implements Serializable {
     @PostConstruct
     public void initDB() {
         albumsList = new ListDataModel<>(new ArrayList<>(albumDatabaseService.listAllAlbums()));
+    }
+
+    public void updateAlbumPhoto(int albumPhotoId) {
+        AlbumPhoto albumPhoto = importanceCollections
+                .getRowData()
+                .getPhotos()
+                .stream()
+                .filter(a -> a.getId() == albumPhotoId)
+                .findFirst()
+                .get();
+        albumDatabaseService.update(albumPhoto.getAlbum());
+        System.out.println(albumPhoto);
     }
 
     public void deletePhoto(Photo photo) {
@@ -71,6 +89,14 @@ public class TableAlbumsBean implements Serializable {
     public String goToDetailRedirect() {
         selectedAlbum = albumsList.getRowData();
         this.iterator = new CyclicIterator(selectedAlbum.getPhotos());
+
+        AlbumPhotoCollection lowImp = new AlbumPhotoCollection(0, new ArrayList<>(selectedAlbum.getPhotos().subList(0, 6)));
+        AlbumPhotoCollection highImp = new AlbumPhotoCollection(6, new ArrayList<>(selectedAlbum.getPhotos().subList(6, 11)));
+        AlbumPhotoCollection lowImp2 = new AlbumPhotoCollection(0, new ArrayList<>(selectedAlbum.getPhotos().subList(11, 17)));
+
+        this.importanceCollections = new ListDataModel<>(
+                List.of(lowImp, highImp, lowImp2)
+        );
         return "albums-detail.xhtml?faces-redirect=true";
     }
 
@@ -106,4 +132,29 @@ public class TableAlbumsBean implements Serializable {
     public void setIterator(CyclicIterator iterator) {
         this.iterator = iterator;
     }
+
+    public int getActiveViewIndex() {
+        return activeViewIndex;
+    }
+
+    public void setActiveViewIndex(int activeViewIndex) {
+        this.activeViewIndex = activeViewIndex;
+    }
+
+    public DataModel<AlbumPhotoCollection> getImportanceCollections() {
+        return importanceCollections;
+    }
+
+    public void setImportanceCollections(DataModel<AlbumPhotoCollection> importanceCollections) {
+        this.importanceCollections = importanceCollections;
+    }
+
+    public int getImportanceThreshold() {
+        return importanceThreshold;
+    }
+
+    public void setImportanceThreshold(int importanceThreshold) {
+        this.importanceThreshold = importanceThreshold;
+    }
+
 }

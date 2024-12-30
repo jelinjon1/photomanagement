@@ -4,7 +4,7 @@
  */
 package cz.cvut.fel.photomanagement.faces.util;
 
-import cz.cvut.fel.photomanagement.faces.model.Photo;
+import cz.cvut.fel.photomanagement.faces.model.AlbumPhoto;
 import java.util.List;
 
 /**
@@ -13,10 +13,10 @@ import java.util.List;
  */
 public class CyclicIterator {
 
-    private List<Photo> objects;
+    private List<AlbumPhoto> objects;
     private int index = 0;
 
-    public CyclicIterator(List<Photo> objects) {
+    public CyclicIterator(List<AlbumPhoto> objects) {
         this.objects = objects;
     }
 
@@ -24,7 +24,7 @@ public class CyclicIterator {
         return objects.size() != 0;
     }
 
-    public Photo getPrevious() {
+    public AlbumPhoto getPrevious() {
         if (isNotEmpty()) {
             if (index - 1 >= 0) {
                 return objects.get(index - 1);
@@ -36,7 +36,7 @@ public class CyclicIterator {
         }
     }
 
-    public Photo getCurrent() {
+    public AlbumPhoto getCurrent() {
         if (objects.size() > 0) {
             return objects.get(index);
         } else {
@@ -44,7 +44,7 @@ public class CyclicIterator {
         }
     }
 
-    public Photo getNext() {
+    public AlbumPhoto getNext() {
         if (isNotEmpty()) {
             if (index + 1 < objects.size()) {
                 return objects.get(index + 1);

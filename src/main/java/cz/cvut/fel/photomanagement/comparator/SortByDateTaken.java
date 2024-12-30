@@ -4,6 +4,7 @@
  */
 package cz.cvut.fel.photomanagement.comparator;
 
+import cz.cvut.fel.photomanagement.faces.model.AlbumPhoto;
 import cz.cvut.fel.photomanagement.faces.model.Photo;
 import java.util.Comparator;
 
@@ -11,19 +12,12 @@ import java.util.Comparator;
  *
  * @author Jonáš
  */
-public class SortByDateTaken implements Comparator {
+public class SortByDateTaken implements Comparator<AlbumPhoto> {
 
     @Override
-    public int compare(Object o1, Object o2) {
-        Photo a = (Photo) o1;
-        Photo b = (Photo) o2;
-
-        if (a.getTaken().isBefore(b.getTaken())) {
-            return -1;
-        }
-        if (a.getTaken().isAfter(b.getTaken())) {
-            return 1;
-        }
-        return 0;
+    public int compare(AlbumPhoto o1, AlbumPhoto o2) {
+        Photo a = o1.getPhoto();
+        Photo b = o2.getPhoto();
+        return a.getTaken().compareTo(b.getTaken());
     }
 }

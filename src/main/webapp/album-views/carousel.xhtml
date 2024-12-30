@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+    <h:head>
+        <title>Carousel Album View</title>
+        <h:outputStylesheet name="css/main.css" />
+        <h:outputStylesheet name="css/albums.css" />
+        <h:outputStylesheet name="css/photos.css" />
+    </h:head>
+    <h:body>
+        <h:form id="carousel-form">
+            <h:panelGroup id="photo-presentation" class="photo-presentation">
+                <h:commandLink action="#{tableAlbumsBean.iterator.goToPrevious()}" class="prev-block">
+                    <p:ajax update="@form" />
+                    <h:graphicImage class="neighbor previous" 
+                                    alt="No previous photo"
+                                    rendered="#{tableAlbumsBean.iterator.notEmpty}"
+                                    value="#{'documentfiles'.concat(tableAlbumsBean.iterator.previous.photo.relativePathFromRoot)}"/>
+                </h:commandLink>
+
+                <a href="#{'documentfiles'.concat(tableAlbumsBean.iterator.current.photo.relativePathFromRoot)}" 
+                   target="_blank" id="photo-link#{photo.id}">
+                    <h:graphicImage class="current" 
+                                    alt="No current photo"
+                                    value="#{'documentfiles'.concat(tableAlbumsBean.iterator.current.photo.relativePathFromRoot)}"/>
+                </a>
+
+                <h:commandLink action="#{tableAlbumsBean.iterator.goToNext()}" class="next-block">
+                    <p:ajax update="@form" />
+                    <h:graphicImage class="neighbor next" 
+                                    alt="No next photo"
+                                    rendered="#{tableAlbumsBean.iterator.notEmpty}"
+                                    value="#{'documentfiles'.concat(tableAlbumsBean.iterator.next.photo.relativePathFromRoot)}"/>
+                </h:commandLink>
+
+            </h:panelGroup>
+        </h:form>
+    </h:body>
+</html>

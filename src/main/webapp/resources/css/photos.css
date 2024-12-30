@@ -65,46 +65,46 @@ table {
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         object-fit: contain;
     }
-}
-
-.photo-wrapper {
-    position: relative;
-    border-radius: 5px;
-    margin: 5px;
-    overflow: hidden;
     
-    > a {
-        width: 100%;
-        height: 100%;
-    }
-    
-    .photo-details {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: fit-content;
-        background: rgba(0, 0, 0, 0.5);
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        text-align: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        padding: 10px;
+    .photo-wrapper {
+        position: relative;
+        border-radius: 5px;
+        margin: 5px;
+        overflow: hidden;
 
         > a {
+            width: 100%;
+            height: 100%;
+        }
+
+        .photo-details {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: fit-content;
+            background: rgba(0, 0, 0, 0.5);
             color: white;
-        }
-        input {
-            margin: 20px;
-        }
-        
-        &:hover {
-            opacity: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 10px;
+
+            > a {
+                color: white;
+            }
+            input {
+                margin: 20px;
+            }
+
+            &:hover {
+                opacity: 1;
+            }
         }
     }
 }
