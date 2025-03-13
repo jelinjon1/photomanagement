@@ -41,7 +41,8 @@
                     </h:commandLink>
                 
                     <ui:repeat value="#{collectionPhotosBean.paths}" var="path">
-                        <h:commandLink value=" > #{path}" action="#{collectionPhotosBean.navigateTo(path)}">
+                        &gt;
+                        <h:commandLink value="#{path}" action="#{collectionPhotosBean.navigateTo(path)}">
                             <f:param name="path" value="/#{path}"/>
                         </h:commandLink>
                     </ui:repeat>
@@ -52,6 +53,7 @@
                 
                 <div class="controls">
                     <h:commandButton value="Add to album" action="#{collectionPhotosBean.addToAlbum}" />
+                    
                     <h:selectOneMenu value="#{collectionPhotosBean.selectedAlbumId}" styleClass="album-selector">
                         <f:selectItems value="#{collectionPhotosBean.albumOptions}" var="album" 
                                    itemValue="#{album.id}" itemLabel="#{album.name}" />

@@ -9,6 +9,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .path-link-wrapper {
     margin: 20px 0px;
+    
+    a {
+        padding: 0 10px;
+    }
 }
 .controls {
     display: flex;

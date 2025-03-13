@@ -4,14 +4,15 @@
  */
 package cz.cvut.fel.photomanagement.faces;
 
-import jakarta.ejb.EJB;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Named;
-import java.time.LocalDate;
-import java.util.List;
 import cz.cvut.fel.photomanagement.faces.model.Album;
 import cz.cvut.fel.photomanagement.faces.model.Photo;
 import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
+import jakarta.ejb.EJB;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -30,6 +31,13 @@ public class CreateAlbumBean {
     private LocalDate lastEdited;
     private String coverImage;
 
+    @Inject
+    private CollectionPhotosBean collectionPhotosBean;
+
+    public void setCollectionPhotosBean(CollectionPhotosBean collectionPhotosBean) {
+        this.collectionPhotosBean = collectionPhotosBean;
+    }
+
     public CreateAlbumBean() {
     }
 
@@ -38,6 +46,14 @@ public class CreateAlbumBean {
         temp.setName(this.name);
         temp.setDescription(this.description);
         albumDatabaseService.saveAlbum(temp);
+        System.out.println("CREATED ALBUM: " + temp);
+
+        // mozny problem s tim ze clovek utece, nenastavi se ze handling false a pak se pridavaj fotky i kdyz nechceme
+        // potreba pridat ze handling false, kdykoliv kdyz odklikneme z toho okna
+        //only add when coming from a redirect to create a new album
+        if (collectionPhotosBean.isHandlingredirectToNewAlbum()) {
+            collectionPhotosBean.addToAlbum(temp);
+        }
         return "albums.xhtml?redirect=true";
     }
 

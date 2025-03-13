@@ -35,7 +35,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     <h:dataTable id="albumtable" value="#{tableAlbumsBean.albumsList}" var="album">
                         <h:column>
                             <f:facet name="header">Name</f:facet>
-                                #{album.name}
+                                <h:commandLink value="#{album.name}" action="#{tableAlbumsBean.goToDetailRedirect}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">Description</f:facet>
@@ -55,20 +55,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         </h:column>
                         <h:column>
                             <f:facet name="header">Action</f:facet>
-                            <h:commandButton value="SELECT" action="#{tableAlbumsBean.selectAlbum}"/>
-                            &nbsp;
-                            <h:commandButton class="delete" value="DELETE" action="#{tableAlbumsBean.deleteAlbum}"/>
-                            &nbsp;
-                            <h:commandLink value="Go to detail" action="#{tableAlbumsBean.goToDetailRedirect}"/>
+                            <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId != album.id}"
+                                             class="delete"
+                                             value="DELETE"
+                                             action="#{tableAlbumsBean.setDeletingAlbumId(album.id)}"/>
+                            
+                            <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId == album.id}" 
+                                             class="cancel"
+                                             value="CANCEL"
+                                             action="#{tableAlbumsBean.setDeletingAlbumId(0)}"/>
+                            
+                            <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId == album.id}" 
+                                             class="confirm"
+                                             value="CONFIRM"
+                                             action="#{tableAlbumsBean.deleteAlbum}"/>
                         </h:column>
                     </h:dataTable>
                 </p>
-                <h:panelGroup rendered="#{not empty tableAlbumsBean.selectedAlbum}">
-                    <p>Selected album: #{tableAlbumsBean.selectedAlbum.name}, #{tableAlbumsBean.selectedAlbum.description}</p>
-                </h:panelGroup>
-                <h:panelGroup rendered="#{empty tableAlbumsBean.selectedAlbum}">
-                    <p>No album is selected.</p>
-                </h:panelGroup>
             </h:form>
         </div>
         <div class="banner footer">

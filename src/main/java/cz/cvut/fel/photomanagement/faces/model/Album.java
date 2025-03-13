@@ -5,10 +5,13 @@
 package cz.cvut.fel.photomanagement.faces.model;
 
 import cz.cvut.fel.photomanagement.comparator.SortByDateTaken;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -24,7 +27,7 @@ public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private List<Photo> photos;
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<AlbumPhoto> albumPhotos;
     private String name;
     private String description;
@@ -37,8 +40,11 @@ public class Album {
         this.lastEdited = this.created;
     }
 
+    public Album(String name) {
+        this.name = name;
+    }
+
     public Album(List<Photo> photos, String name, String description, String coverImage) {
-        this.photos = photos;
         this.name = name;
         this.description = description;
         this.created = LocalDate.now();
@@ -48,13 +54,12 @@ public class Album {
 
     @Override
     public String toString() {
-        return "Album{" + "id=" + id + ", photos=" + photos + ", albumPhotos=" + albumPhotos + ", name=" + name + ", description=" + description + ", created=" + created + ", lastEdited=" + lastEdited + ", coverImage=" + coverImage + '}';
+        return "Album{" + "id=" + id + ", albumPhotos=" + albumPhotos + ", name=" + name + ", description=" + description + ", created=" + created + ", lastEdited=" + lastEdited + ", coverImage=" + coverImage + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.photos);
         hash = 37 * hash + Objects.hashCode(this.name);
         hash = 37 * hash + Objects.hashCode(this.description);
         hash = 37 * hash + Objects.hashCode(this.created);
@@ -100,7 +105,7 @@ public class Album {
     }
 
     public void setPhotos(List<AlbumPhoto> photos) {
-        this.albumPhotos = albumPhotos;
+        this.albumPhotos = photos;
     }
 
     public String getName() {
@@ -152,8 +157,10 @@ public class Album {
         albumPhotos.add(ap); //todo add
     }
 
-    public void deletePhoto(Photo photo) {
+    public void deleteAlbumPhoto(AlbumPhoto photo) {
+        System.out.println("BEFORE: " + albumPhotos);
         Objects.requireNonNull(photo);
-        this.photos.remove(photo);
+        this.albumPhotos.remove(photo);
+        System.out.println("AFTER: " + albumPhotos);
     }
 }

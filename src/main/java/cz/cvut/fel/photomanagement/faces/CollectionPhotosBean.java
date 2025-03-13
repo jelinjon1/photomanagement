@@ -6,6 +6,7 @@ package cz.cvut.fel.photomanagement.faces;
 
 import cz.cvut.fel.photomanagement.faces.model.Album;
 import cz.cvut.fel.photomanagement.faces.model.Photo;
+import cz.cvut.fel.photomanagement.faces.util.AlbumMenuOption;
 import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
 import cz.cvut.fel.photomanagement.services.FileLoader;
 import cz.cvut.fel.photomanagement.services.PhotoDatabaseService;
@@ -47,7 +48,7 @@ public class CollectionPhotosBean implements Serializable {
     private AlbumDatabaseService albumDatabaseService;
     private Map<Long, Boolean> selectedPhotos = new HashMap<>();
     private Long selectedAlbumId = 1L;
-    private List<Album> albumOptions;
+    private List<AlbumMenuOption> albumOptions;
     private Photo selectedPhoto = null;
     private Long selectedPhotoParameter;
     private DataModel<Photo> photosDataModel;
@@ -56,18 +57,19 @@ public class CollectionPhotosBean implements Serializable {
     private DataModel<File> filesDataModel;
     private String filesPath;
     private ArrayList<String> paths;
+    private boolean handlingredirectToNewAlbum = false;
 
 
     @PostConstruct
     public void initDB() {
         paths = new ArrayList<>();
-        albumOptions = albumDatabaseService.listAllAlbums();
+        albumOptions = transformIntoOptions(albumDatabaseService.listAllAlbums());
+    }
 
-//        if (photosDataModel != null) {
-//            for (Photo photo : photosDataModel) {
-//                selectedPhotos.put(photo.getId(), false);
-//            }
-//        }
+    public List<AlbumMenuOption> transformIntoOptions(List<Album> albums) {
+        List<AlbumMenuOption> res = albums.stream().map(album -> new AlbumMenuOption(album)).collect(Collectors.toList());
+        res.add(new AlbumMenuOption(null));
+        return res;
     }
 
     public void updatePhoto(Photo photo) {
@@ -140,8 +142,7 @@ public class CollectionPhotosBean implements Serializable {
 
     /*
     check if photo is already inside /bin
-        if so: delete permanently
-    else:
+    if not:
     check if ./bin exists
         if so: move photo to bin
         else: create ./bin and move photo
@@ -154,21 +155,40 @@ public class CollectionPhotosBean implements Serializable {
             fileLoader.createDirectory(photo.getLocalPath(), "bin");
             fileLoader.moveToBin(photo.getFileName(), photo.getLocalPath());
         }
-
-//        if (photo != null) {
-//            List<Photo> photos = (List<Photo>) photosDataModel.getWrappedData();
-//            photos.removeIf(p -> p == photo);
-//            photosDataModel = new ListDataModel<>(photos);
-//
-//            photoDatabaseService.remove(photo);
-//        }
     }
 
-    public void addToAlbum() {
+    public String addToAlbum(Album album) {
+        handlingredirectToNewAlbum = false;
+
+        System.out.println("ALBUM: " + album);
+        if (album == null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Album not found", null));
+            return null;
+        }
+        System.out.println("PHOTOS DATA MODEL: " + photosDataModel);
+        for (Photo photo : photosDataModel) {
+            album.addPhoto(photo);
+        }
+
+        albumDatabaseService.update(album);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Photos added to album successfully", null));
+        return null;
+    }
+
+    public String addToAlbum() {
+        //check selected option
+        //if new album, redirect to create scree, keep reference to selected photos, add after creation is finished
+        //else, add selected photos to selected album
+
+        if (selectedAlbumId == 0) {
+            handlingredirectToNewAlbum = true;
+            return "albums-new.xhtml?faces-redirect=true";
+        }
+
         Album album = albumDatabaseService.findAlbumById(selectedAlbumId); // Retrieve album by selected ID
         if (album == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Album not found", null));
-            return;
+            return null;
         }
 
         for (Photo photo : photosDataModel) {
@@ -177,6 +197,7 @@ public class CollectionPhotosBean implements Serializable {
 
         albumDatabaseService.update(album);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Photos added to album successfully", null));
+        return null;
     }
 
     public String formatLastModified(long lastModified) {
@@ -247,11 +268,12 @@ public class CollectionPhotosBean implements Serializable {
         this.selectedAlbumId = selectedAlbumId;
     }
 
-    public List<Album> getAlbumOptions() {
+    public List<AlbumMenuOption> getAlbumOptions() {
+        albumOptions = transformIntoOptions(albumDatabaseService.listAllAlbums());
         return albumOptions;
     }
 
-    public void setAlbumOptions(List<Album> albumOptions) {
+    public void setAlbumOptions(List<AlbumMenuOption> albumOptions) {
         this.albumOptions = albumOptions;
     }
 
@@ -274,5 +296,14 @@ public class CollectionPhotosBean implements Serializable {
     public void setPaths(ArrayList<String> paths) {
         this.paths = paths;
     }
+
+    public boolean isHandlingredirectToNewAlbum() {
+        return handlingredirectToNewAlbum;
+    }
+
+    public void setHandlingredirectToNewAlbum(boolean handlingredirectToNewAlbum) {
+        this.handlingredirectToNewAlbum = handlingredirectToNewAlbum;
+    }
+
 
 }

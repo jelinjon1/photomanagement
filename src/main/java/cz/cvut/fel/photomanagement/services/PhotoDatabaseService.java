@@ -90,16 +90,6 @@ public class PhotoDatabaseService {
             throw new PersistenceException(e);
         }
     }
-
-//    public Photo getPhotoByHash(String photoHash) {
-//        Objects.requireNonNull(photoHash);
-//        try {
-//            String query = "SELECT p FROM Photo p WHERE p.hash==" + photoHash;
-//            return entityManager.createQuery(query, Photo.class).getSingleResult();
-//        } catch (RuntimeException e) {
-//            throw new PersistenceException(e);
-//        }
-//    }
     public Photo getPhotoByHash(String hash) {
         Objects.requireNonNull(hash);
         try {

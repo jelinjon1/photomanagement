@@ -7,7 +7,6 @@ package cz.cvut.fel.photomanagement.faces;
 import cz.cvut.fel.photomanagement.faces.model.Album;
 import cz.cvut.fel.photomanagement.faces.model.AlbumPhoto;
 import cz.cvut.fel.photomanagement.faces.model.AlbumPhotoCollection;
-import cz.cvut.fel.photomanagement.faces.model.Photo;
 import cz.cvut.fel.photomanagement.faces.util.CyclicIterator;
 import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
 import cz.cvut.fel.photomanagement.services.PhotoDatabaseService;
@@ -39,6 +38,7 @@ public class TableAlbumsBean implements Serializable {
     private int activeViewIndex;
     private DataModel<AlbumPhotoCollection> importanceCollections;
     private int importanceThreshold = 5;
+    private long deletingAlbumId = 0;
 
     public TableAlbumsBean() {
     }
@@ -46,6 +46,46 @@ public class TableAlbumsBean implements Serializable {
     @PostConstruct
     public void initDB() {
         albumsList = new ListDataModel<>(new ArrayList<>(albumDatabaseService.listAllAlbums()));
+    }
+
+    // sort album photos into appropriate AlbumPhotoCollections
+    // init value from rating in AlbumPhoto.Photo.rating
+    public void sortAlbumPhotos() {
+        List<AlbumPhoto> allAlbumPhotos = selectedAlbum.getPhotos();
+        List<AlbumPhotoCollection> allCollections = new ArrayList<>();
+        AlbumPhotoCollection temp = null;
+        for (AlbumPhoto photo : allAlbumPhotos) {
+
+            // low imp photo scenario
+            if (photo.getImportance() < importanceThreshold) {
+                // if collection isnt initiated or is of high importance, (add to list) and create new one
+                if (temp == null || !temp.isLowImportance()) {
+                    if (temp != null) {
+                        allCollections.add(temp);
+                    }
+                    temp = new AlbumPhotoCollection(true);
+                    temp.addPhoto(photo);
+                } else {
+                    temp.addPhoto(photo);
+                }
+            } else {
+                // if collection isnt initiated or is of low importance, (add to list) and create new one
+                if (temp == null || temp.isLowImportance()) {
+                    if (temp != null) {
+                        allCollections.add(temp);
+                    }
+                    temp = new AlbumPhotoCollection(false);
+                    temp.addPhoto(photo);
+                } else {
+                    temp.addPhoto(photo);
+                }
+            }
+        }
+        if (!allCollections.contains(temp)) {
+            allCollections.add(temp);
+        }
+
+        this.importanceCollections = new ListDataModel<>(allCollections);
     }
 
     public void updateAlbumPhoto(int albumPhotoId) {
@@ -57,11 +97,11 @@ public class TableAlbumsBean implements Serializable {
                 .findFirst()
                 .get();
         albumDatabaseService.update(albumPhoto.getAlbum());
-        System.out.println(albumPhoto);
+        sortAlbumPhotos();
     }
 
-    public void deletePhoto(Photo photo) {
-        selectedAlbum.deletePhoto(photo);
+    public void deletePhoto(AlbumPhoto photo) {
+        selectedAlbum.deleteAlbumPhoto(photo);
         albumDatabaseService.update(selectedAlbum);
     }
 
@@ -82,21 +122,17 @@ public class TableAlbumsBean implements Serializable {
     }
 
     public void deleteAlbum() {
+        deletingAlbumId = 0;
         selectedAlbum = albumsList.getRowData();
         albumDatabaseService.deleteAlbum(selectedAlbum.getId());
     }
 
     public String goToDetailRedirect() {
         selectedAlbum = albumsList.getRowData();
+        System.out.println("SELECTED ALBUM PHOTOS: " + selectedAlbum.getPhotos());
         this.iterator = new CyclicIterator(selectedAlbum.getPhotos());
 
-        AlbumPhotoCollection lowImp = new AlbumPhotoCollection(0, new ArrayList<>(selectedAlbum.getPhotos().subList(0, 6)));
-        AlbumPhotoCollection highImp = new AlbumPhotoCollection(6, new ArrayList<>(selectedAlbum.getPhotos().subList(6, 11)));
-        AlbumPhotoCollection lowImp2 = new AlbumPhotoCollection(0, new ArrayList<>(selectedAlbum.getPhotos().subList(11, 17)));
-
-        this.importanceCollections = new ListDataModel<>(
-                List.of(lowImp, highImp, lowImp2)
-        );
+        sortAlbumPhotos();
         return "albums-detail.xhtml?faces-redirect=true";
     }
 
@@ -157,4 +193,11 @@ public class TableAlbumsBean implements Serializable {
         this.importanceThreshold = importanceThreshold;
     }
 
+    public long getDeletingAlbumId() {
+        return deletingAlbumId;
+    }
+
+    public void setDeletingAlbumId(long deletingAlbumId) {
+        this.deletingAlbumId = deletingAlbumId;
+    }
 }

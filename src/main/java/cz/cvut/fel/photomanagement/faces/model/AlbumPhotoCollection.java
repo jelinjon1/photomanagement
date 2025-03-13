@@ -4,6 +4,7 @@
  */
 package cz.cvut.fel.photomanagement.faces.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,22 +15,21 @@ public class AlbumPhotoCollection {
 
     private List<AlbumPhoto> photos;
     private int importance;
+    private boolean lowImportance;
+    // todo rethink boolean/int/enum for levels of importance
 
-    public AlbumPhotoCollection(int importance, List<AlbumPhoto> photos) {
+    public AlbumPhotoCollection(boolean lowImportance, List<AlbumPhoto> photos) {
+        this.lowImportance = lowImportance;
         this.photos = photos;
-        this.importance = importance;
     }
 
-    public boolean compareImportance(int threshhold) {
-        return importance < 10;
+    public AlbumPhotoCollection(boolean lowImportance) {
+        this.lowImportance = lowImportance;
+        this.photos = new ArrayList<>();
     }
 
-    public void pushAlbumPhoto(AlbumPhoto photo) {
-        this.photos.add(photo);
-    }
-
-    public void appendAlbumPhoto() {
-
+    public void addPhoto(AlbumPhoto photo) {
+        photos.add(photo);
     }
 
     public List<AlbumPhoto> getPhotos() {
@@ -46,6 +46,10 @@ public class AlbumPhotoCollection {
 
     public void setImportance(int importance) {
         this.importance = importance;
+    }
+
+    public boolean isLowImportance() {
+        return lowImportance;
     }
 
 }

@@ -3,37 +3,76 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core">
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
+      xmlns:c="jakarta.tags.core">
     <h:head>
-        <title>Photo managment application</title>
+        <title>Priority Album View</title>
         <h:outputStylesheet name="css/main.css" />
+        <h:outputStylesheet name="css/albums.css" />
+        <h:outputStylesheet name="css/photos.css" />
     </h:head>
     <h:body>
-        <div class="banner header">
-            Header
-        </div>
-        <h:form>
-            <ul class="topnav">
-                <li><a class="active" href="index.xhtml">Home</a></li>
-                <li><a href="albums.xhtml">Albums</a></li>
-                <li>
-                    <h:link value="Photos" outcome="photos">
-                        <f:param name="path" value="" />
-                    </h:link>
-                </li>
-            </ul>
-        </h:form>
-        <div class="wrapper">
-            <h1>Photomanagment</h1>
-            <p>
-                Welcome to home page
-            </p>
-            <!--            <h:graphicImage name="bird-branch.jpg" library="images" alt="Example Image" />
-                        <img src="#{resource['images/bird-branch.jpg']}" alt="Example Image" />-->
-        </div>
+        <h:form id="priority-form">
+            <div class="importance-gallery">
+                <ui:repeat value="#{tableAlbumsBean.importanceCollections}" var="collection">
+                    <!-- Low Importance Collection -->
+                    <h:panelGroup class="low-importance-wrapper" rendered="#{collection.lowImportance}">
+                        <ui:repeat value="#{collection.photos}" var="albumphoto">
+                            <div class="photo-wrapper low-importance">
+                                <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
+                                    <h:graphicImage class="photo" 
+                                                    value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
+                                                    alt="#{albumphoto.photo.description}" />
+                                </a>
+                                <div class="photo-details" id="#{'detail_'.concat(albumphoto.photo.id)}">
+                                    <p>File Name: #{albumphoto.photo.fileName}</p>
+                                    <h:panelGrid columns="1" style="margin-bottom: 10px">
+                                        <div>
+                                            Current Importance: #{albumphoto.importance}
+                                        </div>
+                                        <p:inputNumber id="photo-importance-label" value="#{albumphoto.importance}">
+                                            <p:ajax process="@this" listener="#{tableAlbumsBean.updateAlbumPhoto(albumphoto.id)}" update="@form"/>
+                                        </p:inputNumber>
+                                        <p:slider for="photo-importance-label" step="1" maxValue="10"/>
+                                    </h:panelGrid>
+                                    <h:commandButton class="delete" value="Delete">
+                                        <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(albumphoto.photo)}"/>
+                                    </h:commandButton>
+                                </div>
 
-        <div class="banner footer">
-            Footer
-        </div>
+                            </div>
+                        </ui:repeat>
+                    </h:panelGroup>
+
+                    <!-- High Importance Collection -->
+                    <ui:repeat value="#{collection.photos}" var="albumphoto" rendered="#{!collection.lowImportance}">
+                        <div class="photo-wrapper high-importance">
+                            <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
+                                <h:graphicImage class="photo"
+                                                value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
+                                                alt="#{albumphoto.photo.description}" />
+                            </a>
+                            <div class="photo-details" id="#{'detail_'.concat(albumphoto.photo.id)}">
+                                <p>File Name: #{albumphoto.photo.fileName}</p>
+                                <h:panelGrid columns="1" style="margin-bottom: 10px">
+                                    <div>
+                                        Current Importance: #{albumphoto.importance}
+                                    </div>
+                                    <p:inputNumber id="photo-importance-label" value="#{albumphoto.importance}">
+                                        <p:ajax process="@this" listener="#{tableAlbumsBean.updateAlbumPhoto(albumphoto.id)}" update="@form"/>
+                                    </p:inputNumber>
+                                    <p:slider for="photo-importance-label" step="1" maxValue="10"/>
+                                </h:panelGrid>
+                                <h:commandButton class="delete" value="Delete">
+                                    <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(albumphoto.photo)}"/>
+                                </h:commandButton>
+                            </div>
+                        </div>
+                    </ui:repeat>
+                </ui:repeat>
+            </div>
+        </h:form>
     </h:body>
 </html>

@@ -1,0 +1,49 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 13. 3. 2025, 15:37:10
+    Author     : Jonáš
+*/
+/* tab selector */
+#tab-views {
+    ul {
+        padding: 0 0 2px 0;
+        
+        background-color: var(--dark-green);
+        li {
+            padding: 0;
+            border: none;
+            background-color: var(--dark-green);
+            
+            a {
+                padding: 14px 16px;
+                text-decoration: none;
+                font-weight: 400;
+                font-family: "Times New Roman", Times, serif;
+                color: white;
+            }
+            
+            /* active tab */
+            &.ui-state-active {
+                border: none;
+                background-color: var(--light-green);
+                box-shadow: none;
+            }
+            &.ui-state-hover {
+                /*border-color: red;*/
+                border: none;
+                background-color: var(--light-green);
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                a {
+                    
+                }
+            }
+        }
+    }
+    
+    > div {
+        background-color: var(--lightest-green);
+    }
+}

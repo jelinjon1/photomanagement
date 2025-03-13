@@ -30,6 +30,7 @@ public class AlbumPhoto {
     public AlbumPhoto(Photo photo, Album album) {
         this.photo = photo;
         this.album = album;
+        this.importance = (photo.getRating() == null) ? 0 : photo.getRating() * 2;
     }
 
     public AlbumPhoto(Photo photo, Album album, int placement, int importance) {

@@ -4,21 +4,20 @@
  */
 package cz.cvut.fel.photomanagement.services;
 
-import jakarta.ejb.Singleton;
+import cz.cvut.fel.photomanagement.exception.PersistenceException;
+import cz.cvut.fel.photomanagement.faces.model.Album;
+import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import cz.cvut.fel.photomanagement.exception.PersistenceException;
-import cz.cvut.fel.photomanagement.faces.model.Album;
 
 /**
  *
  * @author Jonáš
  */
-@Singleton
+@Stateless
 public class AlbumDatabaseService {
 
     @PersistenceContext
@@ -40,12 +39,10 @@ public class AlbumDatabaseService {
         return entityManager.createQuery("SELECT a FROM Album a", Album.class).getResultList();
     }
 
-    @Transactional
     public void saveAlbum(Album album) {
         entityManager.persist(album);
     }
 
-    @Transactional
     public Album update(Album album) {
         Objects.requireNonNull(album);
         try {
@@ -56,9 +53,11 @@ public class AlbumDatabaseService {
         }
     }
 
-    @Transactional
     public void deleteAlbum(Long id) {
         Album album = entityManager.find(Album.class, id);
+//        for (AlbumPhoto albumPhoto : album.getPhotos()) {
+//            entityManager.remove(albumPhoto);
+//        }
         if (album != null) {
             entityManager.remove(album);
         }

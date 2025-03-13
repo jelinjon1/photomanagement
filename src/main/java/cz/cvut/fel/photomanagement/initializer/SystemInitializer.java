@@ -4,7 +4,6 @@
  */
 package cz.cvut.fel.photomanagement.initializer;
 
-import cz.cvut.fel.photomanagement.faces.model.Album;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
@@ -26,15 +25,15 @@ public class SystemInitializer {
     @PostConstruct
     @Transactional
     public void initData() {
-        Album album1 = new Album();
-        album1.setName("Summer vacation 2018");
-        album1.setDescription("Trip to Canada");
-
-        Album album2 = new Album();
-        album2.setName("Winter vacation 2019");
-        album2.setDescription("Trip to Europe");
-
-        entityManager.persist(album1);
-        entityManager.persist(album2);
+//        Album album1 = new Album();
+//        album1.setName("Summer vacation 2018");
+//        album1.setDescription("Trip to Canada");
+//
+//        Album album2 = new Album();
+//        album2.setName("Winter vacation 2019");
+//        album2.setDescription("Trip to Europe");
+//
+//        entityManager.persist(album1);
+//        entityManager.persist(album2);
     }
 }

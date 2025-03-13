@@ -13,7 +13,7 @@
         <h:outputStylesheet name="css/photos.css" />
     </h:head>
     <h:body>
-        <h:form id="carousel-form">
+        <h:form id="carousel-form" class="album-view-form">
             <h:panelGroup id="photo-presentation" class="photo-presentation">
                 <h:commandLink action="#{tableAlbumsBean.iterator.goToPrevious()}" class="prev-block">
                     <p:ajax update="@form" />
@@ -37,8 +37,12 @@
                                     rendered="#{tableAlbumsBean.iterator.notEmpty}"
                                     value="#{'documentfiles'.concat(tableAlbumsBean.iterator.next.photo.relativePathFromRoot)}"/>
                 </h:commandLink>
-
             </h:panelGroup>
+            <div class="carousel-controls-wrapper">
+                <h:commandButton class="delete" value="Delete">
+                    <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(tableAlbumsBean.iterator.current)}"/>
+                </h:commandButton>
+            </div>
         </h:form>
     </h:body>
 </html>

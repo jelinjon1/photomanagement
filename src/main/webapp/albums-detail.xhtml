@@ -12,11 +12,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
       xmlns:c="jakarta.tags.core">
     <h:head>
         <title>Albums detail</title>
+    </h:head>
+    <h:body>
         <h:outputStylesheet name="css/main.css" />
         <h:outputStylesheet name="css/albums.css" />
         <h:outputStylesheet name="css/photos.css" />
-    </h:head>
-    <h:body>
+        <h:outputStylesheet name="css/album-views.css" />
         <div class="banner header">
             Header
         </div>
@@ -58,86 +59,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 </div>
             </div>
             
-            <h:form id="album-form">
-                <div class="importance-gallery">
-                    <ui:repeat value="#{tableAlbumsBean.importanceCollections}" var="collection">
-                        <!-- Low Importance Collection -->
-                        <h:panelGroup class="low-importance-wrapper" rendered="#{collection.importance lt tableAlbumsBean.importanceThreshold}">
-                            <!-- Repeat over photos inside this collection -->
-                            <ui:repeat value="#{collection.photos}" var="albumphoto">
-                                <div class="photo-wrapper low-importance">
-                                    <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
-                                        <h:graphicImage class="photo" 
-                                                        value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
-                                                        alt="#{albumphoto.photo.description}" />
-                                    </a>
-                                </div>
-                            </ui:repeat>
-                        </h:panelGroup>
-
-                        <!-- High Importance Collection -->
-                        <ui:repeat value="#{collection.photos}" var="albumphoto" rendered="#{collection.importance ge tableAlbumsBean.importanceThreshold}">
-                            <div class="photo-wrapper high-importance">
-                                <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
-                                    <h:graphicImage class="photo"
-                                                    value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
-                                                    alt="#{albumphoto.photo.description}" />
-                                </a>
-                            </div>
-                        </ui:repeat>
-                    </ui:repeat>
-                </div>
-                
-                
-                <h:panelGroup id="photo-presentation" class="photo-presentation" >
-                    <h:commandLink action="#{tableAlbumsBean.iterator.goToPrevious()}" class="prev-block">
-                        <p:ajax update="@form" />
-                        <h:graphicImage class="neighbor previous" 
-                                        alt="No previous photo"
-                                        rendered="#{tableAlbumsBean.iterator.notEmpty}"
-                                        value="#{'documentfiles'.concat(tableAlbumsBean.iterator.previous.photo.relativePathFromRoot)}"/>
-                    </h:commandLink>
-                    
-                    <a href="#{'documentfiles'.concat(tableAlbumsBean.iterator.current.photo.relativePathFromRoot)}" 
-                       target="_blank" id="photo-link#{photo.id}">
-                        <h:graphicImage class="current" 
-                                        alt="No current photo"
-                                        value="#{'documentfiles'.concat(tableAlbumsBean.iterator.current.photo.relativePathFromRoot)}"/>
-                    </a>
-                    
-                    <h:commandLink action="#{tableAlbumsBean.iterator.goToNext()}" class="next-block">
-                        <p:ajax update="@form" />
-                        <h:graphicImage class="neighbor next" 
-                                        alt="No next photo"
-                                        rendered="#{tableAlbumsBean.iterator.notEmpty}"
-                                        value="#{'documentfiles'.concat(tableAlbumsBean.iterator.next.photo.relativePathFromRoot)}"/>
-                    </h:commandLink>
-                    
-                </h:panelGroup>
-                
-                <div id="photo-gallery" class="photo-gallery">
-                    <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="albumphoto">
-                        <div class="photo-wrapper" id="photo_wrapper_#{albumphoto.photo.id}">
-
-                            <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank">
-                                <h:graphicImage class="photo rating-#{albumphoto.photo.rating}" 
-                                                id="photo_#{photo.id}" 
-                                                value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" 
-                                                alt="#{albumphoto.photo.description}" />
-                            </a>                            
-
-                            <div class="photo-details" id="#{'detail_'.concat(albumphoto.photo.id)}">
-                                <p>File Name: #{albumphoto.photo.fileName}</p>
-                                <p:rating value="#{albumphoto.photo.rating}"/>
-                                <h:commandButton class="delete" value="Delete">
-                                    <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(albumphoto.photo)}"/>
-                                </h:commandButton>
-                            </div>
-                        </div>
-                    </ui:repeat>
-                </div>
-            </h:form>
+            
+            
         </div>
+        <p:tabView id="tab-views">
+            <p:tab title="Carousel album view">
+                <ui:include src="./album-views/carousel.xhtml" />
+            </p:tab>
+            <p:tab title="Gallery album view">
+                <ui:include src="./album-views/gallery.xhtml" />
+            </p:tab>
+            <p:tab title="Priority album view">
+                <ui:include src="./album-views/priority.xhtml" />
+            </p:tab>
+            <p:tab title="Shuffle album view">
+                <ui:include src="./album-views/shuffle.xhtml" />
+            </p:tab>
+        </p:tabView>
         <div class="banner footer">
             Footer
         </div>
