@@ -207,17 +207,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 
 .album-view-form {
-    /*background-color: yellowgreen;*/
+    
+    .placeholder {
+        text-align: center;
+        padding: 12px;
+    }
     
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-content: center;
     
     .carousel-controls-wrapper {
         display: flex;
         justify-content: center;
     }
-    
-/*    > * {
-        border: 2px solid red;
-    }*/
 }

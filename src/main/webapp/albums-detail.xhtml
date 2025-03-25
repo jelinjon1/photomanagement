@@ -22,15 +22,34 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             Header
         </div>
         
-        <ul class="topnav">
-            <li><a href="index.xhtml">Home</a></li>
-            <li><a href="albums.xhtml">Albums</a></li>
-            <li>
-                <h:link value="Photos" outcome="photos">
-                    <f:param name="path" value="" />
-                </h:link>
-            </li>
-        </ul>
+        <h:form>
+            <ul class="topnav">
+                <li><a href="index.xhtml">Domů</a></li>
+                <li><a href="albums.xhtml">Albums</a></li>
+                <li>
+                    <h:link value="Photos" outcome="photos">
+                        <f:param name="path" value="" />
+                    </h:link>
+                </li>
+                <li class="float-right">
+                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="Uživatel: #{request.userPrincipal.name}"/>
+                </li>
+                <li class="float-right">
+                    <h:commandLink 
+                        value="Přihlásit"
+                        action="login.xhtml" 
+                        rendered="#{!request.isUserInRole('admin')}"
+                        />
+                </li>
+                <li class="float-right">
+                    <h:commandLink 
+                        value="Odhlásit"
+                        action="#{logoutBean.logout()}"
+                        rendered="#{request.isUserInRole('admin')}"
+                        />
+                </li>
+            </ul>
+        </h:form>
 
         <div class="wrapper">
             <h1>Album</h1>
@@ -46,16 +65,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     <h:outputText value="#{tableAlbumsBean.selectedAlbum.description}" styleClass="album-description" />
                 
                
-                    <h:panelGrid columns="2" styleClass="album-details">
-                        <h:outputLabel value="Creation date:" />
-                        <h:outputText value="#{tableAlbumsBean.selectedAlbum.created}" />
+                    <h:form class="album-controls">
+                        <h:panelGrid columns="2" styleClass="album-details">
+                            <h:outputLabel value="Datum vytvoření:" />
+                            <h:outputText value="#{tableAlbumsBean.selectedAlbum.created}" />
 
-                        <h:outputLabel value="Last edited:" />
-                        <h:outputText value="#{tableAlbumsBean.selectedAlbum.lastEdited}" />
+                            <h:outputLabel value="Naposledy upraveno:" />
+                            <h:outputText value="#{tableAlbumsBean.selectedAlbum.lastEdited}" />
 
-                        <h:outputLabel value="No. of photos" />
-                        <h:outputText value="#{tableAlbumsBean.selectedAlbum.photos.size()}" />
-                    </h:panelGrid>
+                            <h:outputLabel value="Počet souborů:" />
+                            <h:outputText value="#{tableAlbumsBean.selectedAlbum.photos.size()}" />
+                        
+                            <h:commandButton value="Stáhnout" actionListener="#{tableAlbumsBean.downloadAlbum}" />
+                        </h:panelGrid>
+                    </h:form>
                 </div>
             </div>
             
@@ -63,16 +86,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             
         </div>
         <p:tabView id="tab-views">
-            <p:tab title="Carousel album view">
+            <p:tab title="Carousel">
                 <ui:include src="./album-views/carousel.xhtml" />
             </p:tab>
-            <p:tab title="Gallery album view">
+            <p:tab title="Galerie">
                 <ui:include src="./album-views/gallery.xhtml" />
             </p:tab>
-            <p:tab title="Priority album view">
+            <p:tab title="Prioritní">
                 <ui:include src="./album-views/priority.xhtml" />
             </p:tab>
-            <p:tab title="Shuffle album view">
+            <p:tab title="Shuffle">
                 <ui:include src="./album-views/shuffle.xhtml" />
             </p:tab>
         </p:tabView>

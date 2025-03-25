@@ -4,21 +4,22 @@
  */
 package cz.cvut.fel.photomanagement.faces.util;
 
-import cz.cvut.fel.photomanagement.faces.model.Album;
+import cz.cvut.fel.photomanagement.entities.Album;
+import java.io.Serializable;
 
 /**
  *
  * @author Jonáš
  */
-public class AlbumMenuOption {
+public class AlbumMenuOption implements Serializable {
 
-    private Album album;
+    private final Album album;
 
     public String getName() {
         if (album != null) {
             return album.getName();
         } else {
-            return "Create new album";
+            return "Vytvořit nové album";
         }
     }
 

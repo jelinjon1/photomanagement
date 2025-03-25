@@ -20,23 +20,44 @@
         <div class="banner header">
             Header
         </div>
-        <ul class="topnav">
-            <li><a href="index.xhtml">Home</a></li>
-            <li><a href="albums.xhtml">Albums</a></li>
-            <li>
-                <h:link value="Photos" outcome="photos" class="active">
-                    <f:param name="path" value="" />
-                </h:link>
-            </li>
-        </ul>
+        
+        <h:form>
+            <ul class="topnav">
+                <li><a href="index.xhtml">Domů</a></li>
+                <li><a href="albums.xhtml">Albums</a></li>
+                <li>
+                    <h:link value="Photos" outcome="photos" class="active">
+                        <f:param name="path" value="" />
+                    </h:link>
+                </li>
+                <li class="float-right">
+                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="Uživatel: #{request.userPrincipal.name}"/>
+                </li>
+                <li class="float-right">
+                    <h:commandLink 
+                        value="Přihlásit"
+                        action="login.xhtml" 
+                        rendered="#{!request.isUserInRole('admin')}"
+                        />
+                </li>
+                <li class="float-right">
+                    <h:commandLink 
+                        value="Odhlásit"
+                        action="#{logoutBean.logout()}"
+                        rendered="#{request.isUserInRole('admin')}"
+                        />
+                </li>
+            </ul>
+        </h:form>
+        
         <div class="wrapper">
             
             <h1>Photos</h1>
             
             <h:form>
+                <!--BREADCRUMBS-->
                 <div class="path-link-wrapper">
-                
-                    <h:commandLink value="Home" action="#{collectionPhotosBean.navigateTo(null)}">
+                    <h:commandLink value="Domů" action="#{collectionPhotosBean.navigateTo(null)}">
                         <f:param name="path" value=""/>
                     </h:commandLink>
                 
@@ -49,6 +70,11 @@
                 </div>
             </h:form>
             
+            <h:form enctype="multipart/form-data" id="upload-form">
+                <p:fileUpload value="#{collectionPhotosBean.files}" dragDropSupport="true" mode="simple" skinSimple="true" multiple="true"/>
+                <p:commandButton value="Nahrát" ajax="false" action="#{collectionPhotosBean.uploadMultiple}"/>
+            </h:form>
+            
             <h:form id="photos-form">
                 
                 <div class="controls">
@@ -58,33 +84,24 @@
                         <f:selectItems value="#{collectionPhotosBean.albumOptions}" var="album" 
                                    itemValue="#{album.id}" itemLabel="#{album.name}" />
                     </h:selectOneMenu>
-                    
-                    <h:panelGroup id="actionButtonsWrapper">
-                        <h:panelGroup 
-                            styleClass="#{collectionPhotosBean.selectedPhotoCount > 0 ? 'action-buttons-wrapper active' : 'action-buttons-wrapper'}">
-                            <h:commandButton value="Clear sellection" id="clear"/>
-                            <h:commandButton value="Delete selection" id="delete"/>
-                            <h:outputLabel id="counter" value="#{collectionPhotosBean.selectedPhotoCount} photos selected" />
-                        </h:panelGroup>
-                    </h:panelGroup>
                 </div>
                 
                 <div id="directories-list">
                     <h:dataTable value="#{collectionPhotosBean.filesDataModel}" var="file" rendered="#{collectionPhotosBean.filesDataModel.rowCount > 0}">
                         <div class="file-wrapper" id="file_#{file.name}">
                             <h:column>
-                                <f:facet name="header">File Name</f:facet>
+                                <f:facet name="header">Název adresáře</f:facet>
                                 <h:commandLink value="#{file.name}" action="#{collectionPhotosBean.navigateTo(file.name)}">
                                     <f:param name="path" value="/#{file.name}"/>
                                 </h:commandLink>
                             </h:column>
                             <h:column>
-                                <f:facet name="header">Children</f:facet>
+                                <f:facet name="header">Počet podadresářů</f:facet>
                                     #{file.list().stream().count()} files
                             </h:column>
                             <h:column>
-                                <f:facet name="header">Last Modified</f:facet>
-                                    #{collectionPhotosBean.formatLastModified(file.lastModified())}
+                                <f:facet name="header">Naposledy upraveno</f:facet>
+                                    #{collectionPhotosBean.formatLongToDate(file.lastModified())}
                             </h:column>
                         </div>
                     </h:dataTable>
@@ -98,8 +115,8 @@
                                 <!--<h:graphicImage class="photo rating-#{photo.rating}" id="#{'photo_'.concat(photo.id)}" value="#{'documentfiles'.concat(photo.relativePathFromRoot)}" alt="#{photo.description}" />-->
                                 <h:graphicImage id="#{'photo_'.concat(photo.id != null ? photo.id : 'unknown')}" 
                                                 class="photo rating-#{photo.rating}" 
-                                                value="#{'documentfiles'.concat(photo.relativePathFromRoot)}"
-                                                alt="#{photo.description}" />
+                                                value="#{'documentfiles'.concat(photo.pathToThumbail)}"
+                                                alt="Thumbnail doesn't exist for #{photo.fileName}" />
                             </a>                            
                             
                             <div class="photo-details" id="#{'detail_'.concat(photo.id)}">
@@ -108,9 +125,6 @@
                                     <p>#{photo.fileName}</p>
                                 </a>
                                 <p>#{photo.taken}</p>
-<!--                                <h:selectBooleanCheckbox value="#{collectionPhotosBean.selectedPhotos[photo.id]}">
-                                    <f:ajax render="photos-form:counter photos-form:actionButtonsWrapper" />
-                                </h:selectBooleanCheckbox>-->
                                 
                                 <p:rating value="#{photo.rating}">
                                     <p:ajax event="rate" listener="#{collectionPhotosBean.updatePhoto(photo)}"

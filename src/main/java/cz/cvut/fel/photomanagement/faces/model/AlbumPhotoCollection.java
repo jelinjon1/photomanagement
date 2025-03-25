@@ -4,6 +4,7 @@
  */
 package cz.cvut.fel.photomanagement.faces.model;
 
+import cz.cvut.fel.photomanagement.entities.AlbumPhoto;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class AlbumPhotoCollection {
 
     private List<AlbumPhoto> photos;
     private int importance;
-    private boolean lowImportance;
+    private final boolean lowImportance;
     // todo rethink boolean/int/enum for levels of importance
 
     public AlbumPhotoCollection(boolean lowImportance, List<AlbumPhoto> photos) {
@@ -52,4 +53,7 @@ public class AlbumPhotoCollection {
         return lowImportance;
     }
 
+    public int getSize() {
+        return this.photos.size();
+    }
 }

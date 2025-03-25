@@ -14,6 +14,30 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
         padding: 0 10px;
     }
 }
+
+#upload-form {
+    padding-bottom: 20px;
+    
+    .ui-button {
+        
+        background-color: var(--dark-green);
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+
+        border-radius: 4px;
+        text-decoration: none;
+        font-family: "Times New Roman", Times, serif;
+        color: white;
+        font-size: 1em;
+        
+        &:hover {
+            background-color: var(--light-green);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+    }
+}
+
 .controls {
     display: flex;
     flex-direction: row;
@@ -21,10 +45,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     justify-content: flex-start;
     align-items: center;
     gap: 20px;
+    padding-bottom: 16px;
     
-    label, select {
-        padding: 10px 20px;
-        border: 1px solid var(--dark-green);
+    label {
+        border-bottom: 2px solid var(--dark-green);
     }
 }
 .action-buttons-wrapper {
@@ -58,8 +82,8 @@ table {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    /*margin-top: 20px;*/
+    /*margin-bottom: 20px;*/
     justify-content: flex-start;
     
     img {

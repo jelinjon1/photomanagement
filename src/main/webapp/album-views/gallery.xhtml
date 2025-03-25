@@ -13,7 +13,9 @@
         <h:outputStylesheet name="css/photos.css" />
     </h:head>
     <h:body>
-        <h:form id="gallery-form">
+        <h:form id="gallery-form" class="album-view-form">
+            <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
+            
             <div id="photo-gallery" class="photo-gallery">
                 <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="albumphoto">
                     <div class="photo-wrapper" id="photo_wrapper_#{albumphoto.photo.id}">
@@ -27,8 +29,8 @@
 
                         <div class="photo-details" id="#{'detail_'.concat(albumphoto.photo.id)}">
                             <p>File Name: #{albumphoto.photo.fileName}</p>
-                            <p:rating value="#{albumphoto.photo.rating}"/>
-                            <h:commandButton class="delete" value="Delete">
+                            <p:rating value="#{albumphoto.photo.rating}" rendered="#{request.isUserInRole('admin')}"/>
+                            <h:commandButton class="delete" value="Delete" rendered="#{request.isUserInRole('admin')}">
                                 <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(albumphoto)}"/>
                             </h:commandButton>
                         </div>

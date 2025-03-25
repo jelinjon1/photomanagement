@@ -4,14 +4,17 @@
  */
 package cz.cvut.fel.photomanagement.faces.util;
 
-import cz.cvut.fel.photomanagement.faces.model.AlbumPhoto;
+import cz.cvut.fel.photomanagement.entities.AlbumPhoto;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author Jonáš
  */
-public class CyclicIterator {
+public class CyclicIterator implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private List<AlbumPhoto> objects;
     private int index = 0;
@@ -21,7 +24,7 @@ public class CyclicIterator {
     }
 
     public boolean isNotEmpty() {
-        return objects.size() != 0;
+        return !objects.isEmpty();
     }
 
     public AlbumPhoto getPrevious() {

@@ -4,11 +4,12 @@
  */
 package cz.cvut.fel.photomanagement.services;
 
+import cz.cvut.fel.photomanagement.entities.Album;
 import cz.cvut.fel.photomanagement.exception.PersistenceException;
-import cz.cvut.fel.photomanagement.faces.model.Album;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +19,9 @@ import java.util.Objects;
  * @author Jonáš
  */
 @Stateless
-public class AlbumDatabaseService {
+public class AlbumDatabaseService implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -28,7 +31,12 @@ public class AlbumDatabaseService {
     }
 
     public Album findByName(String name) {
-        return entityManager.createQuery("SELECT a FROM Album a WHERE a.name == " + name, Album.class).getResultList().getFirst();
+        List<Album> albums = entityManager.createQuery("SELECT a FROM Album a WHERE a.name LIKE :albumName", Album.class).setParameter("albumName", name).getResultList();
+        if (!albums.isEmpty()) {
+            return albums.get(0);
+        } else {
+            return null;
+        }
     }
 
     public Album findAlbumById(Long id) {

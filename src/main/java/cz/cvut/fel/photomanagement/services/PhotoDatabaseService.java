@@ -4,12 +4,13 @@
  */
 package cz.cvut.fel.photomanagement.services;
 
+import cz.cvut.fel.photomanagement.entities.Photo;
 import cz.cvut.fel.photomanagement.exception.PersistenceException;
-import cz.cvut.fel.photomanagement.faces.model.Photo;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +20,9 @@ import java.util.Objects;
  * @author Jonáš
  */
 @Stateless
-public class PhotoDatabaseService {
+public class PhotoDatabaseService implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @PersistenceContext
     protected EntityManager entityManager;

@@ -13,9 +13,13 @@
         <h:outputStylesheet name="css/photos.css" />
     </h:head>
     <h:body>
+        <div id="test-wrapper">
         <h:form id="carousel-form" class="album-view-form">
-            <h:panelGroup id="photo-presentation" class="photo-presentation">
-                <h:commandLink action="#{tableAlbumsBean.iterator.goToPrevious()}" class="prev-block">
+            <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
+            <h:panelGroup id="photo-presentation" 
+                          class="photo-presentation" 
+                          rendered="#{tableAlbumsBean.iterator.current != null}">
+                <h:commandLink id="prev-photo-btn" action="#{tableAlbumsBean.iterator.goToPrevious()}" class="prev-block">
                     <p:ajax update="@form" />
                     <h:graphicImage class="neighbor previous" 
                                     alt="No previous photo"
@@ -30,7 +34,7 @@
                                     value="#{'documentfiles'.concat(tableAlbumsBean.iterator.current.photo.relativePathFromRoot)}"/>
                 </a>
 
-                <h:commandLink action="#{tableAlbumsBean.iterator.goToNext()}" class="next-block">
+                <h:commandLink id="next-photo-btn" action="#{tableAlbumsBean.iterator.goToNext()}" class="next-block ">
                     <p:ajax update="@form" />
                     <h:graphicImage class="neighbor next" 
                                     alt="No next photo"
@@ -39,10 +43,34 @@
                 </h:commandLink>
             </h:panelGroup>
             <div class="carousel-controls-wrapper">
-                <h:commandButton class="delete" value="Delete">
+                <h:commandButton class="delete" 
+                                 value="Delete" 
+                                 rendered="#{tableAlbumsBean.iterator.current != null and request.isUserInRole('admin')}">
                     <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(tableAlbumsBean.iterator.current)}"/>
                 </h:commandButton>
             </div>
         </h:form>
+        </div>
+    
+        <script>
+            document.addEventListener("keydown", function(event) {
+                console.log(event);
+                if (event.key === "ArrowLeft") {
+                    document.getElementById("tab-views:carousel-form:prev-photo-btn").click(); // Trigger previous
+                } else if (event.key === "ArrowRight") {
+                    document.getElementById("tab-views:carousel-form:next-photo-btn").click(); // Trigger next
+                } else if (event.key === "f") {
+                    enterFullscreen();
+                }
+            });
+            
+            function enterFullscreen() {
+                var elem = document.getElementById("test-wrapper");
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                    isFullscreen = true;
+                }
+            }
+        </script>
     </h:body>
 </html>

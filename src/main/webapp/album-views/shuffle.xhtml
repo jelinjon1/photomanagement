@@ -11,17 +11,20 @@
         <h:outputStylesheet name="css/main.css" />
         <h:outputStylesheet name="css/albums.css" />
         <h:outputStylesheet name="css/photos.css" />
+        <h:outputStylesheet name="css/album-views.css" />
     </h:head>
     <h:body>
-        <h:form id="shuffle-form">
-            <h:panelGroup id="photo-presentation" class="photo-presentation">
+        <h:form id="shuffle-form" class="album-view-form shuffle-form">
+            <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
+            
+            <h:panelGroup id="photo-presentation" rendered="#{tableAlbumsBean.iterator.current != null}">
                 <p:commandButton type="button" onclick="PF('switcher').previous()"
                                  icon="pi pi-chevron-left" id="prev" styleClass="mr-2 mb-3" />
                 <p:commandButton type="button" onclick="PF('switcher').next()"
                                  icon="pi pi-chevron-right" id="next" styleClass="mr-2 mb-3" />
                 
-                <p:imageSwitch effect="shuffle" widgetVar="switcher" id="manuelSwitcher"
-                               slideshowAuto="false">
+                <p:imageSwitch effect="shuffle" widgetVar="switcher" id="manualSwitcher"
+                               slideshowAuto="false" class="image-switcher">
                     <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="albumphoto">
                         <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
                             <h:graphicImage class="photo shuffle-current"

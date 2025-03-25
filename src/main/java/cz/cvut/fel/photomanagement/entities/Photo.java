@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cz.cvut.fel.photomanagement.faces.model;
+package cz.cvut.fel.photomanagement.entities;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Metadata;
@@ -16,6 +16,7 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributeView;
@@ -36,9 +37,10 @@ import java.util.logging.Logger;
 @NamedQueries({
     @NamedQuery(name = Photo.QUERY_BY_LOCAL_DIR, query = "SELECT photo FROM Photo photo WHERE photo.localPath = :localPath")
 })
-public class Photo {
+public class Photo implements Serializable {
 
     public static final String QUERY_BY_LOCAL_DIR = "Photo.byLocalDir";
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -153,6 +155,10 @@ public class Photo {
 
     public String getRelativePathFromRoot() {
         return localPath + "/" + fileName;
+    }
+
+    public String getPathToThumbail() {
+        return localPath + "/thumbnails/" + fileName;
     }
 
     public Integer getRating() {

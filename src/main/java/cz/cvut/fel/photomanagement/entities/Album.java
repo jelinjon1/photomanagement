@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cz.cvut.fel.photomanagement.faces.model;
+package cz.cvut.fel.photomanagement.entities;
 
-import cz.cvut.fel.photomanagement.comparator.SortByDateTaken;
+import cz.cvut.fel.photomanagement.comparator.AlbumPhotoByDate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -22,7 +23,9 @@ import java.util.Objects;
  * @author Jonáš
  */
 @Entity
-public class Album {
+public class Album implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -99,7 +102,7 @@ public class Album {
     }
 
     public List<AlbumPhoto> getPhotos() {
-        Comparator sortByDate = new SortByDateTaken();
+        Comparator sortByDate = new AlbumPhotoByDate();
         albumPhotos.sort(sortByDate);
         return albumPhotos;
     }

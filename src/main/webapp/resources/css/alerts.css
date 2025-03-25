@@ -1,0 +1,45 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 13. 3. 2025, 22:05:58
+    Author     : Jonáš
+*/
+
+.modal {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    visibility: hidden;
+    
+    .modal-content {
+        padding: 16px;
+        width: 40%;
+        min-height: 200px;
+        min-width: 400px;
+        box-sizing: content-box;
+        background-color: var(--light-green);
+        border: 1px solid gray;
+        border-radius: 10px;
+        box-shadow: 2px 2px 5px #454545;
+        transform: scale(0);
+        transition: transform 1s;
+    }
+    
+    &.visible {
+        visibility: visible;
+        
+        .modal-content {
+            transform: scale(1);
+        }
+    }
+}

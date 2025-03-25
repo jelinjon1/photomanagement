@@ -12,9 +12,24 @@
         <h:outputStylesheet name="css/main.css" />
         <h:outputStylesheet name="css/albums.css" />
         <h:outputStylesheet name="css/photos.css" />
+        <h:outputStylesheet name="css/album-views.css" />
     </h:head>
     <h:body>
-        <h:form id="priority-form">
+        <h:form id="priority-form" class="album-view-form">
+            <div class="controls">
+                <label for="tab-views:priority-form:priority-number-input-wrapper_input">Zvolte priority threshhold: (1-10):</label>
+                <p:inputNumber id="priority-number-input-wrapper"
+                               value="#{tableAlbumsBean.importanceThreshold}"
+                               minValue="0"
+                               maxValue="10"
+                               decimalPlaces="0"
+                               styleClass="number-input-wrapper"
+                               modifyValueOnWheel="true">
+                    <f:ajax event="change" listener="#{tableAlbumsBean.debugPrint()}" render="@none"/>
+                </p:inputNumber>
+            </div>
+            
+            <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
             <div class="importance-gallery">
                 <ui:repeat value="#{tableAlbumsBean.importanceCollections}" var="collection">
                     <!-- Low Importance Collection -->
@@ -27,17 +42,25 @@
                                                     alt="#{albumphoto.photo.description}" />
                                 </a>
                                 <div class="photo-details" id="#{'detail_'.concat(albumphoto.photo.id)}">
-                                    <p>File Name: #{albumphoto.photo.fileName}</p>
-                                    <h:panelGrid columns="1" style="margin-bottom: 10px">
+                                    <h:panelGrid columns="1" 
+                                                 style="margin-bottom: 10px">
+                                        <p>Název souboru: #{albumphoto.photo.fileName}</p>
                                         <div>
-                                            Current Importance: #{albumphoto.importance}
+                                            Priorita fotky: #{albumphoto.importance}
                                         </div>
-                                        <p:inputNumber id="photo-importance-label" value="#{albumphoto.importance}">
+                                        <p:inputNumber id="photo-importance-label" 
+                                                       value="#{albumphoto.importance}"
+                                                       rendered="#{request.isUserInRole('admin')}">
                                             <p:ajax process="@this" listener="#{tableAlbumsBean.updateAlbumPhoto(albumphoto.id)}" update="@form"/>
                                         </p:inputNumber>
-                                        <p:slider for="photo-importance-label" step="1" maxValue="10"/>
+                                        <p:slider for="photo-importance-label"
+                                                  step="1" 
+                                                  maxValue="10"
+                                                  rendered="#{request.isUserInRole('admin')}"/>
                                     </h:panelGrid>
-                                    <h:commandButton class="delete" value="Delete">
+                                    <h:commandButton class="delete"
+                                                     value="Smazat z alba"
+                                                     rendered="#{request.isUserInRole('admin')}">
                                         <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(albumphoto.photo)}"/>
                                     </h:commandButton>
                                 </div>
@@ -55,17 +78,20 @@
                                                 alt="#{albumphoto.photo.description}" />
                             </a>
                             <div class="photo-details" id="#{'detail_'.concat(albumphoto.photo.id)}">
-                                <p>File Name: #{albumphoto.photo.fileName}</p>
-                                <h:panelGrid columns="1" style="margin-bottom: 10px">
+                                <h:panelGrid columns="1" 
+                                             style="margin-bottom: 10px">
+                                    <p>File Name: #{albumphoto.photo.fileName}</p>
                                     <div>
                                         Current Importance: #{albumphoto.importance}
                                     </div>
-                                    <p:inputNumber id="photo-importance-label" value="#{albumphoto.importance}">
+                                    <p:inputNumber id="photo-importance-label"
+                                                   value="#{albumphoto.importance}"
+                                                   rendered="#{request.isUserInRole('admin')}">
                                         <p:ajax process="@this" listener="#{tableAlbumsBean.updateAlbumPhoto(albumphoto.id)}" update="@form"/>
                                     </p:inputNumber>
-                                    <p:slider for="photo-importance-label" step="1" maxValue="10"/>
+                                    <p:slider for="photo-importance-label" rendered="#{request.isUserInRole('admin')}" step="1" maxValue="10"/>
                                 </h:panelGrid>
-                                <h:commandButton class="delete" value="Delete">
+                                <h:commandButton class="delete" value="Smazat z alba" rendered="#{request.isUserInRole('admin')}">
                                     <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(albumphoto.photo)}"/>
                                 </h:commandButton>
                             </div>
