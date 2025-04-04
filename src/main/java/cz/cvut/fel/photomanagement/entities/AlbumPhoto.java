@@ -24,7 +24,6 @@ public class AlbumPhoto implements Serializable {
     private Long id;
     private Photo photo;
     private Album album;
-    private int placement; // order violates sql syntax
     private int importance;
 
     public AlbumPhoto() {
@@ -36,16 +35,15 @@ public class AlbumPhoto implements Serializable {
         this.importance = (photo.getRating() == null) ? 0 : photo.getRating() * 2;
     }
 
-    public AlbumPhoto(Photo photo, Album album, int placement, int importance) {
+    public AlbumPhoto(Photo photo, Album album, int importance) {
         this.photo = photo;
         this.album = album;
-        this.placement = placement;
         this.importance = importance;
     }
 
     @Override
     public String toString() {
-        return "AlbumPhoto{" + "id=" + id + ", album=" + album.getName() + ", placement=" + placement + ", importance=" + importance + '}';
+        return "AlbumPhoto{" + "id=" + id + ", album=" + album.getName() + ", importance=" + importance + '}';
     }
 
     public Long getId() {
@@ -70,14 +68,6 @@ public class AlbumPhoto implements Serializable {
 
     public void setAlbum(Album album) {
         this.album = album;
-    }
-
-    public int getPlacement() {
-        return placement;
-    }
-
-    public void setPlacement(int placement) {
-        this.placement = placement;
     }
 
     public int getImportance() {

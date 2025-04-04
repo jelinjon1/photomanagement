@@ -13,6 +13,14 @@
         <h:outputStylesheet name="css/photos.css" />
     </h:head>
     <h:body>
+        <label class="tooltip">
+            Ovládání
+            <div class="tooltip-text">
+                f - fullscreen,
+                esc - opustit fullscreen
+                šipky vpravo/vlevo - přepínání fotky
+            </div>
+        </label>
         <div id="test-wrapper">
         <h:form id="carousel-form" class="album-view-form">
             <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>

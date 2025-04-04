@@ -7,10 +7,12 @@ package cz.cvut.fel.photomanagement.faces;
 import cz.cvut.fel.photomanagement.comparator.PhotoByDate;
 import cz.cvut.fel.photomanagement.entities.Album;
 import cz.cvut.fel.photomanagement.entities.Photo;
+import cz.cvut.fel.photomanagement.faces.model.FilePlaceholder;
 import cz.cvut.fel.photomanagement.faces.util.AlbumMenuOption;
 import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
 import cz.cvut.fel.photomanagement.services.FileManager;
 import cz.cvut.fel.photomanagement.services.PhotoDatabaseService;
+import cz.cvut.fel.photomanagement.services.ThumbnailWebSocket;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.ejb.EJB;
@@ -32,10 +34,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -54,7 +52,7 @@ import org.primefaces.model.file.UploadedFiles;
 @SessionScoped
 @ManagedExecutorDefinition(
         name = "java:app/concurrent/thumbnailGenerationExecutor",
-        maxAsync = 20)
+        maxAsync = 5)
 public class CollectionPhotosBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -73,7 +71,7 @@ public class CollectionPhotosBean implements Serializable {
     private Photo selectedPhoto = null;
     private Long selectedPhotoParameter;
     private DataModel<Photo> photosDataModel;
-    private DataModel<File> filesDataModel;
+    private DataModel<FilePlaceholder> filesDataModel;
     private String filesPath;
     private ArrayList<String> paths;
     private boolean handlingredirectToNewAlbum = false;
@@ -127,6 +125,7 @@ public class CollectionPhotosBean implements Serializable {
         // filter directories into separate data model
         filesDataModel = new ListDataModel<>(allFiles.stream()
                 .filter(File::isDirectory)
+                .map(file -> new FilePlaceholder((file)))
                 .collect(Collectors.toList()));
 
         // fetch existing records for given path
@@ -140,10 +139,10 @@ public class CollectionPhotosBean implements Serializable {
 
         for (File file : allFiles) {
             if (file.isFile() && isPhoto(file)) {
-                if (!locationIsThumbnailsDirectory) {
-                    managedExecutor.submit(() -> generateThumbnail(file));
-                }
                 Photo existingPhoto = fileNameMap.get(file.getName());
+                if (!locationIsThumbnailsDirectory) {
+                    managedExecutor.submit(() -> generateThumbnail(file, existingPhoto.getId()));
+                }
                 if (existingPhoto != null) {
                     photosList.add(existingPhoto);
                     System.out.println("Loaded existing photo: " + existingPhoto);
@@ -160,11 +159,22 @@ public class CollectionPhotosBean implements Serializable {
         Comparator dateComparator = new PhotoByDate();
         photosList.sort(dateComparator);
 
+        for (Photo photo : photosList) {
+            System.out.println(photo);
+        }
+
         // return datamodel from list of photos
         photosDataModel = new ListDataModel<>(photosList);
     }
 
-    public void generateThumbnail(File inputFile) {
+    public void debugParam() {
+        String received = FacesContext.getCurrentInstance()
+                .getExternalContext().getRequestParameterMap().get("photoId");
+        System.out.println(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap());
+        System.out.println("DEBUG PARAM : " + received);
+    }
+
+    public void generateThumbnail(File inputFile, Long photoId) {
         try {
             Path thumbnailFilePath = Path.of(inputFile.getParent(), "thumbnails", inputFile.getName());
 
@@ -212,6 +222,8 @@ public class CollectionPhotosBean implements Serializable {
 //            g2d.dispose();
             // write the thumbnail to a file
             ImageIO.write(thumbnailImage, "png", thumbnailFilePath.toFile());
+
+            ThumbnailWebSocket.sendThumbnailUpdate(photoId, thumbnailFilePath.toString());
 
             System.out.println("Thumbnail created: " + thumbnailFilePath);
         } catch (Exception | Error e) {
@@ -303,14 +315,6 @@ public class CollectionPhotosBean implements Serializable {
         return null;
     }
 
-    public String formatLongToDate(long lastModified) {
-        LocalDateTime dateTime = Instant.ofEpochMilli(lastModified)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm - dd.MM.yyyy");
-        return dateTime.format(formatter);
-    }
-
     public void addToPaths(String fileName) {
         Objects.requireNonNull(fileName);
         if (!fileName.equals("")) {
@@ -372,7 +376,7 @@ public class CollectionPhotosBean implements Serializable {
         this.albumOptions = albumOptions;
     }
 
-    public DataModel<File> getFilesDataModel() {
+    public DataModel<FilePlaceholder> getFilesDataModel() {
         return filesDataModel;
     }
 

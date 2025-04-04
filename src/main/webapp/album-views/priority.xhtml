@@ -17,16 +17,23 @@
     <h:body>
         <h:form id="priority-form" class="album-view-form">
             <div class="controls">
-                <label for="tab-views:priority-form:priority-number-input-wrapper_input">Zvolte priority threshhold: (1-10):</label>
+                <label for="tab-views:priority-form:priority-number-input-wrapper_input"
+                       class="tooltip">
+                    Zvolte práh priority: (0-11):
+                    <span class="tooltip-text">Hranice od které jsou fotky zvětšeny. (0 - všehny velké, 11 - všechny malé)</span>
+                </label>
                 <p:inputNumber id="priority-number-input-wrapper"
                                value="#{tableAlbumsBean.importanceThreshold}"
                                minValue="0"
-                               maxValue="10"
+                               maxValue="11"
                                decimalPlaces="0"
                                styleClass="number-input-wrapper"
-                               modifyValueOnWheel="true">
-                    <f:ajax event="change" listener="#{tableAlbumsBean.debugPrint()}" render="@none"/>
+                               modifyValueOnWheel="true"
+                               onkeypress="if (event.keyCode == 13) { return false; }">
+                    <p:ajax process="@this" listener="#{tableAlbumsBean.sortAlbumPhotos()}" update="@form"/>
                 </p:inputNumber>
+                <p:slider for="priority-number-input-wrapper" step="1" minValue="0" maxValue="11"/>
+                
             </div>
             
             <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>

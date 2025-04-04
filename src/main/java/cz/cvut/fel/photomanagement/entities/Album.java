@@ -36,7 +36,6 @@ public class Album implements Serializable {
     private String description;
     private LocalDate created;
     private LocalDate lastEdited;
-    private String coverImage = null;
 
     public Album() {
         this.created = LocalDate.now();
@@ -47,28 +46,16 @@ public class Album implements Serializable {
         this.name = name;
     }
 
-    public Album(List<Photo> photos, String name, String description, String coverImage) {
+    public Album(List<Photo> photos, String name, String description) {
         this.name = name;
         this.description = description;
         this.created = LocalDate.now();
         this.lastEdited = this.created;
-        this.coverImage = coverImage;
     }
 
     @Override
     public String toString() {
-        return "Album{" + "id=" + id + ", albumPhotos=" + albumPhotos + ", name=" + name + ", description=" + description + ", created=" + created + ", lastEdited=" + lastEdited + ", coverImage=" + coverImage + '}';
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.name);
-        hash = 37 * hash + Objects.hashCode(this.description);
-        hash = 37 * hash + Objects.hashCode(this.created);
-        hash = 37 * hash + Objects.hashCode(this.lastEdited);
-        hash = 37 * hash + Objects.hashCode(this.coverImage);
-        return hash;
+        return "Album{" + "id=" + id + ", albumPhotos=" + albumPhotos + ", name=" + name + ", description=" + description + ", created=" + created + ", lastEdited=" + lastEdited + '}';
     }
 
     @Override
@@ -95,10 +82,7 @@ public class Album implements Serializable {
         if (!Objects.equals(this.created, other.created)) {
             return false;
         }
-        if (!Objects.equals(this.lastEdited, other.lastEdited)) {
-            return false;
-        }
-        return Objects.equals(this.coverImage, other.coverImage);
+        return Objects.equals(this.lastEdited, other.lastEdited);
     }
 
     public List<AlbumPhoto> getPhotos() {
@@ -143,14 +127,6 @@ public class Album implements Serializable {
         this.lastEdited = lastEdited;
     }
 
-    public String getCoverImage() {
-        return coverImage;
-    }
-
-    public void setCoverImage(String coverImage) {
-        this.coverImage = coverImage;
-    }
-
     public Long getId() {
         return id;
     }
@@ -161,9 +137,7 @@ public class Album implements Serializable {
     }
 
     public void deleteAlbumPhoto(AlbumPhoto photo) {
-        System.out.println("BEFORE: " + albumPhotos);
         Objects.requireNonNull(photo);
         this.albumPhotos.remove(photo);
-        System.out.println("AFTER: " + albumPhotos);
     }
 }

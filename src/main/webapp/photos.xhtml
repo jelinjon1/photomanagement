@@ -71,11 +71,21 @@
             </h:form>
             
             <h:form enctype="multipart/form-data" id="upload-form">
-                <p:fileUpload value="#{collectionPhotosBean.files}" dragDropSupport="true" mode="simple" skinSimple="true" multiple="true"/>
-                <p:commandButton value="Nahrát" ajax="false" action="#{collectionPhotosBean.uploadMultiple}"/>
+                <p:commandButton value="Nahrát" 
+                                 ajax="false" 
+                                 action="#{collectionPhotosBean.uploadMultiple}"/>
+                <p:fileUpload value="#{collectionPhotosBean.files}" 
+                              dragDropSupport="true" 
+                              mode="simple" 
+                              skinSimple="true" 
+                              multiple="true"
+                              label="Vybrat"/>
             </h:form>
             
             <h:form id="photos-form">
+                <p:remoteCommand name="updateThumbnail"
+                                 update="update-wrapper"
+                                 process="@this" />
                 
                 <div class="controls">
                     <h:commandButton value="Add to album" action="#{collectionPhotosBean.addToAlbum}" />
@@ -87,36 +97,36 @@
                 </div>
                 
                 <div id="directories-list">
-                    <h:dataTable value="#{collectionPhotosBean.filesDataModel}" var="file" rendered="#{collectionPhotosBean.filesDataModel.rowCount > 0}">
-                        <div class="file-wrapper" id="file_#{file.name}">
+                    <h:dataTable value="#{collectionPhotosBean.filesDataModel}" var="filePlaceholder" rendered="#{collectionPhotosBean.filesDataModel.rowCount > 0}">
+                        <div class="file-wrapper" id="file_#{filePlaceholder.name}">
                             <h:column>
                                 <f:facet name="header">Název adresáře</f:facet>
-                                <h:commandLink value="#{file.name}" action="#{collectionPhotosBean.navigateTo(file.name)}">
-                                    <f:param name="path" value="/#{file.name}"/>
+                                <h:commandLink value="#{filePlaceholder.name}" action="#{collectionPhotosBean.navigateTo(filePlaceholder.name)}">
+                                    <f:param name="path" value="/#{filePlaceholder.name}"/>
                                 </h:commandLink>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Počet podadresářů</f:facet>
-                                    #{file.list().stream().count()} files
+                                    #{filePlaceholder.directSubdirectoryCount} files
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Naposledy upraveno</f:facet>
-                                    #{collectionPhotosBean.formatLongToDate(file.lastModified())}
+                                    #{filePlaceholder.lastModifiedFormatted}
                             </h:column>
                         </div>
                     </h:dataTable>
                 </div>
                 
+                <h:panelGroup id="update-wrapper">
                 <div id="photo-gallery" class="photo-gallery">
                     <ui:repeat value="#{collectionPhotosBean.photosDataModel}" var="photo" id="ui-rep">
                         <div class="photo-wrapper" id="photo-wrapper_#{photo.id}">
                             
                             <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank" id="photo-link#{photo.id}">
-                                <!--<h:graphicImage class="photo rating-#{photo.rating}" id="#{'photo_'.concat(photo.id)}" value="#{'documentfiles'.concat(photo.relativePathFromRoot)}" alt="#{photo.description}" />-->
-                                <h:graphicImage id="#{'photo_'.concat(photo.id != null ? photo.id : 'unknown')}" 
-                                                class="photo rating-#{photo.rating}" 
-                                                value="#{'documentfiles'.concat(photo.pathToThumbail)}"
-                                                alt="Thumbnail doesn't exist for #{photo.fileName}" />
+                                <img 
+                                    id="photo_#{photo.id}" 
+                                    src="#{'documentfiles'.concat(photo.pathToThumbail)}"
+                                    alt="Thumbnail doesn't exist for #{photo.fileName}" />
                             </a>                            
                             
                             <div class="photo-details" id="#{'detail_'.concat(photo.id)}">
@@ -137,12 +147,26 @@
                         </div>
                     </ui:repeat>
                 </div>
+                </h:panelGroup>
             </h:form>
         </div>
 
         <div class="banner footer">
             Footer
         </div>
+        
+        <script>
+            const socket = new WebSocket("ws://localhost:8080/photo-management-app/thumbnailUpdates");
+
+            socket.onmessage = function(event) {
+                const data = event.data.split("|");
+                const photoId = data[0];
+                
+                console.log('updating the div for ' + photoId);
+                
+                updateThumbnail();
+            };
+        </script>
     </h:body>
 </html>
 

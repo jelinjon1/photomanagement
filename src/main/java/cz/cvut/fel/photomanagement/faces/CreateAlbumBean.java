@@ -37,7 +37,6 @@ public class CreateAlbumBean implements Serializable {
     private String description;
     private LocalDate created;
     private LocalDate lastEdited;
-    private String coverImage;
     private boolean displayAlert = false;
     private String alertMessage = "";
 
@@ -125,14 +124,6 @@ public class CreateAlbumBean implements Serializable {
 
     public void setLastEdited(LocalDate lastEdited) {
         this.lastEdited = lastEdited;
-    }
-
-    public String getCoverImage() {
-        return coverImage;
-    }
-
-    public void setCoverImage(String coverImage) {
-        this.coverImage = coverImage;
     }
 
     public boolean isDisplayAlert() {

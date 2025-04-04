@@ -52,47 +52,45 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <h:commandButton value="Nové album"
                                  action="#{tableAlbumsBean.createAlbum}"
                                  rendered="#{request.isUserInRole('admin')}"/>
-                <p>
-                    <h:dataTable id="albumtable" value="#{tableAlbumsBean.albumsDataModel}" var="album">
-                        <h:column>
-                            <f:facet name="header">Název</f:facet>
-                                <h:commandLink value="#{album.name}" action="#{tableAlbumsBean.goToDetailRedirect}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Popis</f:facet>
-                                #{album.description}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Počet souborů</f:facet>
-                                #{album.photos.size()}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Vytvořeno</f:facet>
-                                #{album.created}
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">Naposledy upraveno</f:facet>
-                                #{album.lastEdited}
-                        </h:column>
-                        <h:column rendered="#{request.isUserInRole('admin')}">
-                            <f:facet name="header">Akce</f:facet>
-                            <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId != album.id}"
-                                             class="delete"
-                                             value="SMAZAT"
-                                             action="#{tableAlbumsBean.setDeletingAlbumId(album.id)}"/>
-                            
-                            <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId == album.id}" 
-                                             class="cancel"
-                                             value="ZRUŠIT"
-                                             action="#{tableAlbumsBean.setDeletingAlbumId(0)}"/>
-                            
-                            <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId == album.id}" 
-                                             class="confirm"
-                                             value="POTVRDIT"
-                                             action="#{tableAlbumsBean.deleteAlbum}"/>
-                        </h:column>
-                    </h:dataTable>
-                </p>
+                <h:dataTable id="albumtable" value="#{tableAlbumsBean.albumsDataModel}" var="album">
+                    <h:column>
+                        <f:facet name="header">Název</f:facet>
+                        <h:commandLink value="#{album.name}" action="#{tableAlbumsBean.goToDetailRedirect}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Popis</f:facet>
+                            #{album.description}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Počet souborů</f:facet>
+                            #{album.photos.size()}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Vytvořeno</f:facet>
+                            #{album.created}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Naposledy upraveno</f:facet>
+                            #{album.lastEdited}
+                    </h:column>
+                    <h:column rendered="#{request.isUserInRole('admin')}" class="action-column-cell">
+                        <f:facet name="header">Akce</f:facet>
+                        <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId != album.id}"
+                                         class="delete"
+                                         value="SMAZAT"
+                                         action="#{tableAlbumsBean.setDeletingAlbumId(album.id)}"/>
+
+                        <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId == album.id}" 
+                                         class="cancel"
+                                         value="ZRUŠIT"
+                                         action="#{tableAlbumsBean.setDeletingAlbumId(0)}"/>
+
+                        <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId == album.id}" 
+                                         class="confirm"
+                                         value="POTVRDIT"
+                                         action="#{tableAlbumsBean.deleteAlbum}"/>
+                    </h:column>
+                </h:dataTable>
             </h:form>
         </div>
         <div class="banner footer">

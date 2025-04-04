@@ -10,7 +10,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 #tab-views {
     .number-input-wrapper {
         input {
-            border: none;
+            border: 1px solid var(--dark-green);
             padding: 10px 20px;
             cursor: pointer;
 

@@ -52,6 +52,7 @@ html, body {
   padding: 0;
   overflow: hidden;
   background-color: var(--dark-green);
+  min-width: 455px;
   
   li {
     float: left;
@@ -90,25 +91,54 @@ html, body {
 
 
 table {
+    margin-top: 16px;
     border-collapse: collapse;
     
     th, td {
         padding: 10px;
         border: 1px solid black;
+        
+        &.action-column-cell {
+            .cancel {
+                margin-right: 10px;
+            }
+        }
     }
+}
+
+@media only screen and (max-width: 1000px) {
+    table {
+        th, td {
+            &.action-column-cell {
+                input {
+                    display: block;
+                    &.cancel {
+                        margin-bottom: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+input[type=submit], button, select {
+    min-width: 120px;
+    /*width: 120px;*/
+    height: 40px;
+    height: 40px;
+    padding: 10px 0;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1em;
 }
 
 input[type=submit], button {
     background-color: var(--dark-green);
     border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    
-    border-radius: 4px;
-    text-decoration: none;
-    font-family: "Times New Roman", Times, serif;
     color: white;
-    font-size: 1em;
     
     &:disabled {
         background-color: #a5a5a5;
@@ -117,22 +147,52 @@ input[type=submit], button {
         box-shadow: none;
         opacity: 0.6;
     }
-    
+
+    &.right {
+        float: right;
+    }
     &.delete, &.cancel {
         background-color: darkred;
-        margin: 0px 10px;
-        
+
         &:hover {
             background-color: lightcoral;
         }
     }
-    
-    &.confirm {
-        
-    }
-    
+
     &:hover {
         background-color: var(--light-green);
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+}
+
+.tooltip {
+    position: relative;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1em; 
+    
+    .tooltip-text {
+        visibility: hidden;
+        width: 260px;
+        background-color: var(--gray);
+        color: white;
+        padding: 8px;
+        border-radius: 4px;
+
+        position: absolute;
+        z-index: 100;
+        bottom: 100%;
+        left: 0%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        margin-bottom: 8px;
+        
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    &::before {
+        content: "ⓘ";
+    }
+    &:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
     }
 }
