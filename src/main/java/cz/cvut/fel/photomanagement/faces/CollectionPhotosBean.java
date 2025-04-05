@@ -322,7 +322,7 @@ public class CollectionPhotosBean implements Serializable {
         }
     }
 
-    public void loadSelectedAlbum() {
+    public void loadSelectedPhoto() {
         selectedPhoto = photoDatabaseService.findPhotoById(selectedPhotoParameter);
     }
 

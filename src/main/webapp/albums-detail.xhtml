@@ -4,12 +4,19 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
 -->
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:p="primefaces"
-      xmlns:c="jakarta.tags.core">
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="jakarta.faces.html"
+        xmlns:f="jakarta.faces.core"
+        xmlns:ui="jakarta.faces.facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:c="jakarta.tags.core">
+
+    <f:metadata>
+        <f:viewParam name="album" value="#{tableAlbumsBean.selectedAlbumId}" />
+        <f:event type="preRenderView" listener="#{tableAlbumsBean.loadSelectedAlbum}" />
+    </f:metadata>
+    
+    
     <h:head>
         <title>Albums detail</title>
     </h:head>
@@ -98,5 +105,5 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             Footer
         </div>
     </h:body>
-</html>
+</f:view>
 

@@ -34,6 +34,27 @@
                 </p:inputNumber>
                 <p:slider for="priority-number-input-wrapper" step="1" minValue="0" maxValue="11"/>
                 
+                <label for="tab-views:priority-form:priority-number-exclude-wrapper_input">
+                    Zvolte ignorovanou prioritu: (0-10):
+                </label>
+                <p:inputNumber id="priority-number-exclude-wrapper"
+                               value="#{tableAlbumsBean.importanceIgnore}"
+                               minValue="0"
+                               maxValue="10"
+                               decimalPlaces="0"
+                               styleClass="number-input-wrapper"
+                               modifyValueOnWheel="true"
+                               onkeypress="if (event.keyCode == 13) { return false; }">
+                    <p:ajax process="@this" listener="#{tableAlbumsBean.sortAlbumPhotos()}" update="@form"/>
+                </p:inputNumber>
+                <p:slider for="priority-number-exclude-wrapper" step="1" minValue="0" maxValue="10"/>
+                <h:commandButton class="delete"
+                                 value="Resetovat"
+                                 action="#{tableAlbumsBean.sortAlbumPhotos()}"
+                                 rendered="#{tableAlbumsBean.importanceIgnore != null}">
+                    <p:ajax process="@this" listener="#{tableAlbumsBean.setImportanceIgnore(null)}" update="@form"/>
+                </h:commandButton>
+                
             </div>
             
             <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>

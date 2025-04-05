@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -44,10 +45,13 @@ public class TableAlbumsBean implements Serializable {
 
     private DataModel<Album> albumsDataModel;
     private Album selectedAlbum = null;
+    private Long selectedAlbumId = 0L;
+    private Long lastSelectedAlbumId = -1L;
     private String selectedAlbumParameter = null;
     private CyclicIterator iterator = null;
     private DataModel<AlbumPhotoCollection> importanceCollections;
     private int importanceThreshold = 5;
+    private Integer importanceIgnore = null;
     private long deletingAlbumId = 0;
 
 
@@ -117,6 +121,9 @@ public class TableAlbumsBean implements Serializable {
         List<AlbumPhotoCollection> allCollections = new ArrayList<>();
         AlbumPhotoCollection temp = null;
         for (AlbumPhoto photo : allAlbumPhotos) {
+            if (this.importanceIgnore != null && photo.getImportance() == this.importanceIgnore) {
+                continue;
+            }
 
             // low imp photo scenario
             if (photo.getImportance() < importanceThreshold) {
@@ -173,7 +180,16 @@ public class TableAlbumsBean implements Serializable {
      * Load bookmarkable detail page data.
      */
     public void loadSelectedAlbum() {
-        selectedAlbum = albumDatabaseService.findByName(selectedAlbumParameter);
+        Album newAlbum = albumDatabaseService.findAlbumById(selectedAlbumId);
+        if (!Objects.equals(selectedAlbumId, lastSelectedAlbumId)) {
+            selectedAlbum = newAlbum;
+            lastSelectedAlbumId = selectedAlbumId;
+            this.iterator = new CyclicIterator(selectedAlbum.getPhotos());
+            sortAlbumPhotos();
+            System.out.println("reset the whole album thing");
+        } else {
+            System.out.println("did not reset the whole album thing");
+        }
     }
 
     public void refreshAlbums() {
@@ -193,14 +209,6 @@ public class TableAlbumsBean implements Serializable {
         selectedAlbum = albumsDataModel.getRowData();
         albumDatabaseService.deleteAlbum(selectedAlbum.getId());
         this.refreshAlbums();
-    }
-
-    public String goToDetailRedirect() {
-        selectedAlbum = albumsDataModel.getRowData();
-        this.iterator = new CyclicIterator(selectedAlbum.getPhotos());
-
-        sortAlbumPhotos();
-        return "albums-detail.xhtml?faces-redirect=true";
     }
 
     public void clearSelectedAlbum() {
@@ -259,4 +267,21 @@ public class TableAlbumsBean implements Serializable {
     public void setDeletingAlbumId(long deletingAlbumId) {
         this.deletingAlbumId = deletingAlbumId;
     }
+
+    public Integer getImportanceIgnore() {
+        return importanceIgnore;
+    }
+
+    public void setImportanceIgnore(Integer importanceIgnore) {
+        this.importanceIgnore = importanceIgnore;
+    }
+
+    public Long getSelectedAlbumId() {
+        return selectedAlbumId;
+    }
+
+    public void setSelectedAlbumId(Long selectedAlbumId) {
+        this.selectedAlbumId = selectedAlbumId;
+    }
+
 }

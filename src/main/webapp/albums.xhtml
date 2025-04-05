@@ -55,7 +55,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <h:dataTable id="albumtable" value="#{tableAlbumsBean.albumsDataModel}" var="album">
                     <h:column>
                         <f:facet name="header">Název</f:facet>
-                        <h:commandLink value="#{album.name}" action="#{tableAlbumsBean.goToDetailRedirect}"/>
+                        <h:link value="#{album.name}"
+                                outcome="albums-detail">
+                            <f:param name="album" value="#{album.id}" />
+                        </h:link>
                     </h:column>
                     <h:column>
                         <f:facet name="header">Popis</f:facet>
