@@ -63,10 +63,6 @@ public class TableAlbumsBean implements Serializable {
         albumsDataModel = new ListDataModel<>(new ArrayList<>(albumDatabaseService.listAllAlbums()));
     }
 
-    public void debugPrint() {
-        System.out.println(this.importanceThreshold);
-    }
-
     public void downloadAlbum() {
         try {
             List<AlbumPhoto> photos = selectedAlbum.getPhotos();
@@ -186,9 +182,6 @@ public class TableAlbumsBean implements Serializable {
             lastSelectedAlbumId = selectedAlbumId;
             this.iterator = new CyclicIterator(selectedAlbum.getPhotos());
             sortAlbumPhotos();
-            System.out.println("reset the whole album thing");
-        } else {
-            System.out.println("did not reset the whole album thing");
         }
     }
 

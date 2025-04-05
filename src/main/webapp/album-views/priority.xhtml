@@ -1,132 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:p="primefaces"
-      xmlns:c="jakarta.tags.core">
-    <h:head>
-        <title>Priority Album View</title>
-        <h:outputStylesheet name="css/main.css" />
-        <h:outputStylesheet name="css/albums.css" />
-        <h:outputStylesheet name="css/photos.css" />
-        <h:outputStylesheet name="css/album-views.css" />
-    </h:head>
-    <h:body>
-        <h:form id="priority-form" class="album-view-form">
-            <div class="controls">
-                <label for="tab-views:priority-form:priority-number-input-wrapper_input"
-                       class="tooltip">
-                    Zvolte práh priority: (0-11):
-                    <span class="tooltip-text">Hranice od které jsou fotky zvětšeny. (0 - všehny velké, 11 - všechny malé)</span>
-                </label>
-                <p:inputNumber id="priority-number-input-wrapper"
-                               value="#{tableAlbumsBean.importanceThreshold}"
-                               minValue="0"
-                               maxValue="11"
-                               decimalPlaces="0"
-                               styleClass="number-input-wrapper"
-                               modifyValueOnWheel="true"
-                               onkeypress="if (event.keyCode == 13) { return false; }">
-                    <p:ajax process="@this" listener="#{tableAlbumsBean.sortAlbumPhotos()}" update="@form"/>
-                </p:inputNumber>
-                <p:slider for="priority-number-input-wrapper" step="1" minValue="0" maxValue="11"/>
-                
-                <label for="tab-views:priority-form:priority-number-exclude-wrapper_input">
-                    Zvolte ignorovanou prioritu: (0-10):
-                </label>
-                <p:inputNumber id="priority-number-exclude-wrapper"
-                               value="#{tableAlbumsBean.importanceIgnore}"
-                               minValue="0"
-                               maxValue="10"
-                               decimalPlaces="0"
-                               styleClass="number-input-wrapper"
-                               modifyValueOnWheel="true"
-                               onkeypress="if (event.keyCode == 13) { return false; }">
-                    <p:ajax process="@this" listener="#{tableAlbumsBean.sortAlbumPhotos()}" update="@form"/>
-                </p:inputNumber>
-                <p:slider for="priority-number-exclude-wrapper" step="1" minValue="0" maxValue="10"/>
-                <h:commandButton class="delete"
-                                 value="Resetovat"
-                                 action="#{tableAlbumsBean.sortAlbumPhotos()}"
-                                 rendered="#{tableAlbumsBean.importanceIgnore != null}">
-                    <p:ajax process="@this" listener="#{tableAlbumsBean.setImportanceIgnore(null)}" update="@form"/>
-                </h:commandButton>
-                
-            </div>
-            
-            <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
-            <div class="importance-gallery">
-                <ui:repeat value="#{tableAlbumsBean.importanceCollections}" var="collection">
-                    <!-- Low Importance Collection -->
-                    <h:panelGroup class="low-importance-wrapper" rendered="#{collection.lowImportance}">
-                        <ui:repeat value="#{collection.photos}" var="albumphoto">
-                            <div class="photo-wrapper low-importance">
-                                <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
-                                    <h:graphicImage class="photo" 
-                                                    value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
-                                                    alt="#{albumphoto.photo.description}" />
-                                </a>
-                                <div class="photo-details" id="#{'detail_'.concat(albumphoto.photo.id)}">
-                                    <h:panelGrid columns="1" 
-                                                 style="margin-bottom: 10px">
-                                        <p>Název souboru: #{albumphoto.photo.fileName}</p>
-                                        <div>
-                                            Priorita fotky: #{albumphoto.importance}
-                                        </div>
-                                        <p:inputNumber id="photo-importance-label" 
-                                                       value="#{albumphoto.importance}"
-                                                       rendered="#{request.isUserInRole('admin')}">
-                                            <p:ajax process="@this" listener="#{tableAlbumsBean.updateAlbumPhoto(albumphoto.id)}" update="@form"/>
-                                        </p:inputNumber>
-                                        <p:slider for="photo-importance-label"
-                                                  step="1" 
-                                                  maxValue="10"
-                                                  rendered="#{request.isUserInRole('admin')}"/>
-                                    </h:panelGrid>
-                                    <h:commandButton class="delete"
-                                                     value="Smazat z alba"
-                                                     rendered="#{request.isUserInRole('admin')}">
-                                        <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(albumphoto.photo)}"/>
-                                    </h:commandButton>
-                                </div>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="jakarta.tags.core">
+    <h:form id="priority-form" class="album-view-form">
+        <div class="controls">
+            <label for="tab-views:priority-form:priority-number-input-wrapper_input"
+                   class="tooltip">
+                Zvolte práh priority: (0-11):
+                <span class="tooltip-text">Hranice od které jsou fotky zvětšeny. (0 - všehny velké, 11 - všechny malé)</span>
+            </label>
+            <p:inputNumber id="priority-number-input-wrapper"
+                           value="#{tableAlbumsBean.importanceThreshold}"
+                           minValue="0"
+                           maxValue="11"
+                           decimalPlaces="0"
+                           styleClass="number-input-wrapper"
+                           modifyValueOnWheel="true"
+                           onkeypress="if (event.keyCode == 13) { return false; }">
+                <p:ajax process="@this" listener="#{tableAlbumsBean.sortAlbumPhotos()}" update="@form"/>
+            </p:inputNumber>
+            <p:slider for="priority-number-input-wrapper" step="1" minValue="0" maxValue="11"/>
 
-                            </div>
-                        </ui:repeat>
-                    </h:panelGroup>
+            <label for="tab-views:priority-form:priority-number-exclude-wrapper_input">
+                Zvolte ignorovanou prioritu: (0-10):
+            </label>
+            <p:inputNumber id="priority-number-exclude-wrapper"
+                           value="#{tableAlbumsBean.importanceIgnore}"
+                           minValue="0"
+                           maxValue="10"
+                           decimalPlaces="0"
+                           styleClass="number-input-wrapper"
+                           modifyValueOnWheel="true"
+                           onkeypress="if (event.keyCode == 13) { return false; }">
+                <p:ajax process="@this" listener="#{tableAlbumsBean.sortAlbumPhotos()}" update="@form"/>
+            </p:inputNumber>
+            <p:slider for="priority-number-exclude-wrapper" step="1" minValue="0" maxValue="10"/>
+            <h:commandButton class="delete"
+                             value="Resetovat"
+                             action="#{tableAlbumsBean.sortAlbumPhotos()}"
+                             rendered="#{tableAlbumsBean.importanceIgnore != null}">
+                <p:ajax process="@this" listener="#{tableAlbumsBean.setImportanceIgnore(null)}" update="@form"/>
+            </h:commandButton>
 
-                    <!-- High Importance Collection -->
-                    <ui:repeat value="#{collection.photos}" var="albumphoto" rendered="#{!collection.lowImportance}">
-                        <div class="photo-wrapper high-importance">
+        </div>
+
+        <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
+        <div class="importance-gallery">
+            <ui:repeat value="#{tableAlbumsBean.importanceCollections}" var="collection">
+                <!-- Low Importance Collection -->
+                <h:panelGroup class="low-importance-wrapper" rendered="#{collection.lowImportance}">
+                    <ui:repeat value="#{collection.photos}" var="albumphoto">
+                        <div class="photo-wrapper low-importance">
                             <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
-                                <h:graphicImage class="photo"
+                                <h:graphicImage class="photo" 
                                                 value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
                                                 alt="#{albumphoto.photo.description}" />
                             </a>
                             <div class="photo-details" id="#{'detail_'.concat(albumphoto.photo.id)}">
                                 <h:panelGrid columns="1" 
                                              style="margin-bottom: 10px">
-                                    <p>File Name: #{albumphoto.photo.fileName}</p>
+                                    <p>Název souboru: #{albumphoto.photo.fileName}</p>
                                     <div>
-                                        Current Importance: #{albumphoto.importance}
+                                        Priorita fotky: #{albumphoto.importance}
                                     </div>
-                                    <p:inputNumber id="photo-importance-label"
+                                    <p:inputNumber id="photo-importance-label" 
                                                    value="#{albumphoto.importance}"
                                                    rendered="#{request.isUserInRole('admin')}">
                                         <p:ajax process="@this" listener="#{tableAlbumsBean.updateAlbumPhoto(albumphoto.id)}" update="@form"/>
                                     </p:inputNumber>
-                                    <p:slider for="photo-importance-label" rendered="#{request.isUserInRole('admin')}" step="1" maxValue="10"/>
+                                    <p:slider for="photo-importance-label"
+                                              step="1" 
+                                              maxValue="10"
+                                              rendered="#{request.isUserInRole('admin')}"/>
                                 </h:panelGrid>
-                                <h:commandButton class="delete" value="Smazat z alba" rendered="#{request.isUserInRole('admin')}">
+                                <h:commandButton class="delete"
+                                                 value="Smazat z alba"
+                                                 rendered="#{request.isUserInRole('admin')}">
                                     <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(albumphoto.photo)}"/>
                                 </h:commandButton>
                             </div>
+
                         </div>
                     </ui:repeat>
+                </h:panelGroup>
+
+                <!-- High Importance Collection -->
+                <ui:repeat value="#{collection.photos}" var="albumphoto" rendered="#{!collection.lowImportance}">
+                    <div class="photo-wrapper high-importance">
+                        <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
+                            <h:graphicImage class="photo"
+                                            value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
+                                            alt="#{albumphoto.photo.description}" />
+                        </a>
+                        <div class="photo-details" id="#{'detail_'.concat(albumphoto.photo.id)}">
+                            <h:panelGrid columns="1" 
+                                         style="margin-bottom: 10px">
+                                <p>File Name: #{albumphoto.photo.fileName}</p>
+                                <div>
+                                    Current Importance: #{albumphoto.importance}
+                                </div>
+                                <p:inputNumber id="photo-importance-label"
+                                               value="#{albumphoto.importance}"
+                                               rendered="#{request.isUserInRole('admin')}">
+                                    <p:ajax process="@this" listener="#{tableAlbumsBean.updateAlbumPhoto(albumphoto.id)}" update="@form"/>
+                                </p:inputNumber>
+                                <p:slider for="photo-importance-label" rendered="#{request.isUserInRole('admin')}" step="1" maxValue="10"/>
+                            </h:panelGrid>
+                            <h:commandButton class="delete" value="Smazat z alba" rendered="#{request.isUserInRole('admin')}">
+                                <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(albumphoto.photo)}"/>
+                            </h:commandButton>
+                        </div>
+                    </div>
                 </ui:repeat>
-            </div>
-        </h:form>
-    </h:body>
-</html>
+            </ui:repeat>
+        </div>
+    </h:form>
+</ui:composition>

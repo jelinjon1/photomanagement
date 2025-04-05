@@ -1,39 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:ui="jakarta.faces.facelets"
-      xmlns:p="primefaces">
-    <h:head>
-        <title>Shuffle Album View</title>
-        <h:outputStylesheet name="css/main.css" />
-        <h:outputStylesheet name="css/albums.css" />
-        <h:outputStylesheet name="css/photos.css" />
-        <h:outputStylesheet name="css/album-views.css" />
-    </h:head>
-    <h:body>
-        <h:form id="shuffle-form" class="album-view-form shuffle-form">
-            <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
-            
-            <h:panelGroup id="photo-presentation" rendered="#{tableAlbumsBean.iterator.current != null}">
-                <p:commandButton type="button" onclick="PF('switcher').previous()"
-                                 icon="pi pi-chevron-left" id="prev" styleClass="mr-2 mb-3" />
-                <p:commandButton type="button" onclick="PF('switcher').next()"
-                                 icon="pi pi-chevron-right" id="next" styleClass="mr-2 mb-3" />
-                
-                <p:imageSwitch effect="shuffle" widgetVar="switcher" id="manualSwitcher"
-                               slideshowAuto="false" class="image-switcher">
-                    <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="albumphoto">
-                        <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
-                            <h:graphicImage class="photo shuffle-current"
-                                            value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
-                                            alt="#{albumphoto.photo.description}" />
-                        </a>
-                    </ui:repeat>
-                </p:imageSwitch>
-            </h:panelGroup>
-        </h:form>
-    </h:body>
-</html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <h:form id="shuffle-form" class="album-view-form shuffle-form">
+        <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
+
+        <h:panelGroup id="photo-presentation" rendered="#{tableAlbumsBean.iterator.current != null}">
+            <p:commandButton type="button" onclick="PF('switcher').previous()"
+                             icon="pi pi-chevron-left" id="prev" styleClass="mr-2 mb-3" />
+            <p:commandButton type="button" onclick="PF('switcher').next()"
+                             icon="pi pi-chevron-right" id="next" styleClass="mr-2 mb-3" />
+
+            <p:imageSwitch effect="shuffle" widgetVar="switcher" id="manualSwitcher"
+                           slideshowAuto="false" class="image-switcher">
+                <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="albumphoto">
+                    <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
+                        <h:graphicImage class="photo shuffle-current"
+                                        value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
+                                        alt="#{albumphoto.photo.description}" />
+                    </a>
+                </ui:repeat>
+            </p:imageSwitch>
+        </h:panelGroup>
+    </h:form>
+</ui:composition>

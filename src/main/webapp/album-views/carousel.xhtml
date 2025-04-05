@@ -6,17 +6,17 @@
                 xmlns:f="jakarta.faces.core"
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:p="http://primefaces.org/ui">
+    
+    <label class="tooltip">
+        Ovládání
+        <div class="tooltip-text">
+            f - fullscreen,
+            esc - opustit fullscreen
+            šipky vpravo/vlevo - přepínání fotky
+        </div>
+    </label>
 
-        <label class="tooltip">
-            Ovládání
-            <div class="tooltip-text">
-                f - fullscreen,
-                esc - opustit fullscreen
-                šipky vpravo/vlevo - přepínání fotky
-            </div>
-        </label>
-
-        <div id="test-wrapper">
+    <div id="test-wrapper">
         <h:form id="carousel-form" class="album-view-form">
             <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
             <h:panelGroup id="photo-presentation" 
@@ -53,26 +53,26 @@
                 </h:commandButton>
             </div>
         </h:form>
-        </div>
-    
-        <script>
-            document.addEventListener("keydown", function(event) {
-                console.log(event);
-                if (event.key === "ArrowLeft") {
-                    document.getElementById("tab-views:carousel-form:prev-photo-btn").click(); // Trigger previous
-                } else if (event.key === "ArrowRight") {
-                    document.getElementById("tab-views:carousel-form:next-photo-btn").click(); // Trigger next
-                } else if (event.key === "f") {
-                    enterFullscreen();
-                }
-            });
-            
-            function enterFullscreen() {
-                var elem = document.getElementById("test-wrapper");
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                    isFullscreen = true;
-                }
+    </div>
+
+    <script>
+        document.addEventListener("keydown", function(event) {
+            console.log(event);
+            if (event.key === "ArrowLeft") {
+                document.getElementById("tab-views:carousel-form:prev-photo-btn").click(); // Trigger previous
+            } else if (event.key === "ArrowRight") {
+                document.getElementById("tab-views:carousel-form:next-photo-btn").click(); // Trigger next
+            } else if (event.key === "f") {
+                enterFullscreen();
             }
-        </script>
+        });
+
+        function enterFullscreen() {
+            var elem = document.getElementById("test-wrapper");
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+                isFullscreen = true;
+            }
+        }
+    </script>
 </ui:composition>
