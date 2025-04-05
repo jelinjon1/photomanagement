@@ -61,20 +61,13 @@ public class CyclicIterator implements Serializable {
 
     public void goToNext() {
         index++;
-        System.out.println(index);
-        System.out.println(objects.size());
         if (index >= objects.size()) {
-            System.out.println("reset the index because exceeded");
             index = 0;
-        } else {
-            System.out.println("didnt because duhh");
         }
     }
 
     public void goToPrevious() {
         index--;
-        System.out.println(index);
-        System.out.println(objects.size());
         if (index < 0) {
             index = objects.size() - 1;
         }

@@ -35,10 +35,6 @@ public class FileManager {
     public void saveUploadedFile(UploadedFile file, String filesPath) {
         byte[] fileBytes = file.getContent();
 
-        System.out.println("File size: " + fileBytes.length + " bytes");
-        System.out.println("Detected MIME type: " + file.getContentType());
-        System.out.println("Uploaded filename: " + file.getFileName());
-
         // try reading
         ByteArrayInputStream inputStream = new ByteArrayInputStream(fileBytes);
         BufferedImage bufferedImage = null;
@@ -57,7 +53,6 @@ public class FileManager {
         // prepare for file creation, make directories when needed
         String prefix = this.getPhotosDirectoryPath();
         String filePath = prefix + filesPath + "/" + file.getFileName();
-        System.out.println("THEORETICAL NEW FILE PATH IS: " + filePath);
 
         File outputFile = new File(filePath);
         outputFile.getParentFile().mkdirs();

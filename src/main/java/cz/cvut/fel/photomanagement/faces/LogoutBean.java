@@ -29,10 +29,8 @@ public class LogoutBean implements Serializable {
         try {
             ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).logout();
         } catch (ServletException ex) {
-            System.out.println("fail");
             log.log(Level.SEVERE, ex.getMessage(), ex);
         }
-        System.out.println("success?");
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     }
 }
