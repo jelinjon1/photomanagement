@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cz.cvut.fel.photomanagement.faces.model;
 
 import cz.cvut.fel.photomanagement.entities.AlbumPhoto;

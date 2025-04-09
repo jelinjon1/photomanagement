@@ -156,8 +156,12 @@
         </div>
         
         <script>
+            console.log(window.location.href);
+            // kvuli reverzni proxy muze bejt kdekoliv
+            // neskladat z location, jen odriznout konec z .href
             const socket = new WebSocket("ws://localhost:8080/photo-management-app/thumbnailUpdates");
 
+            // todo timer to delay refresh requests if too many at once
             socket.onmessage = function(event) {
                 const data = event.data.split("|");
                 const photoId = data[0];

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cz.cvut.fel.photomanagement.faces;
 
 import cz.cvut.fel.photomanagement.entities.Album;
@@ -117,7 +113,7 @@ public class TableAlbumsBean implements Serializable {
         List<AlbumPhotoCollection> allCollections = new ArrayList<>();
         AlbumPhotoCollection temp = null;
         for (AlbumPhoto photo : allAlbumPhotos) {
-            if (this.importanceIgnore != null && photo.getImportance() == this.importanceIgnore) {
+            if (this.importanceIgnore != null && photo.getImportance() < this.importanceIgnore) {
                 continue;
             }
 

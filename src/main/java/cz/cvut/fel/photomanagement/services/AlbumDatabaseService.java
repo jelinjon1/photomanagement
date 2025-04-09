@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cz.cvut.fel.photomanagement.services;
 
 import cz.cvut.fel.photomanagement.entities.Album;
@@ -69,5 +65,9 @@ public class AlbumDatabaseService implements Serializable {
         if (album != null) {
             entityManager.remove(album);
         }
+    }
+
+    void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 }

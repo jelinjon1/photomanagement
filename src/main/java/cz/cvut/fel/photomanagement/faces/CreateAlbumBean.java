@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cz.cvut.fel.photomanagement.faces;
 
 import cz.cvut.fel.photomanagement.entities.Album;
@@ -42,6 +38,10 @@ public class CreateAlbumBean implements Serializable {
 
     public void setCollectionPhotosBean(CollectionPhotosBean collectionPhotosBean) {
         this.collectionPhotosBean = collectionPhotosBean;
+    }
+
+    public void setTableAlbumsBean(TableAlbumsBean tableAlbumsBean) {
+        this.tableAlbumsBean = tableAlbumsBean;
     }
 
     public CreateAlbumBean() {
