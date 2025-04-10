@@ -36,14 +36,6 @@ public class CreateAlbumBean implements Serializable {
     private boolean displayAlert = false;
     private String alertMessage = "";
 
-    public void setCollectionPhotosBean(CollectionPhotosBean collectionPhotosBean) {
-        this.collectionPhotosBean = collectionPhotosBean;
-    }
-
-    public void setTableAlbumsBean(TableAlbumsBean tableAlbumsBean) {
-        this.tableAlbumsBean = tableAlbumsBean;
-    }
-
     public CreateAlbumBean() {
     }
 
@@ -76,6 +68,14 @@ public class CreateAlbumBean implements Serializable {
         saveAlbum();
         tableAlbumsBean.refreshAlbums();
         return "albums.xhtml?redirect=true";
+    }
+
+    public void setCollectionPhotosBean(CollectionPhotosBean collectionPhotosBean) {
+        this.collectionPhotosBean = collectionPhotosBean;
+    }
+
+    public void setTableAlbumsBean(TableAlbumsBean tableAlbumsBean) {
+        this.tableAlbumsBean = tableAlbumsBean;
     }
 
     public AlbumDatabaseService getAlbumDatabaseService() {

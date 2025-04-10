@@ -31,7 +31,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         
         <h:form>
             <ul class="topnav">
-                <li><a href="index.xhtml">Domů</a></li>
+                <li><a href="index.xhtml">Home</a></li>
                 <li><a href="albums.xhtml">Albums</a></li>
                 <li>
                     <h:link value="Photos" outcome="photos">
@@ -39,18 +39,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </h:link>
                 </li>
                 <li class="float-right">
-                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="Uživatel: #{request.userPrincipal.name}"/>
+                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="User: #{request.userPrincipal.name}"/>
                 </li>
                 <li class="float-right">
                     <h:commandLink 
-                        value="Přihlásit"
+                        value="Log in"
                         action="login.xhtml" 
                         rendered="#{!request.isUserInRole('admin')}"
                         />
                 </li>
                 <li class="float-right">
                     <h:commandLink 
-                        value="Odhlásit"
+                        value="Log out"
                         action="#{logoutBean.logout()}"
                         rendered="#{request.isUserInRole('admin')}"
                         />
@@ -69,10 +69,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                
                     <h:form class="album-controls">
                         <h:panelGrid columns="2" styleClass="album-details">
-                            <h:outputLabel value="Datum vytvoření:" />
+                            <h:outputLabel value="Created:" />
                             <h:outputText value="#{tableAlbumsBean.selectedAlbum.created}" />
 
-                            <h:outputLabel value="Naposledy upraveno:" />
+                            <h:outputLabel value="Last edited:" />
                             <h:outputText value="#{tableAlbumsBean.selectedAlbum.lastEdited}" />
 
                             <h:outputLabel value="Počet souborů:" />
@@ -91,10 +91,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             <p:tab title="Carousel">
                 <ui:include src="./album-views/carousel.xhtml" />
             </p:tab>
-            <p:tab title="Galerie">
+            <p:tab title="Gallery">
                 <ui:include src="./album-views/gallery.xhtml" />
             </p:tab>
-            <p:tab title="Prioritní">
+            <p:tab title="Priority">
                 <ui:include src="./album-views/priority.xhtml" />
             </p:tab>
             <p:tab title="Shuffle">

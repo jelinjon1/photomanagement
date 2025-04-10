@@ -27,3 +27,9 @@ input[type=text], textarea, input[type=password] {
 .right {
     /*float: right;*/
 }
+
+#create-album-form {
+    textarea {
+        margin-bottom: 16px;
+    }
+}

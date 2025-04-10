@@ -15,7 +15,7 @@ public class AlbumMenuOption implements Serializable {
         if (album != null) {
             return album.getName();
         } else {
-            return "Vytvořit nové album";
+            return "Create new album";
         }
     }
 

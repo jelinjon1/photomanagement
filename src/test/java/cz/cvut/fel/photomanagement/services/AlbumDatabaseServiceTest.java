@@ -63,8 +63,6 @@ public class AlbumDatabaseServiceTest {
         assertEquals(newAlbum.getName(), persistedAlbum.getName(), "Album name should match");
         assertEquals(newAlbum.getDescription(), persistedAlbum.getDescription(), "Album description should match");
     }
-
-    //todo fix
     @Test
     void testFindByName() {
         EntityTransaction et = this.entityManager.getTransaction();

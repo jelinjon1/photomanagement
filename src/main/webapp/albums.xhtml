@@ -18,7 +18,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         
         <h:form>
             <ul class="topnav">
-                <li><a href="index.xhtml">Domů</a></li>
+                <li><a href="index.xhtml">Home</a></li>
                 <li><a class="active" href="albums.xhtml">Albums</a></li>
                 <li>
                     <h:link value="Photos" outcome="photos">
@@ -26,18 +26,19 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </h:link>
                 </li>
                 <li class="float-right">
-                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="Uživatel: #{request.userPrincipal.name}"/>
+                    <h:outputText rendered="#{request.userPrincipal.name != null}" 
+                                  class="test" value="User: #{request.userPrincipal.name}"/>
                 </li>
                 <li class="float-right">
                     <h:commandLink 
-                        value="Přihlásit"
+                        value="Log in"
                         action="login.xhtml" 
                         rendered="#{!request.isUserInRole('admin')}"
                         />
                 </li>
                 <li class="float-right">
                     <h:commandLink 
-                        value="Odhlásit"
+                        value="Log out"
                         action="#{logoutBean.logout()}"
                         rendered="#{request.isUserInRole('admin')}"
                         />
@@ -49,48 +50,48 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             <h1>Albums</h1>
             
             <h:form id="listform">
-                <h:commandButton value="Nové album"
+                <h:commandButton value="New album"
                                  action="#{tableAlbumsBean.createAlbum}"
                                  rendered="#{request.isUserInRole('admin')}"/>
                 <h:dataTable id="albumtable" value="#{tableAlbumsBean.albumsDataModel}" var="album">
                     <h:column>
-                        <f:facet name="header">Název</f:facet>
+                        <f:facet name="header">Title</f:facet>
                         <h:link value="#{album.name}"
                                 outcome="albums-detail">
                             <f:param name="album" value="#{album.id}" />
                         </h:link>
                     </h:column>
                     <h:column>
-                        <f:facet name="header">Popis</f:facet>
+                        <f:facet name="header">Description</f:facet>
                             #{album.description}
                     </h:column>
                     <h:column>
-                        <f:facet name="header">Počet souborů</f:facet>
+                        <f:facet name="header">No. of files</f:facet>
                             #{album.photos.size()}
                     </h:column>
                     <h:column>
-                        <f:facet name="header">Vytvořeno</f:facet>
+                        <f:facet name="header">Created</f:facet>
                             #{album.created}
                     </h:column>
                     <h:column>
-                        <f:facet name="header">Naposledy upraveno</f:facet>
+                        <f:facet name="header">Last edited</f:facet>
                             #{album.lastEdited}
                     </h:column>
                     <h:column rendered="#{request.isUserInRole('admin')}" class="action-column-cell">
-                        <f:facet name="header">Akce</f:facet>
+                        <f:facet name="header">Action</f:facet>
                         <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId != album.id}"
                                          class="delete"
-                                         value="SMAZAT"
+                                         value="DELETE"
                                          action="#{tableAlbumsBean.setDeletingAlbumId(album.id)}"/>
 
                         <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId == album.id}" 
                                          class="cancel"
-                                         value="ZRUŠIT"
+                                         value="CANCEL"
                                          action="#{tableAlbumsBean.setDeletingAlbumId(0)}"/>
 
                         <h:commandButton rendered="#{tableAlbumsBean.deletingAlbumId == album.id}" 
                                          class="confirm"
-                                         value="POTVRDIT"
+                                         value="CONFIRM"
                                          action="#{tableAlbumsBean.deleteAlbum}"/>
                     </h:column>
                 </h:dataTable>

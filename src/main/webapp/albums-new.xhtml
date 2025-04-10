@@ -23,7 +23,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         
         <h:form>
             <ul class="topnav">
-                <li><a href="index.xhtml">Domů</a></li>
+                <li><a href="index.xhtml">Home</a></li>
                 <li><a href="albums.xhtml">Albums</a></li>
                 <li>
                     <h:link value="Photos" outcome="photos">
@@ -31,18 +31,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                     </h:link>
                 </li>
                 <li class="float-right">
-                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="Uživatel: #{request.userPrincipal.name}"/>
+                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="User: #{request.userPrincipal.name}"/>
                 </li>
                 <li class="float-right">
                     <h:commandLink 
-                        value="Přihlásit"
+                        value="Log in"
                         action="login.xhtml" 
                         rendered="#{!request.isUserInRole('admin')}"
                         />
                 </li>
                 <li class="float-right">
                     <h:commandLink 
-                        value="Odhlásit"
+                        value="Log out"
                         action="#{logoutBean.logout()}"
                         rendered="#{request.isUserInRole('admin')}"
                         />
@@ -53,7 +53,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <div class="wrapper">
             <h1>New album</h1>
             
-            <h:form>
+            <h:form id="create-album-form">
                 
                 <!--make the window have a class dictated by a java evaluation, and then change something in the java when dupe-->
                 <div class="modal #{createAlbumBean.displayAlert == true ? 'visible' : 'hidden'}">
@@ -61,7 +61,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                         <h1>Varování</h1>
                         <p>Jméno alba již existuje.</p>
                         <h:commandButton class="cancel" value="Zrušit" action="#{createAlbumBean.setDisplayAlert(false)}" />
-                        <h:commandButton class="right" value="Vytvořit" action="#{createAlbumBean.saveAlbum()}" />
+                        <h:commandButton class="right" value="Create" action="#{createAlbumBean.saveAlbum()}" />
                     </div>
                 </div>
                 
@@ -76,7 +76,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <h:inputTextarea id="album-description"
                                  value="#{createAlbumBean.description}" />
 
-                <h:commandButton value="Vytvořit" action="#{createAlbumBean.checkAlbumValidity()}" />
+                <h:commandButton value="Create" action="#{createAlbumBean.checkAlbumValidity()}" />
             </h:form>
             
         </div>

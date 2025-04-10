@@ -15,7 +15,7 @@
         <f:metadata>
             <f:viewParam name="path" value="#{collectionPhotosBean.filesPath}" />
             <f:event type="preRenderView"
-                     listener="#{collectionPhotosBean.loadFiles}" />
+                     listener="#{collectionPhotosBean.loadFiles()}" />
         </f:metadata>
         <div class="banner header">
             Header
@@ -23,7 +23,7 @@
         
         <h:form>
             <ul class="topnav">
-                <li><a href="index.xhtml">Domů</a></li>
+                <li><a href="index.xhtml">Home</a></li>
                 <li><a href="albums.xhtml">Albums</a></li>
                 <li>
                     <h:link value="Photos" outcome="photos" class="active">
@@ -31,18 +31,20 @@
                     </h:link>
                 </li>
                 <li class="float-right">
-                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="Uživatel: #{request.userPrincipal.name}"/>
+                    <h:outputText rendered="#{request.userPrincipal.name != null}" 
+                                  class="test" 
+                                  value="User: #{request.userPrincipal.name}"/>
                 </li>
                 <li class="float-right">
                     <h:commandLink 
-                        value="Přihlásit"
+                        value="Log in"
                         action="login.xhtml" 
                         rendered="#{!request.isUserInRole('admin')}"
                         />
                 </li>
                 <li class="float-right">
                     <h:commandLink 
-                        value="Odhlásit"
+                        value="Log out"
                         action="#{logoutBean.logout()}"
                         rendered="#{request.isUserInRole('admin')}"
                         />
@@ -57,21 +59,21 @@
             <h:form>
                 <!--BREADCRUMBS-->
                 <div class="path-link-wrapper">
-                    <h:commandLink value="Domů" action="#{collectionPhotosBean.navigateTo(null)}">
-                        <f:param name="path" value=""/>
-                    </h:commandLink>
+                    <h:link value="Home" outcome="photos">
+                        <f:param name="path" value="" />
+                    </h:link>
                 
-                    <ui:repeat value="#{collectionPhotosBean.paths}" var="path">
+                    <ui:repeat value="#{collectionPhotosBean.breadcrumbs}" var="breadcrumb">
                         &gt;
-                        <h:commandLink value="#{path}" action="#{collectionPhotosBean.navigateTo(path)}">
-                            <f:param name="path" value="/#{path}"/>
-                        </h:commandLink>
+                        <h:link value="#{breadcrumb.value}" outcome="photos">
+                            <f:param name="path" value="/#{breadcrumb.path}" />
+                        </h:link>
                     </ui:repeat>
                 </div>
             </h:form>
             
             <h:form enctype="multipart/form-data" id="upload-form">
-                <p:commandButton value="Nahrát" 
+                <p:commandButton value="Upload" 
                                  ajax="false" 
                                  action="#{collectionPhotosBean.uploadMultiple}"/>
                 <p:fileUpload value="#{collectionPhotosBean.files}" 
@@ -79,7 +81,7 @@
                               mode="simple" 
                               skinSimple="true" 
                               multiple="true"
-                              label="Vybrat"/>
+                              label="Choose files"/>
             </h:form>
             
             <h:form id="photos-form">
@@ -97,20 +99,24 @@
                 </div>
                 
                 <div id="directories-list">
-                    <h:dataTable value="#{collectionPhotosBean.filesDataModel}" var="filePlaceholder" rendered="#{collectionPhotosBean.filesDataModel.rowCount > 0}">
+                    <h:dataTable value="#{collectionPhotosBean.filesDataModel}" 
+                                 var="filePlaceholder" 
+                                 rendered="#{collectionPhotosBean.filesDataModel.rowCount > 0}">
+                        
                         <div class="file-wrapper" id="file_#{filePlaceholder.name}">
                             <h:column>
-                                <f:facet name="header">Název adresáře</f:facet>
-                                <h:commandLink value="#{filePlaceholder.name}" action="#{collectionPhotosBean.navigateTo(filePlaceholder.name)}">
-                                    <f:param name="path" value="/#{filePlaceholder.name}"/>
-                                </h:commandLink>
+                                <f:facet name="header">Directory name</f:facet>
+                                <h:link value="#{filePlaceholder.name}"
+                                        outcome="photos">
+                                    <f:param name="path" value="#{filePlaceholder.path}" />
+                                </h:link>
                             </h:column>
                             <h:column>
-                                <f:facet name="header">Počet podadresářů</f:facet>
-                                    #{filePlaceholder.directSubdirectoryCount} files
+                                <f:facet name="header">No. of files</f:facet>
+                                    #{filePlaceholder.directSubdirectoryCount}
                             </h:column>
                             <h:column>
-                                <f:facet name="header">Naposledy upraveno</f:facet>
+                                <f:facet name="header">Last edited</f:facet>
                                     #{filePlaceholder.lastModifiedFormatted}
                             </h:column>
                         </div>

@@ -23,7 +23,7 @@
         </div>
         <h:form>
             <ul class="topnav">
-                <li><a href="index.xhtml">Domů</a></li>
+                <li><a href="index.xhtml">Home</a></li>
                 <li><a href="albums.xhtml">Albums</a></li>
                 <li>
                     <h:link value="Photos" outcome="photos">
@@ -31,11 +31,12 @@
                     </h:link>
                 </li>
                 <li class="float-right">
-                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="Uživatel: #{request.userPrincipal.name}"/>
+                    <h:outputText rendered="#{request.userPrincipal.name != null}" 
+                                  class="test" value="User: #{request.userPrincipal.name}"/>
                 </li>
                 <li class="float-right">
                     <h:commandLink
-                        value="Přihlásit"
+                        value="Log in"
                         class="active"
                         action="login.xhtml" 
                         rendered="#{!request.isUserInRole('admin')}"
@@ -43,7 +44,7 @@
                 </li>
                 <li class="float-right">
                     <h:commandLink 
-                        value="Odhlásit"
+                        value="Log out"
                         action="#{logoutBean.logout()}"
                         rendered="#{request.isUserInRole('admin')}"
                         />
@@ -54,25 +55,21 @@
             <form method="POST" action="j_security_check">
                 <h:panelGrid columns="2">
                     <h:outputLabel for="username" value="Username:" />
-                    <input type="text" id="username" name="j_username" required="true" placeholder="Vaše uživatelské jméno" />
+                    <input type="text" 
+                           id="username" 
+                           name="j_username" 
+                           required="true" 
+                           placeholder="Your username" />
 
                     <h:outputLabel for="password" value="Password:" />
-                    <input type="password" id="password" name="j_password" required="true" placeholder="Vaše heslo" />
+                    <input type="password" 
+                           id="password" 
+                           name="j_password" 
+                           required="true" 
+                           placeholder="Your password" />
                 </h:panelGrid>
                 
-<!--                public void logout() {
-                try {
-                ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).logout();
-                } catch (ServletException ex) {
-                log.log(Level.SEVERE, ex.getMessage(), ex);
-                }
-                FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-                }-->
-
-<!--<h:outputText rendered="#{not empty request.remoteUser}" value="test" />-->
-                
-                
-                <button type="submit">Přihlásit</button>
+                <button type="submit">Log in</button>
             </form>
 
             <h:panelGroup rendered="#{not empty param.error}">

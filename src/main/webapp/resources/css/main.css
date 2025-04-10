@@ -124,10 +124,9 @@ table {
 
 input[type=submit], button, select {
     min-width: 120px;
-    /*width: 120px;*/
     height: 40px;
     height: 40px;
-    padding: 10px 0;
+    padding: 10px 10px;
     cursor: pointer;
     border-radius: 4px;
     text-decoration: none;

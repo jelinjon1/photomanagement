@@ -17,9 +17,12 @@ public class FilePlaceholder implements Serializable {
     private String name;
     private int directSubdirectoryCount;
     private String lastModifiedFormatted;
+    private String path;
+    private int photosDirectoryPathLength;
 
 
-    public FilePlaceholder(File file) {
+    public FilePlaceholder(File file, int photosDirectoryPathLength) {
+        this.photosDirectoryPathLength = photosDirectoryPathLength;
         this.name = file.getName();
         this.directSubdirectoryCount = file.list().length;
         LocalDateTime dateTime = Instant.ofEpochMilli(file.lastModified())
@@ -28,6 +31,15 @@ public class FilePlaceholder implements Serializable {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm - dd.MM.yyyy");
         this.lastModifiedFormatted = dateTime.format(formatter);
+        this.path = formatPath(file.getAbsolutePath());
+    }
+
+    private String formatPath(String fullPath) {
+        return fullPath.substring(photosDirectoryPathLength);
+    }
+
+    public String getPath() {
+        return path;
     }
 
     public String getName() {

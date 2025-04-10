@@ -5,6 +5,7 @@ import cz.cvut.fel.photomanagement.entities.Album;
 import cz.cvut.fel.photomanagement.entities.Photo;
 import cz.cvut.fel.photomanagement.faces.model.FilePlaceholder;
 import cz.cvut.fel.photomanagement.faces.util.AlbumMenuOption;
+import cz.cvut.fel.photomanagement.faces.util.Breadcrumb;
 import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
 import cz.cvut.fel.photomanagement.services.FileManager;
 import cz.cvut.fel.photomanagement.services.PhotoDatabaseService;
@@ -26,10 +27,8 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Path;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -80,48 +79,50 @@ public class CollectionPhotosBean implements Serializable {
         albumOptions = transformIntoOptions(albumDatabaseService.listAllAlbums());
     }
 
-    public void uploadMultiple() {
-        if (files != null) {
-            for (UploadedFile file : files.getFiles()) {
-                fileManager.saveUploadedFile(file, filesPath);
-            }
-        } else {
-            System.err.println("FILES IS NULL");
+    public DataModel<Breadcrumb> getBreadcrumbs() {
+
+        Path partialPath = Path.of(filesPath);
+        List<Breadcrumb> breadcrumbs = new ArrayList<>();
+
+        for (int i = 0; i < partialPath.getNameCount(); i++) {
+            Path subPath = partialPath.subpath(0, i + 1);
+
+            breadcrumbs.add(
+                    new Breadcrumb(
+                            partialPath.getName(i).toString(),
+                            subPath
+                    )
+            );
         }
+
+        return new ListDataModel(breadcrumbs);
     }
 
-    public List<AlbumMenuOption> transformIntoOptions(List<Album> albums) {
-        List<AlbumMenuOption> res = albums.stream().map(album -> new AlbumMenuOption(album)).collect(Collectors.toList());
-        res.add(new AlbumMenuOption(null));
-        return res;
+    // receives full path from root as a String
+    public void changeDirectory(String path) {
+        loadFiles();
     }
 
-    public void updatePhoto(Photo photo) {
-        photoDatabaseService.update(photo);
-        System.out.println(photo);
-    }
-
-    // todo move to service
-    public void loadFiles() throws IOException, NoSuchAlgorithmException {
-        StringBuilder sb = new StringBuilder();
+    public void loadFiles() {
+        Path path = Path.of(filesPath);
         boolean locationIsThumbnailsDirectory = false;
-        for (String path : paths) {
-            System.out.println("PATH: " + path);
-            if ("thumbnails".equals(path)) {
-                System.out.println("Located in thumbnails file, wont generate thumbails for present photos");
+
+        System.out.print("CURRENT PATH: ");
+        for (int i = 0; i < path.getNameCount(); i++) {
+            System.out.print(path.getName(i) + " / ");
+            if (path.getName(i).equals("thumbnails")) {
                 locationIsThumbnailsDirectory = true;
             }
-            sb.append("/");
-            sb.append(path);
         }
-        filesPath = sb.toString();
+        System.out.println();
+
         // fetch all present files located in directory given by navigation
         List<File> allFiles = fileManager.loadFiles(filesPath);
 
         // filter directories into separate data model
         filesDataModel = new ListDataModel<>(allFiles.stream()
                 .filter(File::isDirectory)
-                .map(file -> new FilePlaceholder((file)))
+                .map(file -> new FilePlaceholder(file, fileManager.getPhotosDirectoryPath().length()))
                 .collect(Collectors.toList()));
 
         // fetch existing records for given path
@@ -163,11 +164,25 @@ public class CollectionPhotosBean implements Serializable {
         photosDataModel = new ListDataModel<>(photosList);
     }
 
-    public void debugParam() {
-        String received = FacesContext.getCurrentInstance()
-                .getExternalContext().getRequestParameterMap().get("photoId");
-        System.out.println(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap());
-        System.out.println("DEBUG PARAM : " + received);
+    public void uploadMultiple() {
+        if (files != null) {
+            for (UploadedFile file : files.getFiles()) {
+                fileManager.saveUploadedFile(file, filesPath);
+            }
+        } else {
+            System.err.println("FILES IS NULL");
+        }
+    }
+
+    public List<AlbumMenuOption> transformIntoOptions(List<Album> albums) {
+        List<AlbumMenuOption> res = albums.stream().map(album -> new AlbumMenuOption(album)).collect(Collectors.toList());
+        res.add(new AlbumMenuOption(null));
+        return res;
+    }
+
+    public void updatePhoto(Photo photo) {
+        photoDatabaseService.update(photo);
+        System.out.println(photo);
     }
 
     public void generateThumbnail(File inputFile, Long photoId) {
@@ -231,24 +246,6 @@ public class CollectionPhotosBean implements Serializable {
     private boolean isPhoto(File file) {
         String name = file.getName().toLowerCase();
         return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".gif");
-    }
-
-    public String navigateTo(String fileName) {
-        if (fileName.length() == 0) {
-            paths.clear();
-        } else if (paths.contains(fileName)) {
-            int index = paths.indexOf(fileName);
-            for (int i = paths.size() - 1; i >= 0; i--) {
-                if (paths.get(i) == fileName) {
-                    break;
-                } else {
-                    paths.remove(i);
-                }
-            }
-        } else {
-            paths.add(fileName);
-        }
-        return "photos.xhtml";
     }
 
     /*

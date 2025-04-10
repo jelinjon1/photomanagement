@@ -15,7 +15,7 @@
         
         <h:form>
             <ul class="topnav">
-                <li><a class="active" href="index.xhtml">Domů</a></li>
+                <li><a class="active" href="index.xhtml">Home</a></li>
                 <li><a href="albums.xhtml">Albums</a></li>
                 <li>
                     <h:link value="Photos" outcome="photos">
@@ -23,18 +23,18 @@
                     </h:link>
                 </li>
                 <li class="float-right">
-                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="Uživatel: #{request.userPrincipal.name}"/>
+                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="User: #{request.userPrincipal.name}"/>
                 </li>
                 <li class="float-right">
                     <h:commandLink 
-                        value="Přihlásit"
+                        value="Log in"
                         action="login.xhtml" 
                         rendered="#{!request.isUserInRole('admin')}"
                     />
                 </li>
                 <li class="float-right">
                     <h:commandLink 
-                        value="Odhlásit"
+                        value="Log out"
                         action="#{logoutBean.logout()}"
                         rendered="#{request.isUserInRole('admin')}"
                     />
@@ -45,7 +45,7 @@
         <div class="wrapper">
             <h1>Photomanagment</h1>
             <p>
-                Welcome to Domů page
+                Welcome to Home page
             </p>
         </div>
                 
