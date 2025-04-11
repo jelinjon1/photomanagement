@@ -107,14 +107,15 @@ public class CollectionPhotosBean implements Serializable {
         Path path = Path.of(filesPath);
         boolean locationIsThumbnailsDirectory = false;
 
-        System.out.print("CURRENT PATH: ");
+//        System.out.print("CURRENT PATH: ");
         for (int i = 0; i < path.getNameCount(); i++) {
-            System.out.print(path.getName(i) + " / ");
-            if (path.getName(i).equals("thumbnails")) {
+//            System.out.println(path.getName(i));
+            if ("thumbnails".equals(path.getName(i).toString())) {
                 locationIsThumbnailsDirectory = true;
             }
         }
-        System.out.println();
+//        System.out.println();
+
 
         // fetch all present files located in directory given by navigation
         List<File> allFiles = fileManager.loadFiles(filesPath);
