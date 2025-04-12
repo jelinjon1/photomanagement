@@ -73,10 +73,101 @@ public class FileManager {
         return directory.mkdirs();
     }
 
-    public void moveToBin(String fileName, String localPath) {
-        File toMove = Paths.get(photosDirectoryPath, localPath, fileName).toFile();
+    public void cleanUpEmptyFile(File file) {
+        if (file.listFiles().length == 0) {
+            System.out.println("FILE " + file.getName() + " IS EMPTY, MARKED FOR DELETION");
+            file.delete();
+        }
+    }
+
+    public void restoreFile(String fileName, String localPath) {
+        // find thumbnail in local file (/bin) and try to move it alongside the photo to the parent/thumbnails
+
+        if (moveAFileUp(fileName, localPath)) {
+            Path thumbnailPath = Paths.get(photosDirectoryPath, localPath, "thumbnails", fileName);
+            File thumbnailImageFile = thumbnailPath.toFile();
+            if (thumbnailImageFile.exists()) {
+                // move thumbnail thumbnail file within bin to parent of bin thumbnail file
+                // check local thumbnail for empty
+                // check bin for empty
+
+                Path thumbnailParentLocalPath = thumbnailPath.getParent().getParent().getParent();
+                Path newThumbnailImagePath = Path.of(thumbnailParentLocalPath.toString(), "thumbnails", fileName);
+                File newThumbnailImageFile = newThumbnailImagePath.toFile();
+                newThumbnailImageFile.getParentFile().mkdirs();
+
+                boolean success = thumbnailImageFile.renameTo(newThumbnailImageFile);
+                if (!success) {
+                    thumbnailImageFile.delete();
+                }
+
+                File localThumbnailsFile = thumbnailPath.getParent().toFile();
+                cleanUpEmptyFile(localThumbnailsFile);
+            }
+        }
+    }
+
+    public boolean moveAFileUp(String fileName, String localPath) {
+
+        Path originalPath = Paths.get(photosDirectoryPath, localPath);
+        Path toMove = originalPath.resolve(fileName);
+        Path parentDir = originalPath.getParent();
+
+        if (parentDir == null) {
+            throw new IllegalStateException("Cannot move up from root directory");
+        }
+
+        Path targetPath = parentDir.resolve(fileName);
+
+        File sourceFile = toMove.toFile();
+        File targetFile = targetPath.toFile();
+        targetFile.getParentFile().mkdirs();
+
+        boolean success = sourceFile.renameTo(targetFile);
+        if (!success) {
+            System.err.println("Failed to move file from " + sourceFile + " to " + targetFile);
+        }
+        return success;
+    }
+
+    public void deletePhoto(String fileName, String localPath) {
+        if (moveToBin(fileName, localPath)) {
+            System.out.println("GOING TO MOVE THUMBNAIL");
+            Path thumbnailPath = Paths.get(photosDirectoryPath, localPath, "thumbnails", fileName);
+            File thumbnailImageFile = thumbnailPath.toFile();
+            if (thumbnailImageFile.exists()) {
+                // move thumbnail thumbnail file within bin to parent of bin thumbnail file
+                // check local thumbnail for empty
+                // check bin for empty
+                System.out.println("THUMBNAIL FOUND");
+
+                Path targetThumbnailPath = Paths.get(photosDirectoryPath, localPath, "bin", "thumbnails", fileName);
+                File newThumbnailImageFile = targetThumbnailPath.toFile();
+                newThumbnailImageFile.getParentFile().mkdirs();
+
+                boolean success = thumbnailImageFile.renameTo(newThumbnailImageFile);
+                if (!success) {
+                    thumbnailImageFile.delete();
+                }
+
+                File localThumbnailsFile = thumbnailPath.getParent().toFile();
+                cleanUpEmptyFile(localThumbnailsFile);
+            }
+
+        }
+    }
+
+    public boolean moveToBin(String fileName, String localPath) {
+        createDirectory(localPath, "bin");
+
+        File sourceFile = Paths.get(photosDirectoryPath, localPath, fileName).toFile();
         String targetPath = Paths.get(photosDirectoryPath, localPath, "bin", fileName).toString();
-        toMove.renameTo(new File(targetPath));
+        boolean success = sourceFile.renameTo(new File(targetPath));
+
+        if (!success) {
+            System.err.println("Failed to move file from " + sourceFile + " to " + targetPath);
+        }
+        return success;
     }
 
     public List<File> loadFiles() {

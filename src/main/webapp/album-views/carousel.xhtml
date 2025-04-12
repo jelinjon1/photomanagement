@@ -16,7 +16,7 @@
         </div>
     </label>
 
-    <div id="test-wrapper">
+    <div id="fullscreen-wrapper">
         <h:form id="carousel-form" class="album-view-form">
             <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
             <h:panelGroup id="photo-presentation" 
@@ -68,10 +68,9 @@
         });
 
         function enterFullscreen() {
-            var elem = document.getElementById("test-wrapper");
+            var elem = document.getElementById("fullscreen-wrapper");
             if (elem.requestFullscreen) {
                 elem.requestFullscreen();
-                isFullscreen = true;
             }
         }
     </script>

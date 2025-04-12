@@ -6,32 +6,55 @@
                 xmlns:f="jakarta.faces.core"
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:p="http://primefaces.org/ui">
-    <h:form id="shuffle-form" class="album-view-form shuffle-form">
-        <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
+    
+    <div id="shuffle-fullscreen-wrapper">
+        <h:form id="shuffle-form" class="album-view-form shuffle-form">
+            <h:panelGroup class="placeholder" rendered="#{tableAlbumsBean.iterator.current == null}">Album is empty.</h:panelGroup>
 
-        <h:panelGroup id="photo-presentation" rendered="#{tableAlbumsBean.iterator.current != null}">
-            <div class="controls">
-            <p:commandButton type="button" onclick="PF('switcher').previous()"
-                             icon="pi pi-chevron-left" id="prev" styleClass="mr-2 mb-3" />
-            <p:commandButton type="button" onclick="PF('switcher').next()"
-                             icon="pi pi-chevron-right" id="next" styleClass="mr-2 mb-3" />
-            </div>
-            <!--toss-->
-            <p:imageSwitch effect="turnRight" 
-                           widgetVar="switcher" 
-                           id="manualSwitcher"
-                           slideshowAuto="false" 
-                           class="image-switcher"
-                           speed="2000"
-                           slideshowSpeed="3000">
-                <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="albumphoto">
-                    <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
-                        <h:graphicImage class="photo"
-                                        value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
-                                        alt="#{albumphoto.photo.description}" />
-                    </a>
-                </ui:repeat>
-            </p:imageSwitch>
-        </h:panelGroup>
-    </h:form>
+            <h:panelGroup id="photo-presentation" rendered="#{tableAlbumsBean.iterator.current != null}">
+                <p:imageSwitch effect="turnRight" 
+                               widgetVar="switcher" 
+                               id="manualSwitcher"
+                               slideshowAuto="false" 
+                               class="image-switcher"
+                               speed="2000"
+                               slideshowSpeed="3000">
+                    <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="albumphoto">
+                        <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
+                            <h:graphicImage class="photo"
+                                            value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
+                                            alt="#{albumphoto.photo.description}" />
+                        </a>
+                    </ui:repeat>
+                </p:imageSwitch>
+                
+                <div class="controls">
+                    <p:commandButton type="button" onclick="PF('switcher').previous()"
+                                     icon="pi pi-chevron-left" id="prev" styleClass="mr-2 mb-3" />
+                    <p:commandButton type="button" onclick="PF('switcher').next()"
+                                     icon="pi pi-chevron-right" id="next" styleClass="mr-2 mb-3" />
+                </div>
+            </h:panelGroup>
+        </h:form>
+    </div>
+    
+    <script>
+        document.addEventListener("keydown", function(event) {
+            console.log(event);
+            if (event.key === "ArrowLeft") {
+                document.getElementById("tab-views:shuffle-form:prev").click(); // Trigger previous
+            } else if (event.key === "ArrowRight") {
+                document.getElementById("tab-views:shuffle-form:next").click(); // Trigger next
+            } else if (event.key === "f") {
+                enterFullscreen();
+            }
+        });
+
+        function enterFullscreen() {
+            var elem = document.getElementById("shuffle-fullscreen-wrapper");
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            }
+        }
+    </script>
 </ui:composition>

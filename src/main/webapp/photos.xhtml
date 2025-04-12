@@ -124,35 +124,46 @@
                 </div>
                 
                 <h:panelGroup id="update-wrapper">
-                <div id="photo-gallery" class="photo-gallery">
-                    <ui:repeat value="#{collectionPhotosBean.photosDataModel}" var="photo" id="ui-rep">
-                        <div class="photo-wrapper" id="photo-wrapper_#{photo.id}">
-                            
-                            <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank" id="photo-link#{photo.id}">
-                                <img 
-                                    id="photo_#{photo.id}" 
-                                    src="#{'documentfiles'.concat(photo.pathToThumbail)}"
-                                    alt="Thumbnail doesn't exist for #{photo.fileName}" />
-                            </a>                            
-                            
-                            <div class="photo-details" id="#{'detail_'.concat(photo.id)}">
-                                
-                                <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank">
-                                    <p>#{photo.fileName}</p>
-                                </a>
-                                <p>#{photo.taken}</p>
-                                
-                                <p:rating value="#{photo.rating}">
-                                    <p:ajax event="rate" listener="#{collectionPhotosBean.updatePhoto(photo)}"
-                                            update="@form" />
-                                </p:rating>
-                                <h:commandButton class="delete" value="Delete" action="#{collectionPhotosBean.deletePhoto(photo)}">
-                                    <f:ajax execute="@this" render="@form"/>
-                                </h:commandButton>
+                    <div id="photo-gallery" class="photo-gallery">
+                        <ui:repeat value="#{collectionPhotosBean.photosDataModel}" var="photo" id="ui-rep">
+                            <div class="photo-wrapper" id="photo-wrapper_#{photo.id}">
+
+                                <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank" id="photo-link#{photo.id}">
+                                    <img 
+                                        id="photo_#{photo.id}" 
+                                        src="#{'documentfiles'.concat(photo.pathToThumbail)}"
+                                        alt="Thumbnail doesn't exist for #{photo.fileName}" />
+                                </a>                            
+
+                                <div class="photo-details" id="#{'detail_'.concat(photo.id)}">
+
+                                    <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank">
+                                        <p>#{photo.fileName}</p>
+                                    </a>
+                                    <p>#{photo.taken}</p>
+
+                                    <p:rating value="#{photo.rating}">
+                                        <p:ajax event="rate" listener="#{collectionPhotosBean.updatePhoto(photo)}"
+                                                update="@form" />
+                                    </p:rating>
+                                    
+                                    <h:commandButton class="confirm" 
+                                                     value="Restore" 
+                                                     rendered="#{collectionPhotosBean.locationIsBinDirectory}"
+                                                     action="#{collectionPhotosBean.restorePhoto(photo)}">
+                                        <f:ajax execute="@this" render="@form"/>
+                                    </h:commandButton>
+                                    
+                                    <h:commandButton class="delete" 
+                                                     value="Delete" 
+                                                     rendered="#{!collectionPhotosBean.locationIsBinDirectory}"
+                                                     action="#{collectionPhotosBean.deletePhoto(photo)}">
+                                        <f:ajax execute="@this" render="@form"/>
+                                    </h:commandButton>
+                                </div>
                             </div>
-                        </div>
-                    </ui:repeat>
-                </div>
+                        </ui:repeat>
+                    </div>
                 </h:panelGroup>
             </h:form>
         </div>

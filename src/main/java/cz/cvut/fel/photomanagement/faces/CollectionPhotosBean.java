@@ -70,6 +70,7 @@ public class CollectionPhotosBean implements Serializable {
     private String filesPath;
     private ArrayList<String> paths;
     private boolean handlingredirectToNewAlbum = false;
+    private boolean locationIsBinDirectory = false;
     private UploadedFiles files;
     private static final int DISPLAYED_PHOTO_HEIGHT = 300;
 
@@ -98,20 +99,19 @@ public class CollectionPhotosBean implements Serializable {
         return new ListDataModel(breadcrumbs);
     }
 
-    // receives full path from root as a String
-    public void changeDirectory(String path) {
-        loadFiles();
-    }
-
     public void loadFiles() {
         Path path = Path.of(filesPath);
         boolean locationIsThumbnailsDirectory = false;
+        this.locationIsBinDirectory = false;
 
 //        System.out.print("CURRENT PATH: ");
         for (int i = 0; i < path.getNameCount(); i++) {
 //            System.out.println(path.getName(i));
             if ("thumbnails".equals(path.getName(i).toString())) {
                 locationIsThumbnailsDirectory = true;
+            }
+            if ("bin".equals(path.getName(i).toString())) {
+                this.locationIsBinDirectory = true;
             }
         }
 //        System.out.println();
@@ -222,16 +222,6 @@ public class CollectionPhotosBean implements Serializable {
             g2d.drawImage(scaledImage, 0, 0, null);
             g2d.dispose();
 
-            //BICUBIC interpolation
-//            BufferedImage thumbnailImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-//            Graphics2D g2d = thumbnailImage.createGraphics();
-//
-//            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-//            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-//            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//
-//            g2d.drawImage(originalImage, 0, 0, w, h, null);
-//            g2d.dispose();
             // write the thumbnail to a file
             ImageIO.write(thumbnailImage, "png", thumbnailFilePath.toFile());
 
@@ -249,20 +239,23 @@ public class CollectionPhotosBean implements Serializable {
         return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".gif");
     }
 
+    public void restorePhoto(Photo photo) {
+        Path photoLocalPath = Path.of(photo.getLocalPath());
+        if ("bin".equals(photoLocalPath.getName(photoLocalPath.getNameCount() - 1).toString())) {
+            fileManager.restoreFile(photo.getFileName(), photo.getLocalPath());
+        }
+    }
+
     /*
-    check if photo is already inside /bin
-    if not:
-    check if ./bin exists
-        if so: move photo to bin
-        else: create ./bin and move photo
+    check if photo is not already inside /bin
+        check if ./bin exists
+            if so: move photo to bin
+            else: create ./bin and move photo
      */
     public void deletePhoto(Photo photo) {
-        if ((photo.getLocalPath().endsWith("/bin"))) {
-
-            photoDatabaseService.deletePhoto(photo);
-        } else {
-            fileManager.createDirectory(photo.getLocalPath(), "bin");
-            fileManager.moveToBin(photo.getFileName(), photo.getLocalPath());
+        Path photoLocalPath = Path.of(photo.getLocalPath());
+        if (!"bin".equals(photoLocalPath.getName(photoLocalPath.getNameCount() - 1).toString())) {
+            fileManager.deletePhoto(photo.getFileName(), photo.getLocalPath());
         }
     }
 
@@ -404,5 +397,9 @@ public class CollectionPhotosBean implements Serializable {
 
     public void setFiles(UploadedFiles files) {
         this.files = files;
+    }
+
+    public boolean isLocationIsBinDirectory() {
+        return locationIsBinDirectory;
     }
 }
