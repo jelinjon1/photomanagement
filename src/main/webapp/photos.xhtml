@@ -173,11 +173,19 @@
         </div>
         
         <script>            
-            console.log(window.location.href);
-            
             // kvuli reverzni proxy muze bejt kdekoliv
             // neskladat z location, jen odriznout konec z .href
-            const socket = new WebSocket("ws://localhost:8080/photo-management-app/thumbnailUpdates");
+            
+            let match = window.location.href.match(/^.*?(?=photos.xhtml)/);
+            if (match) {
+                match += "thumbnailUpdates"
+            } else {
+                console.log('could not parse link to websocket from window.location..href')
+            }
+            // "ws://localhost:8080/photo-management-app/thumbnailUpdates"
+            // console.log(match);
+            
+            const socket = new WebSocket(match);
 
             let lastUpdate = 0;
             const THROTTLE_INTERVAL = 500; //in milliseconds
