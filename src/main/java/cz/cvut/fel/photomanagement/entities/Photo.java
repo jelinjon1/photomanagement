@@ -19,6 +19,7 @@ import java.nio.file.attribute.BasicFileAttributeView;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -101,6 +102,10 @@ public class Photo implements Serializable {
         return LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getFileName() {
         return fileName;
     }
@@ -123,6 +128,11 @@ public class Photo implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getFormattedTaken() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm - dd.MM.yyyy");
+        return taken.format(formatter);
     }
 
     public LocalDateTime getTaken() {

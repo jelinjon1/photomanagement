@@ -8,11 +8,11 @@
                 xmlns:p="http://primefaces.org/ui">
     
     <label class="tooltip">
-        Ovládání
+        Controls
         <div class="tooltip-text">
             f - fullscreen,
-            esc - opustit fullscreen
-            šipky vpravo/vlevo - přepínání fotky
+            esc - exit fullscreen
+            arrows left/right - go to previous/next
         </div>
     </label>
 
@@ -48,9 +48,21 @@
             <div class="carousel-controls-wrapper">
                 <h:commandButton class="delete" 
                                  value="Delete" 
-                                 rendered="#{tableAlbumsBean.iterator.current != null and request.isUserInRole('admin')}">
-                    <p:ajax update="@form" listener="#{tableAlbumsBean.deletePhoto(tableAlbumsBean.iterator.current)}"/>
+                                 rendered="#{tableAlbumsBean.iterator.current != null and
+                                             request.isUserInRole('admin') and
+                                             tableAlbumsBean.deletingPhotoId != tableAlbumsBean.iterator.current.id}"
+                                 action="#{tableAlbumsBean.setDeletingPhotoId(tableAlbumsBean.iterator.current.id)}">
                 </h:commandButton>
+
+                <h:commandButton rendered="#{tableAlbumsBean.deletingPhotoId == tableAlbumsBean.iterator.current.id}" 
+                                 class="cancel"
+                                 value="CANCEL"
+                                 action="#{tableAlbumsBean.setDeletingPhotoId(0)}"/>
+
+                <h:commandButton rendered="#{tableAlbumsBean.deletingPhotoId == tableAlbumsBean.iterator.current.id}" 
+                                 class="confirm"
+                                 value="CONFIRM"
+                                 action="#{tableAlbumsBean.deletePhoto(tableAlbumsBean.iterator.current)}"/>
             </div>
         </h:form>
     </div>

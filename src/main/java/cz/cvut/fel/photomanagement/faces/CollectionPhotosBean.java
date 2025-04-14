@@ -67,7 +67,7 @@ public class CollectionPhotosBean implements Serializable {
     private Long selectedPhotoParameter;
     private DataModel<Photo> photosDataModel;
     private DataModel<FilePlaceholder> filesDataModel;
-    private String filesPath;
+    private String filesPath = "";
     private ArrayList<String> paths;
     private boolean handlingredirectToNewAlbum = false;
     private boolean locationIsBinDirectory = false;
@@ -104,9 +104,7 @@ public class CollectionPhotosBean implements Serializable {
         boolean locationIsThumbnailsDirectory = false;
         this.locationIsBinDirectory = false;
 
-//        System.out.print("CURRENT PATH: ");
         for (int i = 0; i < path.getNameCount(); i++) {
-//            System.out.println(path.getName(i));
             if ("thumbnails".equals(path.getName(i).toString())) {
                 locationIsThumbnailsDirectory = true;
             }
@@ -114,8 +112,6 @@ public class CollectionPhotosBean implements Serializable {
                 this.locationIsBinDirectory = true;
             }
         }
-//        System.out.println();
-
 
         // fetch all present files located in directory given by navigation
         List<File> allFiles = fileManager.loadFiles(filesPath);
@@ -289,7 +285,7 @@ public class CollectionPhotosBean implements Serializable {
 
         Album album = albumDatabaseService.findAlbumById(selectedAlbumId); // Retrieve album by selected ID
         if (album == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Album not found", null));
+            System.err.println("Album with the given id was not found.");
             return null;
         }
 
@@ -298,7 +294,8 @@ public class CollectionPhotosBean implements Serializable {
         }
 
         albumDatabaseService.update(album);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Photos added to album successfully", null));
+//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Photos added to album successfully", null));
+        System.out.println("photos added to album successfully");
         return null;
     }
 
@@ -315,6 +312,10 @@ public class CollectionPhotosBean implements Serializable {
 
     public DataModel<Photo> getPhotosDataModel() {
         return photosDataModel;
+    }
+
+    public void setPhotosDataModel(DataModel<Photo> photosDataModel) {
+        this.photosDataModel = photosDataModel;
     }
 
     public void selectPhoto() {
@@ -402,4 +403,17 @@ public class CollectionPhotosBean implements Serializable {
     public boolean isLocationIsBinDirectory() {
         return locationIsBinDirectory;
     }
+
+    public void setPhotoDatabaseService(PhotoDatabaseService photoDatabaseService) {
+        this.photoDatabaseService = photoDatabaseService;
+    }
+
+    public void setAlbumDatabaseService(AlbumDatabaseService albumDatabaseService) {
+        this.albumDatabaseService = albumDatabaseService;
+    }
+
+    public void setFileManager(FileManager fileManager) {
+        this.fileManager = fileManager;
+    }
+
 }

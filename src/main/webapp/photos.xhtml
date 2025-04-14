@@ -140,7 +140,8 @@
                                     <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank">
                                         <p>#{photo.fileName}</p>
                                     </a>
-                                    <p>#{photo.taken}</p>
+                                    
+                                    <p>#{photo.formattedTaken}</p>
 
                                     <p:rating value="#{photo.rating}">
                                         <p:ajax event="rate" listener="#{collectionPhotosBean.updatePhoto(photo)}"
@@ -167,25 +168,30 @@
                 </h:panelGroup>
             </h:form>
         </div>
-
         <div class="banner footer">
             Footer
         </div>
         
-        <script>
+        <script>            
             console.log(window.location.href);
+            
             // kvuli reverzni proxy muze bejt kdekoliv
             // neskladat z location, jen odriznout konec z .href
             const socket = new WebSocket("ws://localhost:8080/photo-management-app/thumbnailUpdates");
 
-            // todo timer to delay refresh requests if too many at once
+            let lastUpdate = 0;
+            const THROTTLE_INTERVAL = 500; //in milliseconds
+
             socket.onmessage = function(event) {
-                const data = event.data.split("|");
-                const photoId = data[0];
-                
-                console.log('updating the div for ' + photoId);
-                
-                updateThumbnail();
+                const now = Date.now();
+                if (now - lastUpdate > THROTTLE_INTERVAL) {
+                    const data = event.data.split("|");
+                    const photoId = data[0];
+
+                    console.log('throttled update for ' + photoId);
+                    updateThumbnail();
+                    lastUpdate = now;
+                }
             };
         </script>
     </h:body>

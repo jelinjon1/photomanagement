@@ -49,6 +49,7 @@ public class TableAlbumsBean implements Serializable {
     private int importanceThreshold = 5;
     private Integer importanceIgnore = null;
     private long deletingAlbumId = 0;
+    private long deletingPhotoId = 0;
 
 
     public TableAlbumsBean() {
@@ -271,6 +272,14 @@ public class TableAlbumsBean implements Serializable {
 
     public void setSelectedAlbumId(Long selectedAlbumId) {
         this.selectedAlbumId = selectedAlbumId;
+    }
+
+    public long getDeletingPhotoId() {
+        return deletingPhotoId;
+    }
+
+    public void setDeletingPhotoId(long deletingPhotoId) {
+        this.deletingPhotoId = deletingPhotoId;
     }
 
 }

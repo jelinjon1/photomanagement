@@ -67,15 +67,21 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
         justify-content: center;
         height: 100vh;
         
+        .controls {
+            padding-top: 16px;
+        }
         .image-switcher {
             height: 90vh;
             display: flex;
             flex-direction: row;
             justify-content: center;
+            overflow: hidden;
             
             /*overwrite PF css*/
             a {
                 position: relative !important;
+                height: fit-content !important;
+                background-color: none !important;
             }
             
             img {

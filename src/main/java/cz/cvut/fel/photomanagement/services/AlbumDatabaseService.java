@@ -67,7 +67,7 @@ public class AlbumDatabaseService implements Serializable {
         }
     }
 
-    void setEntityManager(EntityManager entityManager) {
+    public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 }

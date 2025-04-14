@@ -100,4 +100,8 @@ public class PhotoDatabaseService implements Serializable {
             throw new PersistenceException(e);
         }
     }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 }

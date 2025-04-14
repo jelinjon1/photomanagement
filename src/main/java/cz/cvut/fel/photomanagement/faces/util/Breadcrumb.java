@@ -5,6 +5,7 @@
 package cz.cvut.fel.photomanagement.faces.util;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
 /**
  *
@@ -19,6 +20,18 @@ public class Breadcrumb {
         this.value = value;
         this.path = path;
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Breadcrumb bc = (Breadcrumb) o;
+        return Objects.equals(value, bc.value) && Objects.equals(path, bc.path);
     }
 
     public String getValue() {
