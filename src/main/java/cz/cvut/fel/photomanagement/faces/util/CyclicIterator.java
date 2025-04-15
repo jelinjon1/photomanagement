@@ -28,7 +28,7 @@ public class CyclicIterator implements Serializable {
             if (index - 1 >= 0) {
                 return objects.get(index - 1);
             } else {
-                return objects.getLast();
+                return objects.get(objects.size() - 1);
             }
         } else {
             return null;
@@ -48,7 +48,7 @@ public class CyclicIterator implements Serializable {
             if (index + 1 < objects.size()) {
                 return objects.get(index + 1);
             } else {
-                return objects.getFirst();
+                return objects.get(0);
             }
         } else {
             return null;

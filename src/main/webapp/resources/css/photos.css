@@ -50,7 +50,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     }
 }
 
-.controls, .photo-details {
+.controls, .photo-details {    
     .ui-slider {
         width: 200px;
         cursor: pointer;
@@ -80,6 +80,33 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     align-items: center;
     gap: 20px;
     padding-bottom: 16px;
+    
+    .ui-chkbox .ui-chkbox-box {
+        &.ui-state-default {
+            border-color: lightgray;
+            
+            &.ui-state-hover {
+                border-color: gray;
+            }
+        }
+        
+        &.ui-state-active {
+            background-color: var(--dark-green);
+            border-color: lightgray;
+            
+            &.ui-state-hover {
+                background-color: var(--light-green);
+                border-color: gray;
+            }
+        }
+        
+    }
+    
+    .ui-chkbox-label {
+        text-decoration: none;
+        font-weight: 400;
+        font-family: "Times New Roman", Times, serif;
+    }
     
     
 }

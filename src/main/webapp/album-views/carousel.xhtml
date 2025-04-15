@@ -27,7 +27,7 @@
                     <h:graphicImage class="neighbor previous" 
                                     alt="No previous photo"
                                     rendered="#{tableAlbumsBean.iterator.notEmpty}"
-                                    value="#{'documentfiles'.concat(tableAlbumsBean.iterator.previous.photo.relativePathFromRoot)}"/>
+                                    value="#{'documentfiles'.concat(tableAlbumsBean.iterator.previous.photo.pathToThumbail)}"/>
                 </h:commandLink>
 
                 <a href="#{'documentfiles'.concat(tableAlbumsBean.iterator.current.photo.relativePathFromRoot)}" 
@@ -42,7 +42,7 @@
                     <h:graphicImage class="neighbor next" 
                                     alt="No next photo"
                                     rendered="#{tableAlbumsBean.iterator.notEmpty}"
-                                    value="#{'documentfiles'.concat(tableAlbumsBean.iterator.next.photo.relativePathFromRoot)}"/>
+                                    value="#{'documentfiles'.concat(tableAlbumsBean.iterator.next.photo.pathToThumbail)}"/>
                 </h:commandLink>
             </h:panelGroup>
             <div class="carousel-controls-wrapper">

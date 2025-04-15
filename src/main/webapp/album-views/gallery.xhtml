@@ -13,10 +13,10 @@
             <ui:repeat value="#{tableAlbumsBean.selectedAlbum.photos}" var="albumphoto">
                 <div class="photo-wrapper" id="photo_wrapper_#{albumphoto.photo.id}">
 
-                    <a href="#{'documentfiles'.concat(photo.relativePathFromRoot)}" target="_blank">
+                    <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
                         <h:graphicImage class="photo rating-#{albumphoto.photo.rating}" 
                                         id="photo_#{photo.id}" 
-                                        value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" 
+                                        value="#{'documentfiles'.concat(albumphoto.photo.pathToThumbail)}" 
                                         alt="#{albumphoto.photo.description}" />
                     </a>                            
 

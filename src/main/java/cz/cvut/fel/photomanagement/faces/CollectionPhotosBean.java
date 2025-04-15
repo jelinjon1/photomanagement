@@ -73,6 +73,8 @@ public class CollectionPhotosBean implements Serializable {
     private boolean locationIsBinDirectory = false;
     private UploadedFiles files;
     private static final int DISPLAYED_PHOTO_HEIGHT = 300;
+    private boolean hideThumbnails = true;
+    private boolean hideBin = false;
 
     @PostConstruct
     public void init() {
@@ -119,6 +121,8 @@ public class CollectionPhotosBean implements Serializable {
         // filter directories into separate data model
         filesDataModel = new ListDataModel<>(allFiles.stream()
                 .filter(File::isDirectory)
+                .filter(file -> !hideThumbnails || !"thumbnails".equals(file.getName()))
+                .filter(file -> !hideBin || !"bin".equals(file.getName()))
                 .map(file -> new FilePlaceholder(file, fileManager.getPhotosDirectoryPath().length()))
                 .collect(Collectors.toList()));
 
@@ -415,5 +419,22 @@ public class CollectionPhotosBean implements Serializable {
     public void setFileManager(FileManager fileManager) {
         this.fileManager = fileManager;
     }
+
+    public boolean isHideThumbnails() {
+        return hideThumbnails;
+    }
+
+    public void setHideThumbnails(boolean hideThumbnails) {
+        this.hideThumbnails = hideThumbnails;
+    }
+
+    public boolean isHideBin() {
+        return hideBin;
+    }
+
+    public void setHideBin(boolean hideBin) {
+        this.hideBin = hideBin;
+    }
+
 
 }

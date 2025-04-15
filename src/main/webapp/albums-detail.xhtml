@@ -75,10 +75,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                             <h:outputLabel value="Last edited:" />
                             <h:outputText value="#{tableAlbumsBean.selectedAlbum.lastEdited}" />
 
-                            <h:outputLabel value="Počet souborů:" />
+                            <h:outputLabel value="Photos:" />
                             <h:outputText value="#{tableAlbumsBean.selectedAlbum.photos.size()}" />
                         
-                            <h:commandButton value="Stáhnout" actionListener="#{tableAlbumsBean.downloadAlbum}" />
+                            <h:commandButton value="Download" actionListener="#{tableAlbumsBean.downloadAlbum}" />
                         </h:panelGrid>
                     </h:form>
                 </div>
@@ -88,14 +88,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             
         </div>
         <p:tabView id="tab-views" dynamic="true" cache="true">
-            <p:tab title="Carousel">
-                <ui:include src="./album-views/carousel.xhtml" />
+            <p:tab title="Priority">
+                <ui:include src="./album-views/priority.xhtml" />
             </p:tab>
             <p:tab title="Gallery">
                 <ui:include src="./album-views/gallery.xhtml" />
             </p:tab>
-            <p:tab title="Priority">
-                <ui:include src="./album-views/priority.xhtml" />
+            <p:tab title="Carousel">
+                <ui:include src="./album-views/carousel.xhtml" />
             </p:tab>
             <p:tab title="Shuffle">
                 <ui:include src="./album-views/shuffle.xhtml" />

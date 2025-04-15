@@ -59,7 +59,7 @@
                         <div class="photo-wrapper low-importance">
                             <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
                                 <h:graphicImage class="photo" 
-                                                value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
+                                                value="#{'documentfiles'.concat(albumphoto.photo.pathToThumbail)}"
                                                 alt="#{albumphoto.photo.description}" />
                             </a>
                             <div class="photo-details" id="#{'detail_'.concat(albumphoto.photo.id)}">
@@ -95,7 +95,7 @@
                     <div class="photo-wrapper high-importance">
                         <a href="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}" target="_blank">
                             <h:graphicImage class="photo"
-                                            value="#{'documentfiles'.concat(albumphoto.photo.relativePathFromRoot)}"
+                                            value="#{'documentfiles'.concat(albumphoto.photo.pathToThumbail)}"
                                             alt="#{albumphoto.photo.description}" />
                         </a>
                         <div class="photo-details" id="#{'detail_'.concat(albumphoto.photo.id)}">

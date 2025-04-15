@@ -96,6 +96,14 @@
                         <f:selectItems value="#{collectionPhotosBean.albumOptions}" var="album" 
                                    itemValue="#{album.id}" itemLabel="#{album.name}" />
                     </h:selectOneMenu>
+                    
+                    <p:selectBooleanCheckbox itemLabel="Hide thumbnails" value="#{collectionPhotosBean.hideThumbnails}">
+                        <f:ajax execute="@this" render="@form"/>
+                    </p:selectBooleanCheckbox>
+                    
+                    <p:selectBooleanCheckbox itemLabel="Hide bin" value="#{collectionPhotosBean.hideBin}">
+                        <f:ajax execute="@this" render="@form"/>
+                    </p:selectBooleanCheckbox>
                 </div>
                 
                 <div id="directories-list">
