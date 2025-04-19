@@ -1,11 +1,14 @@
 package cz.cvut.fel.photomanagement.faces;
 
 import cz.cvut.fel.photomanagement.comparator.PhotoByDate;
+import cz.cvut.fel.photomanagement.comparator.PhotoByName;
+import cz.cvut.fel.photomanagement.comparator.PhotoByRating;
 import cz.cvut.fel.photomanagement.entities.Album;
 import cz.cvut.fel.photomanagement.entities.Photo;
 import cz.cvut.fel.photomanagement.faces.model.FilePlaceholder;
 import cz.cvut.fel.photomanagement.faces.util.AlbumMenuOption;
 import cz.cvut.fel.photomanagement.faces.util.Breadcrumb;
+import cz.cvut.fel.photomanagement.faces.util.SortMenuOption;
 import cz.cvut.fel.photomanagement.services.AlbumDatabaseService;
 import cz.cvut.fel.photomanagement.services.FileManager;
 import cz.cvut.fel.photomanagement.services.PhotoDatabaseService;
@@ -30,6 +33,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +67,9 @@ public class CollectionPhotosBean implements Serializable {
 
     private Long selectedAlbumId = 1L;
     private List<AlbumMenuOption> albumOptions;
+    private List<SortMenuOption> sortMenuOptions;
+    private Long selectedComparatorId = 1L;
+    private boolean ascending = true;
     private Photo selectedPhoto = null;
     private Long selectedPhotoParameter;
     private DataModel<Photo> photosDataModel;
@@ -80,6 +87,11 @@ public class CollectionPhotosBean implements Serializable {
     public void init() {
         paths = new ArrayList<>();
         albumOptions = transformIntoOptions(albumDatabaseService.listAllAlbums());
+        sortMenuOptions = Arrays.asList(
+                new SortMenuOption("Sort by date", 1L, new PhotoByDate()),
+                new SortMenuOption("Sort by name", 2L, new PhotoByName()),
+                new SortMenuOption("Sort by rating", 3L, new PhotoByRating())
+        );
     }
 
     public DataModel<Breadcrumb> getBreadcrumbs() {
@@ -102,6 +114,8 @@ public class CollectionPhotosBean implements Serializable {
     }
 
     public void loadFiles() {
+        System.out.println("HEJ: " + this.selectedComparatorId);
+
         Path path = Path.of(filesPath);
         boolean locationIsThumbnailsDirectory = false;
         this.locationIsBinDirectory = false;
@@ -143,23 +157,33 @@ public class CollectionPhotosBean implements Serializable {
                 }
                 if (existingPhoto != null) {
                     photosList.add(existingPhoto);
-                    System.out.println("Loaded existing photo: " + existingPhoto);
+//                    System.out.println("Loaded existing photo: " + existingPhoto);
                 } else {
                     Photo photo = new Photo(file, filesPath);
                     photoDatabaseService.savePhoto(photo);
                     photosList.add(photo);
-                    System.out.println("Saved new photo: " + photo);
+//                    System.out.println("Saved new photo: " + photo);
                 }
             }
 
         }
-        // sort list of photos
-        Comparator dateComparator = new PhotoByDate();
-        photosList.sort(dateComparator);
 
-        for (Photo photo : photosList) {
-            System.out.println(photo);
+//        System.out.println("BEFORE SORT");
+//        for (Photo photo : photosList) {
+//            System.out.println(photo);
+//        }
+
+        // sort list of photos
+        Comparator selectedComparator = this.sortMenuOptions.get(selectedComparatorId.intValue() - 1).getComparator();
+        if (!ascending) {
+            selectedComparator = selectedComparator.reversed();
         }
+        photosList.sort(selectedComparator);
+
+//        System.out.println("AFTER SORT");
+//        for (Photo photo : photosList) {
+//            System.out.println(photo);
+//        }
 
         // return datamodel from list of photos
         photosDataModel = new ListDataModel<>(photosList);
@@ -190,12 +214,12 @@ public class CollectionPhotosBean implements Serializable {
         try {
             Path thumbnailFilePath = Path.of(inputFile.getParent(), "thumbnails", inputFile.getName());
 
-            System.out.println(thumbnailFilePath);
+//            System.out.println(thumbnailFilePath);
             File thumbnailFile = thumbnailFilePath.toFile();
 
             // check if thumbnail already generated, if so, return
             if (thumbnailFile.exists()) {
-                System.out.println("Thumbnail already exists for " + inputFile);
+//                System.out.println("Thumbnail already exists for " + inputFile);
                 return;
             }
             thumbnailFile.getParentFile().mkdirs();
@@ -227,7 +251,7 @@ public class CollectionPhotosBean implements Serializable {
 
             ThumbnailWebSocket.sendThumbnailUpdate(photoId, thumbnailFilePath.toString());
 
-            System.out.println("Thumbnail created: " + thumbnailFilePath);
+//            System.out.println("Thumbnail created: " + thumbnailFilePath);
         } catch (Exception | Error e) {
             System.err.println("Failed to create thumbnail for: " + inputFile.getName());
             e.printStackTrace();
@@ -436,5 +460,28 @@ public class CollectionPhotosBean implements Serializable {
         this.hideBin = hideBin;
     }
 
+    public List<SortMenuOption> getSortMenuOptions() {
+        return sortMenuOptions;
+    }
+
+    public void setSortMenuOptions(List<SortMenuOption> sortMenuOptions) {
+        this.sortMenuOptions = sortMenuOptions;
+    }
+
+    public Long getSelectedComparatorId() {
+        return selectedComparatorId;
+    }
+
+    public void setSelectedComparatorId(Long selectedComparatorId) {
+        this.selectedComparatorId = selectedComparatorId;
+    }
+
+    public boolean isAscending() {
+        return ascending;
+    }
+
+    public void setAscending(boolean ascending) {
+        this.ascending = ascending;
+    }
 
 }
