@@ -50,6 +50,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             <h1>Albums</h1>
             
             <h:form id="listform">
+                <h:commandButton value="&#x21bb;"
+                                 styleClass="refresh"
+                                 action="#{tableAlbumsBean.refreshAlbums}"/>
                 <h:commandButton value="New album"
                                  action="#{tableAlbumsBean.createAlbum}"
                                  rendered="#{request.isUserInRole('admin')}"/>

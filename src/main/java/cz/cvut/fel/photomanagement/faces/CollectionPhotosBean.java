@@ -88,9 +88,9 @@ public class CollectionPhotosBean implements Serializable {
         paths = new ArrayList<>();
         albumOptions = transformIntoOptions(albumDatabaseService.listAllAlbums());
         sortMenuOptions = Arrays.asList(
-                new SortMenuOption("Sort by date", 1L, new PhotoByDate()),
-                new SortMenuOption("Sort by name", 2L, new PhotoByName()),
-                new SortMenuOption("Sort by rating", 3L, new PhotoByRating())
+                new SortMenuOption("Date", 1L, new PhotoByDate()),
+                new SortMenuOption("Name", 2L, new PhotoByName()),
+                new SortMenuOption("Rating", 3L, new PhotoByRating())
         );
     }
 
@@ -114,8 +114,6 @@ public class CollectionPhotosBean implements Serializable {
     }
 
     public void loadFiles() {
-        System.out.println("HEJ: " + this.selectedComparatorId);
-
         Path path = Path.of(filesPath);
         boolean locationIsThumbnailsDirectory = false;
         this.locationIsBinDirectory = false;

@@ -105,11 +105,13 @@
                         <f:ajax execute="@this" render="@form"/>
                     </p:selectBooleanCheckbox>
                     
-                    <h:selectOneMenu value="#{collectionPhotosBean.selectedComparatorId}" styleClass="menu-selector">
+                    <label for="photos-form:sort-selector">Sort by:</label>
+                    <h:selectOneMenu id="sort-selector" value="#{collectionPhotosBean.selectedComparatorId}" styleClass="menu-selector">
                         <f:selectItems value="#{collectionPhotosBean.sortMenuOptions}" var="sort" 
                                        itemValue="#{sort.id}" itemLabel="#{sort.name}" />
                         <f:ajax render="@form" />
                     </h:selectOneMenu>
+                    
                     
                     <p:selectBooleanCheckbox itemLabel="Ascending" value="#{collectionPhotosBean.ascending}">
                         <f:ajax execute="@this" render="@form"/>
