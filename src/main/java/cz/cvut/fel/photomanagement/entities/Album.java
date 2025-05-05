@@ -129,7 +129,7 @@ public class Album implements Serializable {
 
     public void addPhoto(Photo photo) {
         AlbumPhoto ap = new AlbumPhoto(photo, this);
-        albumPhotos.add(ap); //todo add
+        albumPhotos.add(ap);
     }
 
     public void deleteAlbumPhoto(AlbumPhoto photo) {

@@ -1,42 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<f:view xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
       xmlns:f="jakarta.faces.core"
       xmlns:ui="jakarta.faces.facelets"
       xmlns:p="primefaces">
+    
+    <f:metadata>
+        <f:viewParam name="path" value="#{collectionPhotosBean.filesPath}" />
+        <f:event type="preRenderView"
+                 listener="#{collectionPhotosBean.loadFiles()}" />
+    </f:metadata>
+    
     <h:head>
         <title>Photo managment application</title>
         <h:outputStylesheet name="css/main.css" />
         <h:outputStylesheet name="css/photos.css" />
     </h:head>
     <h:body>
-        <f:metadata>
-            <f:viewParam name="path" value="#{collectionPhotosBean.filesPath}" />
-            <f:event type="preRenderView"
-                     listener="#{collectionPhotosBean.loadFiles()}" />
-        </f:metadata>
         <div class="banner header">
             Header
         </div>
         
-        <h:form>
+        <h:form id="photos-navigation-form">
             <ul class="topnav">
-                <li><a href="index.xhtml">Home</a></li>
-                <li><a href="albums.xhtml">Albums</a></li>
+                <li><a id="home-link" href="index.xhtml">Home</a></li>
+                <li><a id="albums-link" href="albums.xhtml">Albums</a></li>
                 <li>
-                    <h:link value="Photos" outcome="photos" class="active">
+                    <h:link id="photos-link" value="Photos" outcome="photos" class="active">
                         <f:param name="path" value="" />
                     </h:link>
                 </li>
                 <li class="float-right">
                     <h:outputText rendered="#{request.userPrincipal.name != null}" 
-                                  class="test" 
+                                  class="topnav-label"
                                   value="User: #{request.userPrincipal.name}"/>
                 </li>
                 <li class="float-right">
                     <h:commandLink 
+                        id="login-link"
                         value="Log in"
                         action="login.xhtml" 
                         rendered="#{!request.isUserInRole('admin')}"
@@ -44,6 +47,7 @@
                 </li>
                 <li class="float-right">
                     <h:commandLink 
+                        id="logout-link"
                         value="Log out"
                         action="#{logoutBean.logout()}"
                         rendered="#{request.isUserInRole('admin')}"
@@ -74,9 +78,11 @@
             
             <h:form enctype="multipart/form-data" id="upload-form">
                 <p:commandButton value="Upload" 
+                                 id="upload-button"
                                  ajax="false" 
                                  action="#{collectionPhotosBean.uploadMultiple}"/>
                 <p:fileUpload value="#{collectionPhotosBean.files}" 
+                              id="choose-files-button"
                               dragDropSupport="true" 
                               mode="simple" 
                               skinSimple="true" 
@@ -90,9 +96,13 @@
                                  process="@this" />
                 
                 <div class="controls">
-                    <h:commandButton value="Add to album" action="#{collectionPhotosBean.addToAlbum}" />
+                    <h:commandButton value="Add to album" 
+                                     id="addtoalbum-button"
+                                     action="#{collectionPhotosBean.addToAlbum}" />
                     
-                    <h:selectOneMenu value="#{collectionPhotosBean.selectedAlbumId}" styleClass="menu-selector">
+                    <h:selectOneMenu value="#{collectionPhotosBean.selectedAlbumId}" 
+                                     id="select-album-menu"
+                                     styleClass="menu-selector">
                         <f:selectItems value="#{collectionPhotosBean.albumOptions}" var="album" 
                                    itemValue="#{album.id}" itemLabel="#{album.name}" />
                     </h:selectOneMenu>
@@ -223,5 +233,5 @@
             };
         </script>
     </h:body>
-</html>
+</f:view>
 

@@ -13,29 +13,27 @@
         <h:outputStylesheet name="css/form-elements.css" />
     </h:head>
     <h:body>
-        <f:metadata>
-            <f:viewParam name="path" value="#{collectionPhotosBean.filesPath}" />
-            <f:event type="preRenderView"
-                     listener="#{collectionPhotosBean.loadFiles}" />
-        </f:metadata>
+        
         <div class="banner header">
             Header
         </div>
-        <h:form>
+        <h:form id="login-navigation-form">
             <ul class="topnav">
-                <li><a href="index.xhtml">Home</a></li>
-                <li><a href="albums.xhtml">Albums</a></li>
+                <li><a id="home-link" href="index.xhtml">Home</a></li>
+                <li><a id="albums-link" href="albums.xhtml">Albums</a></li>
                 <li>
-                    <h:link value="Photos" outcome="photos">
+                    <h:link id="photos-link" value="Photos" outcome="photos">
                         <f:param name="path" value="" />
                     </h:link>
                 </li>
                 <li class="float-right">
                     <h:outputText rendered="#{request.userPrincipal.name != null}" 
-                                  class="test" value="User: #{request.userPrincipal.name}"/>
+                                  class="topnav-label"
+                                  value="User: #{request.userPrincipal.name}"/>
                 </li>
                 <li class="float-right">
                     <h:commandLink
+                        id="login-link"
                         value="Log in"
                         class="active"
                         action="login.xhtml" 
@@ -44,6 +42,7 @@
                 </li>
                 <li class="float-right">
                     <h:commandLink 
+                        id="logout-link"
                         value="Log out"
                         action="#{logoutBean.logout()}"
                         rendered="#{request.isUserInRole('admin')}"
@@ -69,7 +68,7 @@
                            placeholder="Your password" />
                 </h:panelGrid>
                 
-                <button type="submit">Log in</button>
+                <button id="login-submit-button" type="submit">Log in</button>
             </form>
 
             <h:panelGroup rendered="#{not empty param.error}">

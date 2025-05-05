@@ -21,20 +21,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             Header
         </div>
         
-        <h:form>
+        <h:form id="newalbum-navigation-form">
             <ul class="topnav">
-                <li><a href="index.xhtml">Home</a></li>
-                <li><a href="albums.xhtml">Albums</a></li>
+                <li><a id="home-link" href="index.xhtml">Home</a></li>
+                <li><a id="albums-link" href="albums.xhtml">Albums</a></li>
                 <li>
-                    <h:link value="Photos" outcome="photos">
+                    <h:link id="photos-link" value="Photos" outcome="photos">
                         <f:param name="path" value="" />
                     </h:link>
                 </li>
                 <li class="float-right">
-                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="User: #{request.userPrincipal.name}"/>
+                    <h:outputText rendered="#{request.userPrincipal.name != null}" 
+                                  class="topnav-label"
+                                  value="User: #{request.userPrincipal.name}"/>
                 </li>
                 <li class="float-right">
                     <h:commandLink 
+                        id="login-link"
                         value="Log in"
                         action="login.xhtml" 
                         rendered="#{!request.isUserInRole('admin')}"
@@ -42,6 +45,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 </li>
                 <li class="float-right">
                     <h:commandLink 
+                        id="logout-link"
                         value="Log out"
                         action="#{logoutBean.logout()}"
                         rendered="#{request.isUserInRole('admin')}"
@@ -56,16 +60,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             <h:form id="create-album-form">
                 
                 <!--make the window have a class dictated by a java evaluation, and then change something in the java when dupe-->
-                <div class="modal #{createAlbumBean.displayAlert == true ? 'visible' : 'hidden'}">
+                <div id="modal-wrapper" class="modal #{createAlbumBean.displayAlert == true ? 'visible' : 'hidden'}">
                     <div class="modal-content">
-                        <h1>Varování</h1>
-                        <p>Jméno alba již existuje.</p>
-                        <h:commandButton class="cancel" value="Zrušit" action="#{createAlbumBean.setDisplayAlert(false)}" />
-                        <h:commandButton class="right" value="Create" action="#{createAlbumBean.saveAlbum()}" />
+                        <h1>Warning</h1>
+                        <p>Album name is duplicate</p>
+                        <h:commandButton id="modal-cancel-button" class="cancel" value="Cancel" action="#{createAlbumBean.setDisplayAlert(false)}" />
+                        <h:commandButton id="modal-create-button" class="right" value="Create" action="#{createAlbumBean.saveAlbum()}" />
                     </div>
                 </div>
-                
-
                 
                 <label>Album title:</label>
                 <h:inputText id="album-name" 
@@ -76,7 +78,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
                 <h:inputTextarea id="album-description"
                                  value="#{createAlbumBean.description}" />
 
-                <h:commandButton value="Create" action="#{createAlbumBean.checkAlbumValidity()}" />
+                <h:commandButton id="createalbum-button" value="Create" action="#{createAlbumBean.checkAlbumValidity()}" />
             </h:form>
             
         </div>

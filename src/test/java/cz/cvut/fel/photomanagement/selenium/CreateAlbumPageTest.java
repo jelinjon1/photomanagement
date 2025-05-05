@@ -43,8 +43,7 @@ public class CreateAlbumPageTest {
         }
     }
 
-    @Test
-    void testCreateAndDeleteLoggedIn() {
+    private void login() {
         driver.get("http://localhost:8080/photo-management-app/login.xhtml");
 
         WebElement usernameField = driver.findElement(By.id("username"));
@@ -59,27 +58,86 @@ public class CreateAlbumPageTest {
         waitForPageToLoadCompletely();
 
         String title = driver.getTitle();
-        Assertions.assertTrue(title.contains("Photo"), "Page title should contain 'Photo' but contains " + title + " instead");
+        Assertions.assertTrue(title.contains("Photo management application"),
+                "Page title should contain 'Photo management application' but contains " + title + " instead");
+    }
 
-        WebElement albumsButton = driver.findElement(By.cssSelector("a[href='albums.xhtml']"));
+    private void createAlbum(String albumTitle, String albumDescription) {
+        WebElement albumTitleField = driver.findElement(By.id("create-album-form:album-name"));
+        albumTitleField.sendKeys(albumTitle);
+
+        WebElement albumDescriptionField = driver.findElement(By.id("create-album-form:album-description"));
+        albumDescriptionField.sendKeys(albumDescription);
+
+        WebElement createAlbumButton = driver.findElement(By.id("create-album-form:createalbum-button"));
+        createAlbumButton.click();
+        waitForPageToLoadCompletely();
+    }
+
+    @Test
+    void testCreateAlbumDuplicateTitle() {
+        login();
+
+        WebElement albumsButton = driver.findElement(By.id("albums-link"));
         albumsButton.click();
         waitForPageToLoadCompletely();
 
-        WebElement newAlbumButton = driver.findElement(By.cssSelector("input[value='New album']"));
+        WebElement newAlbumButton = driver.findElement(By.id("listform:newalbum-button"));
         newAlbumButton.click();
         waitForPageToLoadCompletely();
 
-        WebElement albumTitle = driver.findElement(By.id("create-album-form:album-name"));
         String testAlbumTitle = "Test album";
-        albumTitle.sendKeys(testAlbumTitle);
-
-        WebElement albumDescription = driver.findElement(By.id("create-album-form:album-description"));
         String testAlbumDescription = "Test album description";
-        albumDescription.sendKeys(testAlbumDescription);
+        createAlbum(testAlbumTitle, testAlbumDescription);
 
-        WebElement createAlbumButton = driver.findElement(By.cssSelector("input[value='Create'][name='create-album-form:j_idt28']"));
-        createAlbumButton.click();
+        newAlbumButton = driver.findElement(By.id("listform:newalbum-button"));
+        newAlbumButton.click();
         waitForPageToLoadCompletely();
+
+        createAlbum(testAlbumTitle, testAlbumDescription);
+        WebElement modalWrapper = driver.findElement(By.id("modal-wrapper"));
+        Assertions.assertTrue(modalWrapper.getDomAttribute("class").contains("visible"),
+                "The modal wrapper is not marked as visible in the css class attribute.");
+
+        WebElement modalCancelButton = driver.findElement(By.id("create-album-form:modal-cancel-button"));
+        modalCancelButton.click();
+        albumsButton = driver.findElement(By.id("albums-link"));
+        albumsButton.click();
+        waitForPageToLoadCompletely();
+
+        List<WebElement> deleteAlbumButtons = driver.findElements(By.className("delete"));
+
+        Assertions.assertTrue(deleteAlbumButtons.size() != 0);
+        deleteAlbumButtons.get(deleteAlbumButtons.size() - 1).click();
+
+        waitForPageToLoadCompletely();
+        List<WebElement> confirmAlbumButtons = driver.findElements(By.className("confirm"));
+        List<WebElement> cancelAlbumButtons = driver.findElements(By.className("cancel"));
+        System.out.println(confirmAlbumButtons);
+        System.out.println(cancelAlbumButtons);
+
+        Assertions.assertTrue(confirmAlbumButtons.size() != 0);
+        confirmAlbumButtons.get(confirmAlbumButtons.size() - 1).click();
+
+        Assertions.assertThrows(NoSuchElementException.class,
+                () -> driver.findElement(By.partialLinkText(testAlbumTitle)));
+    }
+
+    @Test
+    void testCreateAndDeleteLoggedIn() {
+        login();
+
+        WebElement albumsButton = driver.findElement(By.id("albums-link"));
+        albumsButton.click();
+        waitForPageToLoadCompletely();
+
+        WebElement newAlbumButton = driver.findElement(By.id("listform:newalbum-button"));
+        newAlbumButton.click();
+        waitForPageToLoadCompletely();
+
+        String testAlbumTitle = "Test album";
+        String testAlbumDescription = "Test album description";
+        createAlbum(testAlbumTitle, testAlbumDescription);
 
         WebElement albumLink = driver.findElement(By.partialLinkText(testAlbumTitle));
         Assertions.assertNotNull(albumLink, "Link with the given album title does not exist.");
@@ -109,10 +167,11 @@ public class CreateAlbumPageTest {
         waitForPageToLoadCompletely();
 
         String title = driver.getTitle();
-        Assertions.assertTrue(title.contains("Albums"), "Page title should contain 'Albums' but contains " + title + " instead");
+        Assertions.assertTrue(title.contains("Albums"),
+                "Page title should contain 'Albums' but contains " + title + " instead");
 
 
-        List<WebElement> newAlbumButtons = driver.findElements(By.cssSelector("input[value='New album']"));
+        List<WebElement> newAlbumButtons = driver.findElements(By.id("create-album-form:createalbum-button"));
         Assertions.assertTrue(newAlbumButtons.isEmpty());
 
     }

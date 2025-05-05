@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -57,7 +58,7 @@ public class TableAlbumsBean implements Serializable {
     
     @PostConstruct
     public void initDB() {
-        albumsDataModel = new ListDataModel<>(new ArrayList<>(albumDatabaseService.listAllAlbums()));
+        refreshAlbums();
     }
 
     public void downloadAlbum() {
@@ -183,7 +184,12 @@ public class TableAlbumsBean implements Serializable {
     }
 
     public void refreshAlbums() {
-        this.albumsDataModel = new ListDataModel<>(new ArrayList<>(albumDatabaseService.listAllAlbums()));
+        this.albumsDataModel = new ListDataModel<>(new ArrayList<>(
+                albumDatabaseService
+                        .listAllAlbums()
+                        .stream().sorted((o1, o2) -> o1.getCreated().compareTo(o2.getCreated()))
+                        .collect(Collectors.toList())
+        ));
     }
 
     public DataModel<Album> getAlbumsDataModel() {

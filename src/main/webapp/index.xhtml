@@ -13,20 +13,23 @@
             Header
         </div>
         
-        <h:form>
+        <h:form id="home-navigation-form">
             <ul class="topnav">
-                <li><a class="active" href="index.xhtml">Home</a></li>
-                <li><a href="albums.xhtml">Albums</a></li>
+                <li><a id="home-link" class="active" href="index.xhtml">Home</a></li>
+                <li><a id="albums-link" href="albums.xhtml">Albums</a></li>
                 <li>
-                    <h:link value="Photos" outcome="photos">
+                    <h:link id="photos-link" value="Photos" outcome="photos">
                         <f:param name="path" value="" />
                     </h:link>
                 </li>
                 <li class="float-right">
-                    <h:outputText rendered="#{request.userPrincipal.name != null}" class="test" value="User: #{request.userPrincipal.name}"/>
+                    <h:outputText rendered="#{request.userPrincipal.name != null}" 
+                                  class="topnav-label"
+                                  value="User: #{request.userPrincipal.name}"/>
                 </li>
                 <li class="float-right">
                     <h:commandLink 
+                        id="login-link"
                         value="Log in"
                         action="login.xhtml" 
                         rendered="#{!request.isUserInRole('admin')}"
@@ -34,6 +37,7 @@
                 </li>
                 <li class="float-right">
                     <h:commandLink 
+                        id="logout-link"
                         value="Log out"
                         action="#{logoutBean.logout()}"
                         rendered="#{request.isUserInRole('admin')}"
