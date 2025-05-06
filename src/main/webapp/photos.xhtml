@@ -94,6 +94,7 @@
                 <p:remoteCommand name="updateThumbnail"
                                  update="update-wrapper"
                                  process="@this" />
+                <h:inputHidden id="hiddenPath" value="#{collectionPhotosBean.filesPath}" />
                 
                 <div class="controls">
                     <h:commandButton value="Add to album" 
@@ -108,11 +109,11 @@
                     </h:selectOneMenu>
                     
                     <p:selectBooleanCheckbox itemLabel="Hide thumbnails" value="#{collectionPhotosBean.hideThumbnails}">
-                        <f:ajax execute="@this" render="@form"/>
+                        <f:ajax execute="@this hiddenPath" render="@form" />
                     </p:selectBooleanCheckbox>
                     
                     <p:selectBooleanCheckbox itemLabel="Hide bin" value="#{collectionPhotosBean.hideBin}">
-                        <f:ajax execute="@this" render="@form"/>
+                        <f:ajax execute="@this hiddenPath" render="@form" />
                     </p:selectBooleanCheckbox>
                     
                     <label for="photos-form:sort-selector">Sort by:</label>
@@ -202,7 +203,8 @@
             Footer
         </div>
         
-        <script>            
+        <script>
+            
             // kvuli reverzni proxy muze bejt kdekoliv
             // neskladat z location, jen odriznout konec z .href
             

@@ -29,7 +29,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -43,19 +42,19 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ExtendWith(MockitoExtension.class)
 public class CollectionPhotosBeanTest {
 
-    @Mock
+    @InjectMocks
     private PhotoDatabaseService photoDatabaseService;
 
-    @Mock
+    @InjectMocks
     private AlbumDatabaseService albumDatabaseService;
 
     @InjectMocks
     private CollectionPhotosBean collectionPhotosBean;
 
-    private static EntityManager entityManager;
+    private EntityManager entityManager;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         Map<String, String> props = new HashMap<>();
         props.put("jakarta.persistence.jdbc.url", postgresContainer.getJdbcUrl());
         props.put("jakarta.persistence.jdbc.user", postgresContainer.getUsername());
@@ -66,7 +65,10 @@ public class CollectionPhotosBeanTest {
                 = Persistence.createEntityManagerFactory("photomanagementTestingPu", props);
         entityManager = entityManagerFactory.createEntityManager();
 
+        photoDatabaseService.setEntityManager(entityManager);
+        albumDatabaseService.setEntityManager(entityManager);
         collectionPhotosBean.setPhotoDatabaseService(photoDatabaseService);
+        collectionPhotosBean.setAlbumDatabaseService(albumDatabaseService);
     }
 
     @Container
@@ -78,7 +80,6 @@ public class CollectionPhotosBeanTest {
 
     @Test
     void testGetBreadcrumbs() {
-        collectionPhotosBean.setAlbumDatabaseService(albumDatabaseService);
 
         String testPath = "/photos/vacations/vacations01";
         List<Breadcrumb> testBreadcrumbs = Arrays.asList(
@@ -97,8 +98,6 @@ public class CollectionPhotosBeanTest {
 
     @Test
     void testAddToNewAlbum() {
-        collectionPhotosBean.setAlbumDatabaseService(albumDatabaseService);
-
         this.collectionPhotosBean.setSelectedAlbumId(0L);
         String result = collectionPhotosBean.addToAlbum();
 
@@ -110,14 +109,6 @@ public class CollectionPhotosBeanTest {
     void testAddToExistingAlbum() {
         EntityTransaction et = this.entityManager.getTransaction();
         et.begin();
-
-        PhotoDatabaseService photoDatabaseService = new PhotoDatabaseService();
-        photoDatabaseService.setEntityManager(entityManager);
-        collectionPhotosBean.setPhotoDatabaseService(photoDatabaseService);
-
-        AlbumDatabaseService albumDatabaseService = new AlbumDatabaseService();
-        albumDatabaseService.setEntityManager(entityManager);
-        collectionPhotosBean.setAlbumDatabaseService(albumDatabaseService);
 
         // create new album, save album in db
         Album newAlbum = new Album();
