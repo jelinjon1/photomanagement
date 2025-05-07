@@ -39,8 +39,9 @@ public class AlbumPhoto implements Serializable {
 
     @Override
     public String toString() {
-        return "AlbumPhoto{" + "id=" + id + ", album=" + album.getName() + ", importance=" + importance + '}';
+        return "AlbumPhoto{" + "id=" + id + ", photo=" + photo.getFileName() + ", album=" + album.getName() + ", importance=" + importance + '}';
     }
+
 
     public Long getId() {
         return id;

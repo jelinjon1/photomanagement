@@ -76,6 +76,7 @@ public class TableAlbumsBean implements Serializable {
 
             ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
 
+            // todo many calls fetching a basically static variable
             for (AlbumPhoto photo : photos) {
                 String filePath = this.fileLoader.getPhotosDirectoryPath() + photo.getPhoto().getRelativePathFromRoot();
                 System.out.println("FILEPATH FOR " + photo.getPhoto().getFileName() + " is: " + filePath);

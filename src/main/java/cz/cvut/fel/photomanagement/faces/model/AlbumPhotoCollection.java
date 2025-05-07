@@ -11,7 +11,6 @@ import java.util.List;
 public class AlbumPhotoCollection {
 
     private List<AlbumPhoto> photos;
-    private int importance;
     private final boolean lowImportance;
     // todo rethink boolean/int/enum for levels of importance
 
@@ -37,19 +36,16 @@ public class AlbumPhotoCollection {
         this.photos = photos;
     }
 
-    public int getImportance() {
-        return importance;
-    }
-
-    public void setImportance(int importance) {
-        this.importance = importance;
-    }
-
     public boolean isLowImportance() {
         return lowImportance;
     }
 
     public int getSize() {
         return this.photos.size();
+    }
+
+    @Override
+    public String toString() {
+        return "AlbumPhotoCollection{" + "photos=" + photos + ", lowImportance=" + lowImportance + '}';
     }
 }

@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -43,6 +44,9 @@ public class Album implements Serializable {
     }
 
     public Album(List<Photo> photos, String name, String description) {
+        this.albumPhotos = photos.stream()
+                .map(photo -> new AlbumPhoto(photo, this))
+                .collect(Collectors.toList());
         this.name = name;
         this.description = description;
         this.created = LocalDate.now();
