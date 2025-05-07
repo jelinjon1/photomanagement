@@ -4,6 +4,7 @@
  */
 package cz.cvut.fel.photomanagement.selenium;
 
+import cz.cvut.fel.photomanagement.config.TestConstants;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
@@ -44,7 +45,7 @@ public class CreateAlbumPageTest {
     }
 
     private void login() {
-        driver.get("http://localhost:8080/photo-management-app/login.xhtml");
+        driver.get(TestConstants.URL.concat("login.xhtml"));
 
         WebElement usernameField = driver.findElement(By.id("username"));
         usernameField.sendKeys("admin");
@@ -162,7 +163,7 @@ public class CreateAlbumPageTest {
 
     @Test
     void testCreateLoggedOut() {
-        driver.get("http://localhost:8080/photo-management-app/albums.xhtml");
+        driver.get(TestConstants.URL.concat("albums.xhtml"));
 
         waitForPageToLoadCompletely();
 

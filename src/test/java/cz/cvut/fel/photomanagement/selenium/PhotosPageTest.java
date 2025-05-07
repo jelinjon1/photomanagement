@@ -4,6 +4,7 @@
  */
 package cz.cvut.fel.photomanagement.selenium;
 
+import cz.cvut.fel.photomanagement.config.TestConstants;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
@@ -66,7 +67,7 @@ public class PhotosPageTest {
     }
 
     private void login() {
-        driver.get("http://localhost:8080/photo-management-app/login.xhtml");
+        driver.get(TestConstants.URL.concat("login.xhtml"));
 
         WebElement usernameField = driver.findElement(By.id("username"));
         usernameField.sendKeys("admin");
@@ -114,9 +115,8 @@ public class PhotosPageTest {
         photosLink.click();
         waitForPageToLoadCompletely();
 
-        String fileName = "trees.jpg";
-        Path testPath = Paths.get("src/test/resources/images", fileName);
-        File uploadFile = testPath.toFile();
+        File uploadFile = TestConstants.TEST_FILES.get(0);
+        String fileName = uploadFile.getName();
 
         if (!uploadFile.exists()) {
             fail("File for test upload not found on given path.");

@@ -5,6 +5,7 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifIFD0Directory;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
 import cz.cvut.fel.photomanagement.comparator.PhotoByDate;
 import cz.cvut.fel.photomanagement.comparator.PhotoByName;
@@ -25,8 +26,6 @@ import jakarta.ejb.EJB;
 import jakarta.enterprise.concurrent.ManagedExecutorDefinition;
 import jakarta.enterprise.concurrent.ManagedExecutorService;
 import jakarta.enterprise.context.SessionScoped;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
 import jakarta.faces.model.DataModel;
 import jakarta.faces.model.ListDataModel;
 import jakarta.inject.Inject;
@@ -37,13 +36,21 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributeView;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.primefaces.model.file.UploadedFile;
@@ -81,7 +88,6 @@ public class CollectionPhotosBean implements Serializable {
     private DataModel<Photo> photosDataModel;
     private DataModel<FilePlaceholder> filesDataModel;
     private String filesPath = "";
-    private ArrayList<String> paths;
     private boolean handlingredirectToNewAlbum = false;
     private boolean locationIsBinDirectory = false;
     private UploadedFiles files;
@@ -91,7 +97,6 @@ public class CollectionPhotosBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        paths = new ArrayList<>();
         albumOptions = transformIntoOptions(albumDatabaseService.listAllAlbums());
         sortMenuOptions = Arrays.asList(
                 new SortMenuOption("Date", 1L, new PhotoByDate()),
@@ -163,7 +168,7 @@ public class CollectionPhotosBean implements Serializable {
                 if (existingPhoto != null) {
                     photosList.add(existingPhoto);
                 } else {
-                    Photo photo = new Photo(file, filesPath);
+                    Photo photo = new Photo(file.getName(), filesPath, extractDate(file));
                     photoDatabaseService.savePhoto(photo);
                     photosList.add(photo);
                 }
@@ -180,6 +185,37 @@ public class CollectionPhotosBean implements Serializable {
 
         // return datamodel from list of photos
         photosDataModel = new ListDataModel<>(photosList);
+    }
+
+    public LocalDateTime extractDate(File file) {
+        try {
+            Metadata metadata = ImageMetadataReader.readMetadata(file);
+            ExifSubIFDDirectory directory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+
+            if (directory != null) {
+                Date date = directory.getDateOriginal();
+                if (date != null) {
+                    return LocalDateTime.ofInstant(date.toInstant(), java.time.ZoneId.systemDefault());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error reading photo metadata: " + e.getMessage());
+        }
+
+        Instant creationTime;
+        try {
+            creationTime = Files.getFileAttributeView(
+                    Paths.get(file.getAbsoluteFile().toURI()),
+                    BasicFileAttributeView.class)
+                    .readAttributes()
+                    .creationTime()
+                    .toInstant();
+
+        } catch (IOException ex) {
+            Logger.getLogger(Photo.class.getName()).log(Level.SEVERE, null, ex);
+            creationTime = Instant.ofEpochMilli(file.lastModified());
+        }
+        return LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
     }
 
     public void uploadMultiple() {
@@ -322,12 +358,6 @@ public class CollectionPhotosBean implements Serializable {
         }
     }
 
-    /*
-    check if photo is not already inside /bin
-        check if ./bin exists
-            if so: move photo to bin
-            else: create ./bin and move photo
-     */
     public void deletePhoto(Photo photo) {
         Path photoLocalPath = Path.of(photo.getLocalPath());
         if (!"bin".equals(photoLocalPath.getName(photoLocalPath.getNameCount() - 1).toString())) {
@@ -338,18 +368,15 @@ public class CollectionPhotosBean implements Serializable {
     public String addToAlbum(Album album) {
         handlingredirectToNewAlbum = false;
 
-        System.out.println("ALBUM: " + album);
         if (album == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Album not found", null));
+            System.out.println("Could not resolve addToAlbum, target album is null.");
             return null;
         }
-        System.out.println("PHOTOS DATA MODEL: " + photosDataModel);
         for (Photo photo : photosDataModel) {
             album.addPhoto(photo);
         }
 
         albumDatabaseService.update(album);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Photos added to album successfully", null));
         return null;
     }
 
@@ -376,13 +403,6 @@ public class CollectionPhotosBean implements Serializable {
         albumDatabaseService.update(album);
         System.out.println("photos added to album successfully");
         return null;
-    }
-
-    public void addToPaths(String fileName) {
-        Objects.requireNonNull(fileName);
-        if (!fileName.equals("")) {
-            paths.add(fileName);
-        }
     }
 
     public void loadSelectedPhoto() {
@@ -453,14 +473,6 @@ public class CollectionPhotosBean implements Serializable {
 
     public void setFilesPath(String filesPath) {
         this.filesPath = filesPath;
-    }
-
-    public List<String> getPaths() {
-        return paths;
-    }
-
-    public void setPaths(ArrayList<String> paths) {
-        this.paths = paths;
     }
 
     public boolean isHandlingredirectToNewAlbum() {

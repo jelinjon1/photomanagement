@@ -31,6 +31,7 @@
                 <div class="controls">
                     <p:commandButton type="button" onclick="PF('switcher').previous()"
                                      icon="pi pi-chevron-left" id="prev" styleClass="mr-2 mb-3" />
+                    <p:commandButton id="toggle" type="button" value="Toggle" onclick="PF('switcher').resumeSlideshow()"/>
                     <p:commandButton type="button" onclick="PF('switcher').next()"
                                      icon="pi pi-chevron-right" id="next" styleClass="mr-2 mb-3" />
                 </div>
@@ -39,12 +40,13 @@
     </div>
     
     <script>
+        
         document.addEventListener("keydown", function(event) {
             console.log(event);
             if (event.key === "ArrowLeft") {
-                document.getElementById("tab-views:shuffle-form:prev").click(); // Trigger previous
+                document.getElementById("tab-views:shuffle-form:prev").click();
             } else if (event.key === "ArrowRight") {
-                document.getElementById("tab-views:shuffle-form:next").click(); // Trigger next
+                document.getElementById("tab-views:shuffle-form:next").click();
             } else if (event.key === "f") {
                 enterFullscreen();
             }
