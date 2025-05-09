@@ -70,10 +70,10 @@ public class PhotosPageTest {
         driver.get(TestConstants.URL.concat("login.xhtml"));
 
         WebElement usernameField = driver.findElement(By.id("username"));
-        usernameField.sendKeys("admin");
+        usernameField.sendKeys(TestConstants.TEST_USERNAME);
 
         WebElement passwordField = driver.findElement(By.id("password"));
-        passwordField.sendKeys("admin");
+        passwordField.sendKeys(TestConstants.TEST_PASSWORD);
 
         WebElement submitButton = driver.findElement(By.xpath("//button[normalize-space()='Log in']"));
         submitButton.click();

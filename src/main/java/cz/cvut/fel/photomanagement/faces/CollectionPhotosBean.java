@@ -94,6 +94,9 @@ public class CollectionPhotosBean implements Serializable {
     private static final double DISPLAYED_PHOTO_HEIGHT = 300.0;
     private boolean hideThumbnails = true;
     private boolean hideBin = false;
+    private String newDirectoryName = null;
+    private boolean displayDialog = false;
+    private String dialogError = null;
 
     @PostConstruct
     public void init() {
@@ -103,6 +106,21 @@ public class CollectionPhotosBean implements Serializable {
                 new SortMenuOption("Name", 2L, new PhotoByName()),
                 new SortMenuOption("Rating", 3L, new PhotoByRating())
         );
+    }
+
+    public void resetDialog() {
+        newDirectoryName = null;
+        dialogError = null;
+        displayDialog = false;
+    }
+    public void createDirectory() {
+        if (newDirectoryName != null) {
+            if (fileManager.createDirectory(filesPath, newDirectoryName)) {
+                resetDialog();
+            } else {
+                dialogError = "Error while creating directory, try again.";
+            }
+        }
     }
 
     public DataModel<Breadcrumb> getBreadcrumbs() {
@@ -545,6 +563,30 @@ public class CollectionPhotosBean implements Serializable {
 
     public void setAscending(boolean ascending) {
         this.ascending = ascending;
+    }
+
+    public String getNewDirectoryName() {
+        return newDirectoryName;
+    }
+
+    public void setNewDirectoryName(String newDirectoryName) {
+        this.newDirectoryName = newDirectoryName;
+    }
+
+    public boolean isDisplayDialog() {
+        return displayDialog;
+    }
+
+    public void setDisplayDialog(boolean displayDialog) {
+        this.displayDialog = displayDialog;
+    }
+
+    public String getDialogError() {
+        return dialogError;
+    }
+
+    public void setDialogError(String dialogError) {
+        this.dialogError = dialogError;
     }
 
 }

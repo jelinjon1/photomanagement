@@ -17,6 +17,8 @@
         <title>Photo managment application</title>
         <h:outputStylesheet name="css/main.css" />
         <h:outputStylesheet name="css/photos.css" />
+        <h:outputStylesheet name="css/alerts.css" />
+        <h:outputStylesheet name="css/form-elements.css" />
     </h:head>
     <h:body>
         <div class="banner header">
@@ -88,7 +90,38 @@
                               skinSimple="true" 
                               multiple="true"
                               label="Choose files"/>
+                
+                <div id="modal-wrapper" 
+                     class="modal #{collectionPhotosBean.displayDialog == true ? 'visible' : 'hidden'}">
+                    <div class="modal-content">
+                        <h1>Create a new directory</h1>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel for="dirname" value="Directory name:" />
+                            <h:inputText id="dirname"
+                                         value="#{collectionPhotosBean.newDirectoryName}" />
+                        </h:panelGrid>
+                        <h:outputText class="error-field" 
+                                      value="#{collectionPhotosBean.dialogError}" />
+                        <div class="controls">
+                            <h:commandButton id="modal-cancel-button" 
+                                             class="cancel" 
+                                             value="Cancel" 
+                                             action="#{collectionPhotosBean.resetDialog()}" />
+                            <h:commandButton id="modal-create-button" 
+                                             class="right" 
+                                             value="Create" 
+                                             action="#{collectionPhotosBean.createDirectory()}" />
+                        </div>
+                    </div>
+                </div>
+
+                <h:commandButton id="createalbum-button" 
+                                 value="Create directory" 
+                                 action="#{collectionPhotosBean.setDisplayDialog(true)}" />
+                
             </h:form>
+            
+            
             
             <h:form id="photos-form">
                 <p:remoteCommand name="updateThumbnail"
@@ -204,7 +237,6 @@
         </div>
         
         <script>
-            
             // kvuli reverzni proxy muze bejt kdekoliv
             // neskladat z location, jen odriznout konec z .href
             

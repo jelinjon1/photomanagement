@@ -89,7 +89,6 @@ html, body {
   }
 }
 
-
 table {
     margin-top: 16px;
     border-collapse: collapse;
@@ -124,7 +123,7 @@ table {
 
 input[type=submit], button, select {
     min-width: 120px;
-    height: 40px;
+    width: fit-content;
     height: 40px;
     padding: 10px 10px;
     cursor: pointer;

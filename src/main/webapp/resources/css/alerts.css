@@ -23,16 +23,35 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     
     .modal-content {
         padding: 16px;
-        width: 40%;
+        width: 30%;
         min-height: 200px;
         min-width: 400px;
         box-sizing: content-box;
         background-color: var(--light-green);
-        border: 1px solid gray;
+        border: 1px solid var(--gray);
         border-radius: 10px;
         box-shadow: 2px 2px 5px #454545;
         transform: scale(0);
         transition: transform 1s;
+        
+        flex-wrap:  wrap;
+        display: flex;
+        justify-content: center;
+        flex-flow: column;
+        align-content: center;
+        align-items: center;
+        
+        .error-field {
+            color: red;
+            margin-bottom: 16px;
+        }
+        
+        .controls {
+            width: 80%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
     }
     
     &.visible {

@@ -21,6 +21,8 @@ public final class TestConstants {
     public static final String URL = "http://localhost:8080/photo-management-app/";
     public static final Path TEST_FILES_DIRECTORY_PATH = Paths.get("src", "test", "resources", "images");
     public static final List<File> TEST_FILES;
+    public static final String TEST_USERNAME = "admin";
+    public static final String TEST_PASSWORD = "admin";
 
     static {
         TEST_FILES = loadFiles();
