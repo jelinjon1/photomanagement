@@ -37,7 +37,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
                 text-decoration: none;
                 font-weight: 400;
                 font-family: "Times New Roman", Times, serif;
-                color: white;
+                color: var(--text-accent-color);
             }
             
             /* active tab */
@@ -47,10 +47,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
                 box-shadow: none;
             }
             &.ui-state-hover {
-                /*border-color: red;*/
                 border: none;
                 background-color: var(--light-green);
-                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                box-shadow: 0 4px 8px 0 var(--shadow-primary-color), 0 6px 20px 0 var(--shadow-primary-color);
                 a {
                     
                 }
@@ -100,7 +99,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
         input[type=submit], button {
             margin-right: 20px;
             
-            background-color: var(--dark-green);
+            background-color: var(--confirm-button-color);
             border: none;
             padding: 10px 20px;
             cursor: pointer;
@@ -108,33 +107,29 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
             border-radius: 4px;
             text-decoration: none;
             font-family: "Times New Roman", Times, serif;
-            color: white;
+            color: var(--text-accent-color);
             font-size: 1em;
 
             &:disabled {
-                background-color: #a5a5a5;
-                color: #ddd;
+                background-color: var(--gray);
+                color: var(--text-accent-color);
                 cursor: not-allowed;
                 box-shadow: none;
                 opacity: 0.6;
             }
 
             &.delete, &.cancel {
-                background-color: darkred;
+                background-color: var(--cancel-button-color);
                 margin: 0px 10px;
 
                 &:hover {
-                    background-color: lightcoral;
+                    background-color: var(--cancel-button-accent-color);
                 }
-            }
-
-            &.confirm {
-
             }
 
             &:hover {
                 background-color: var(--light-green);
-                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                box-shadow: 0 4px 8px 0 var(--shadow-primary-color), 0 6px 20px 0 var(--shadow-primary-color);
             }
         }
     }

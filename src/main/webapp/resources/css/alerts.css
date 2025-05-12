@@ -17,7 +17,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     position: fixed;
     top: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--shadow-primary-color);
     z-index: 999;
     visibility: hidden;
     
@@ -42,7 +42,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
         align-items: center;
         
         .error-field {
-            color: red;
+            color: var(--cancel-button-color);
             margin-bottom: 16px;
         }
         

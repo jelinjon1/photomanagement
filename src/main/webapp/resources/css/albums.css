@@ -64,7 +64,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
         height: auto;
         
         border: 5px solid #fff;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 20px var(--shadow-primary-color);
         transition: transform 0.3s ease;
         z-index: 10;
         
@@ -130,7 +130,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 .album-description {
     font-size: 1em;
-    color: #555;
+    color: var(--gray);
     margin-bottom: 20px;
 }
 
@@ -179,10 +179,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
             visibility: hidden;
             position: absolute;
             min-width: 200px;
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
+            background: var(--albumphoto-details-background);
+            color: var(--text-accent-color);
             padding: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px var(--shadow-primary-color);
             z-index: 20;
             white-space: normal;
             transition: all 1s;

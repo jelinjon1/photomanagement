@@ -12,10 +12,66 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     --lightest-green: #eefceb;
     --brown: #523800;
     --gray: #424242;
+    --light-gray: lightgray;
+    --black: black;
+    --cancel-button-color: darkred;
+    --cancel-button-accent-color: lightcoral;
+    --confirm-button-color: #306000;
+    --text-primary-color: black;
+    --text-accent-color: white;
+    --shadow-primary-color: rgba(0, 0, 0, 0.2);
+    --slider-default-shadow-color: rgba(0, 0, 0, 0.1);
+    --slider-hover-shadow-color: rgba(0, 0, 0, 0.3);
+    --albumphoto-details-background: rgba(0, 0, 0, 0.9);
+    --photo-details-background: rgba(0, 0, 0, 0.5);
     
+    /*svg variables*/
+    --primary-color: #dadada;
+    --highlight-color: #e9e98a;
+    --dark-color: #6d6d6d;
+    --grass-green: #82ba00;
+    --tree-brown: #825200;
+    --tree-green: #009900;
+    --photo-border: #000000;
+}
+
+svg {
+    .outline {
+        stroke: var(--photo-border, #000000);
+        stroke-width: 1;
+    }
+    .thick-outline {
+        stroke: var(--photo-border, #000000);
+        stroke-width: 2;
+    }
+    .fill-none {
+        fill: none;
+    }
+    .brown {
+        fill: var(--brown-fill, #825200);
+    }
+    .primary {
+        fill: var(--primary-color);
+    }
+    .highlight {
+        fill: var(--highlight-color);
+    }
+    .dark {
+        fill: var(--dark-color);
+    }
+    .green {
+        fill: var(--grass-green);
+    }
+    .brown {
+        fill: var(--tree-brown);
+    }
+    .tree-green {
+        fill: var(--tree-green);
+    }
 }
 
 html, body {
+    color: var(--black);
     margin: 0px;
     background-color: var(--lightest-green);
     height: 100%;
@@ -24,15 +80,33 @@ html, body {
 }
 
 .banner {
-    color: white;
+    color: var(--text-accent-color);
     text-align: center;
     background-color: var(--brown);
+    min-width: 500px;
+    
+    a {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        gap: 16px;
+        color: var(--text-accent-color);
+        text-decoration: none;
+    }
     
     &.header {
         font-size: 50px;
         padding: 20px;
+        
     }
     &.footer {
+        display: flex;
+        flex-wrap: wrap;
+        a {
+            margin-left: 5px;
+            color: inherit;
+            text-decoration: underline;
+        }
         padding: 20px;
         display: flex;
         align-content: center;
@@ -64,7 +138,7 @@ html, body {
     span {
         display: block;
         margin:0;
-        color: white;
+        color: var(--text-accent-color);
         text-align: center;
         padding: 14px 16px;
         text-decoration: none;
@@ -72,14 +146,14 @@ html, body {
     
     a {
         display: block;
-        color: white;
+        color: var(--text-accent-color);
         text-align: center;
         padding: 14px 16px;
         text-decoration: none;
         
         &:hover {
             background-color: var(--light-green);
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            box-shadow: 0 4px 8px 0 var(--shadow-primary-color), 0 6px 20px 0 var(--shadow-primary-color);
         }
         
         &.active {
@@ -95,7 +169,7 @@ table {
     
     th, td {
         padding: 10px;
-        border: 1px solid black;
+        border: 1px solid var(--black);
         
         &.action-column-cell {
             .cancel {
@@ -141,11 +215,11 @@ input[type=submit], button, select {
 input[type=submit], button {
     background-color: var(--dark-green);
     border: none;
-    color: white;
+    color: var(--text-accent-color);
     
     &:disabled {
-        background-color: #a5a5a5;
-        color: #ddd;
+        background-color: var(--gray);
+        color: var(--text-primary-color);
         cursor: not-allowed;
         box-shadow: none;
         opacity: 0.6;
@@ -155,16 +229,16 @@ input[type=submit], button {
         float: right;
     }
     &.delete, &.cancel {
-        background-color: darkred;
+        background-color: var(--cancel-button-color);
 
         &:hover {
-            background-color: lightcoral;
+            background-color: var(--cancel-button-accent-color);
         }
     }
 
     &:hover {
         background-color: var(--light-green);
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        box-shadow: 0 4px 8px 0 var(--shadow-primary-color), 0 6px 20px 0 var(--shadow-primary-color);
     }
 }
 
@@ -177,7 +251,7 @@ input[type=submit], button {
         visibility: hidden;
         width: 260px;
         background-color: var(--gray);
-        color: white;
+        color: var(--text-accent-color);
         padding: 8px;
         border-radius: 4px;
 
@@ -185,7 +259,7 @@ input[type=submit], button {
         z-index: 100;
         bottom: 100%;
         left: 0%;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        box-shadow: 0 4px 8px 0 var(--shadow-primary-color), 0 6px 20px 0 var(--shadow-primary-color);
         margin-bottom: 8px;
         
         opacity: 0;

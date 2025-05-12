@@ -40,12 +40,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
         background-color: var(--dark-green);
         text-decoration: none;
         font-family: "Times New Roman", Times, serif;
-        color: white;
+        color: var(--text-accent-color);
         font-size: 1em;
         
         &:hover {
             background-color: var(--light-green);
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            box-shadow: 0 4px 8px 0 var(--shadow-primary-color), 0 6px 20px 0 var(--shadow-primary-color);
         }
     }
 }
@@ -61,12 +61,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
         .ui-slider-handle {
             border-color: var(--light-green);
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 4px 8px var(--slider-default-shadow-color);
 
             &:hover {
                 border-color: var(--light-green);
                 background-color: var(--light-green);
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+                box-shadow: 0px 4px 8px var(var(--slider-hover-shadow-color));
             }
         }
     }
@@ -83,20 +83,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     
     .ui-chkbox .ui-chkbox-box {
         &.ui-state-default {
-            border-color: lightgray;
+            border-color: var(--light-gray);
             
             &.ui-state-hover {
-                border-color: gray;
+                border-color: var(--gray);
             }
         }
         
         &.ui-state-active {
             background-color: var(--dark-green);
-            border-color: lightgray;
+            border-color: var(--light-gray);
             
             &.ui-state-hover {
                 background-color: var(--light-green);
-                border-color: gray;
+                border-color: var(--gray);
             }
         }
         
@@ -133,7 +133,7 @@ table {
         border: none;
     }
     & thead {
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid var(--black);
     }
 }
 
@@ -147,7 +147,6 @@ table {
         height: 300px;
         width: auto;
         border-radius: 5px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         object-fit: contain;
     }
     
@@ -170,8 +169,8 @@ table {
             right: 0;
             bottom: 0;
             width: fit-content;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
+            background: var(--photo-details-background);
+            color: var(--text-accent-color);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -180,9 +179,23 @@ table {
             opacity: 0;
             transition: opacity 0.3s ease;
             padding: 10px;
-
+            
+            .ui-rating  {
+                .ui-rating-star {
+                    a {
+                        color: white;
+                    }
+                }
+                
+                .ui-rating-star-on {
+                    a {
+                        color: yellow;
+                    }
+                }
+            }
+            
             > a {
-                color: white;
+                color: var(--text-accent-color);
             }
             input {
                 margin: 20px;

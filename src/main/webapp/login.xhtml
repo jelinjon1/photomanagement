@@ -15,7 +15,37 @@
     <h:body>
         
         <div class="banner header">
-            Header
+            <a href="index.xhtml">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="var(--primary-text-color, #000)" width="64" height="64" viewBox="0 0 64 64">
+
+                    <rect width="100%" height="100%" class="fill-none" />
+                    <g class="currentLayer">
+                        <!--photo backgrounds-->
+                        <rect class="primary thick-outline" x="17.96" y="7.13" width="41.61" height="36.83" />
+                        <rect class="primary thick-outline" x="12.91" y="12.70" width="41.61" height="36.91" />
+                        <rect class="primary" x="6.39" y="19" width="41.61" height="39" />
+
+                        <!--sun-->
+                        <path class="highlight outline" d="M38.29,25.54c0-1.91,1.55-3.46,3.45-3.46s3.46,1.55,3.46,3.46-1.55,3.46-3.46,3.46-3.45-1.55-3.45-3.46z"/>
+
+                        <!-- Dark paths -->
+                        <path class="dark outline" d="M16.1,35.37L24.46,24.31L32.90,51.77L29.15,55.77L14.82,54.31" transform="rotate(-14.09 23.86,40.04)"/>
+                        <path class="dark outline" d="M6.18,32.94L14.55,21.88L22.98,49.33L19.23,53.33L4.91,51.88" transform="rotate(-4.5 14.55,35.6)"/>
+
+                        <!--grass-->
+                        <path class="green outline" d="M6.72,41.76c0,0.14-0.56,16.53-0.61,16.43c0.06,0.1,42.56,0.55,42.78,0.46L48.47,41.53L42.64,38.19L34.92,40.79L23.89,35.56L6.72,41.76z"/>
+
+                        <!--tree-->
+                        <path class="brown outline" d="M36.11,33.68L35.08,40.26L35.96,46.30L29.83,46.45L31.28,39.79L32.91,33.59z"/>
+                        <path class="tree-green outline" d="M27.38,32.66c0-1.87,3.09-3.38,6.91-3.38s6.91,1.52,6.91,3.38-3.09,3.38-6.91,3.38-6.91-1.51-6.91-3.38z"/>
+                        <path class="tree-green outline" d="M33.74,37.87c0-0.73,1.43-1.33,3.19-1.33s3.19,0.6,3.19,1.33-1.43,1.33-3.19,1.33-3.19-0.6-3.19-1.33z"/>
+                    </g>
+                    <g id="photo-outlines">
+                        <rect class="thick-outline fill-none" x="6.39" y="19" width="41.61" height="39"/>
+                    </g>
+                </svg>
+                Photomanagement
+            </a>
         </div>
         <h:form id="login-navigation-form">
             <ul class="topnav">
@@ -72,12 +102,12 @@
             </form>
 
             <h:panelGroup rendered="#{not empty param.error}">
-                <h:outputText value="Invalid username or password. Please try again." style="color:red;" />
+                <h:outputText value="Invalid username or password. Please try again."/>
             </h:panelGroup>
         </div>
 
         <div class="banner footer">
-            Footer
+            © 2025 Jonáš Jelínek. This work is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="license noopener">Creative Commons Attribution 4.0 International License</a>.
         </div>
     </h:body>
 </html>
