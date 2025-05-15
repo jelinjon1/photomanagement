@@ -103,7 +103,8 @@ public class PhotosPageTest {
         waitForPageToLoadCompletely();
 
         String title = driver.getTitle();
-        Assertions.assertTrue(title.contains("New album"), "Page title should contain 'New album' but contains " + title + " instead");
+        Assertions.assertTrue(title.contains("New album"),
+                "Page title should contain 'New album' but contains " + title + " instead");
 
     }
 

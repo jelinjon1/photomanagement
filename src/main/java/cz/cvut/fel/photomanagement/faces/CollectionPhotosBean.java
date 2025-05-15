@@ -165,7 +165,8 @@ public class CollectionPhotosBean implements Serializable {
                 .filter(File::isDirectory)
                 .filter(file -> !hideThumbnails || !"thumbnails".equals(file.getName()))
                 .filter(file -> !hideBin || !"bin".equals(file.getName()))
-                .map(file -> new FilePlaceholder(file, fileManager.getPhotosDirectoryPath().length()))
+                .map(file -> new FilePlaceholder(file,
+                fileManager.getPhotosDirectoryPath().length()))
                 .collect(Collectors.toList()));
 
         // fetch existing records for given path
@@ -247,7 +248,8 @@ public class CollectionPhotosBean implements Serializable {
     }
 
     public List<AlbumMenuOption> transformIntoOptions(List<Album> albums) {
-        List<AlbumMenuOption> res = albums.stream().map(album -> new AlbumMenuOption(album)).collect(Collectors.toList());
+        List<AlbumMenuOption> res
+                = albums.stream().map(album -> new AlbumMenuOption(album)).collect(Collectors.toList());
         res.add(new AlbumMenuOption(null));
         return res;
     }
@@ -284,7 +286,8 @@ public class CollectionPhotosBean implements Serializable {
         }
     }
 
-    public static void rotateAndResize(BufferedImage img, File imageFile, Path thPath) throws IOException, ImageProcessingException, MetadataException {
+    public static void rotateAndResize(BufferedImage img, File imageFile, Path thPath)
+            throws IOException, ImageProcessingException, MetadataException {
         BufferedImage originalImage = ImageIO.read(imageFile);
 
         Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
@@ -366,7 +369,10 @@ public class CollectionPhotosBean implements Serializable {
 
     private boolean isPhoto(File file) {
         String name = file.getName().toLowerCase();
-        return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".gif");
+        return name.endsWith(".jpg")
+                || name.endsWith(".jpeg")
+                || name.endsWith(".png")
+                || name.endsWith(".gif");
     }
 
     public void restorePhoto(Photo photo) {
