@@ -14,15 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Represents a Photo.
  *
  * @author jelinjon
  */
 @Entity
 @NamedQueries({
+    @NamedQuery(name = Photo.QUERY_ALL, query = "SELECT photo FROM Photo"),
     @NamedQuery(name = Photo.QUERY_BY_LOCAL_DIR, query = "SELECT photo FROM Photo photo WHERE photo.localPath = :localPath")
 })
 public class Photo implements Serializable {
 
+    public static final String QUERY_ALL = "Photo.all";
     public static final String QUERY_BY_LOCAL_DIR = "Photo.byLocalDir";
     private static final long serialVersionUID = 1L;
 

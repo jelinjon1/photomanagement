@@ -20,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
+ * Unit tests for TableAlbumBean.
  *
  * @author jelinjon
  */

@@ -8,11 +8,20 @@ import cz.cvut.fel.photomanagement.entities.Photo;
 import java.util.Comparator;
 
 /**
+ * This class implements a method that compares two {@link cz.cvut.fel.photomanagement.entities.Photo} by rating
+ * ascending, prioritising those with null rating.
  *
  * @author jelinjon
  */
 public class PhotoByRating implements Comparator<Photo> {
 
+    /**
+     * Compares two Photos based on rating.
+     *
+     * @param o1 first comapred Photo
+     * @param o2 second comapred Photo
+     * @return ==0 if equal, <0 if o1 < o2, >0 if o1>02
+     */
     @Override
     public int compare(Photo o1, Photo o2) {
         if (o1.getRating() == null) {

@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 /**
+ * Represents a dropdown menu option that determines which Comparator is to be used to sort the currently displayed
+ * collection of photos, used on photos.xhtml.
  *
  * @author jelinjon
  */

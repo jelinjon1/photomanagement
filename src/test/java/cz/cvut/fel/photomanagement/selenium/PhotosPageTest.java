@@ -28,6 +28,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
+ * Integration tests using Selenium to test user input on photos.xhtml.
  *
  * @author jelinjon
  */

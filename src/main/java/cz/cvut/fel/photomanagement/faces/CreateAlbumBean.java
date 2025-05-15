@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
+ * A bean that feeds data regarding creation of new Album instances to Faces, handles user input from albums-new.xhtml.
  *
  * @author jelinjon
  */

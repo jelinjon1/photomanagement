@@ -7,6 +7,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,12 +18,19 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
+ * Represents an album.
  *
  * @author jelinjon
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = Album.QUERY_ALL, query = "SELECT album FROM Album"),
+    @NamedQuery(name = Album.QUERY_BY_ALBUM_NAME, query = "SELECT album FROM Album album WHERE album.name = :givenName")
+})
 public class Album implements Serializable {
 
+    public static final String QUERY_BY_ALBUM_NAME = "Album.byName";
+    public static final String QUERY_ALL = "Album.all";
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -39,6 +48,7 @@ public class Album implements Serializable {
         this.lastEdited = this.created;
     }
 
+    //todo maybe delete
     public Album(String name) {
         this.name = name;
     }

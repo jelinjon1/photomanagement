@@ -57,6 +57,7 @@ import org.primefaces.model.file.UploadedFile;
 import org.primefaces.model.file.UploadedFiles;
 
 /**
+ * A bean that feeds data regarding Photos to Faces, handles user input from photos.xhtml.
  *
  * @author jelinjon
  */
@@ -171,7 +172,7 @@ public class CollectionPhotosBean implements Serializable {
 
         // fetch existing records for given path
         List<Photo> photosList = new ArrayList<>();
-        List<Photo> existingPhotos = photoDatabaseService.findAllExistingPhotos(filesPath);
+        List<Photo> existingPhotos = photoDatabaseService.findAllPhotosInADirectory(filesPath);
 
         // create map of <file name, Photo instance>
         Map<String, Photo> fileNameMap = existingPhotos
@@ -255,7 +256,7 @@ public class CollectionPhotosBean implements Serializable {
     }
 
     public void updatePhoto(Photo photo) {
-        photoDatabaseService.update(photo);
+        photoDatabaseService.merge(photo);
         System.out.println(photo);
     }
 

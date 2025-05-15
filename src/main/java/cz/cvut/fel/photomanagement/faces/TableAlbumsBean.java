@@ -27,6 +27,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
+ * A bean that feeds data regarding Albums to Faces, handles user input from albums.xhtml and albums-detail.xhtml.
  *
  * @author jelinjon
  */

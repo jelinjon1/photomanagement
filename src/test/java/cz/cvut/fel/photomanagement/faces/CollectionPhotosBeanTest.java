@@ -35,6 +35,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 /**
+ * Unit tests for CollectionPhotosBean.
  *
  * @author jelinjon
  */

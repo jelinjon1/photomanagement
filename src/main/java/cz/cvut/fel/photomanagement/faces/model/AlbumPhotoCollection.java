@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Represents a collection of {@link cz.cvut.fel.photomanagement.entities.AlbumPhoto} inside an
+ * {@link cz.cvut.fel.photomanagement.entities.Album} sorted into smaller collections based on importance value, to be
+ * later displayed while differentiating between these collections.
  *
  * @author jelinjon
  */

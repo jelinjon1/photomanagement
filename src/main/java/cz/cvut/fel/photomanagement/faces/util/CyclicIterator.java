@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * Custom iterator to cyclically traverse AlbumPhotos inside an Album, used on albums-detail.xhtml.
  *
  * @author jelinjon
  */

@@ -7,6 +7,9 @@ import jakarta.persistence.Id;
 import java.io.Serializable;
 
 /**
+ * Represents a relationship between an {@link cz.cvut.fel.photomanagement.entities.Album} and a
+ * {@link cz.cvut.fel.photomanagement.entities.Photo}, where one Photo can be saved in many albums but has different
+ * importance value inside each.
  *
  * @author jelinjon
  */

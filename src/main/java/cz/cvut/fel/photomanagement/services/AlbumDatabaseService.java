@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * Implements methods for accessing the database table Album.
  *
  * @author jelinjon
  */
@@ -27,12 +28,10 @@ public class AlbumDatabaseService implements Serializable {
     }
 
     public Album findByName(String name) {
-        List<Album> albums = entityManager.createQuery("SELECT a FROM Album a WHERE a.name LIKE :albumName", Album.class).setParameter("albumName", name).getResultList();
-        if (!albums.isEmpty()) {
-            return albums.get(0);
-        } else {
-            return null;
-        }
+        return entityManager
+                .createNamedQuery(Album.QUERY_BY_ALBUM_NAME, Album.class)
+                .setParameter("givenName", name)
+                .getSingleResult();
     }
 
     public Album findAlbumById(Long id) {
@@ -40,7 +39,9 @@ public class AlbumDatabaseService implements Serializable {
     }
 
     public List<Album> findAllAlbums() {
-        return entityManager.createQuery("SELECT a FROM Album a", Album.class).getResultList();
+        return entityManager
+                .createNamedQuery(Album.QUERY_ALL, Album.class)
+                .getResultList();
     }
 
     public void saveAlbum(Album album) {
@@ -59,9 +60,6 @@ public class AlbumDatabaseService implements Serializable {
 
     public void deleteAlbum(Long id) {
         Album album = entityManager.find(Album.class, id);
-//        for (AlbumPhoto albumPhoto : album.getPhotos()) {
-//            entityManager.remove(albumPhoto);
-//        }
         if (album != null) {
             entityManager.remove(album);
         }

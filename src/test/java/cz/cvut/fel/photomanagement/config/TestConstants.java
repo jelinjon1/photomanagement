@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Attempts to fetch/define constants required for testing such as a URL.
  *
  * @author jelinjon
  */

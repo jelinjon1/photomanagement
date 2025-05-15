@@ -18,6 +18,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.primefaces.model.file.UploadedFile;
 
 /**
+ * Implements CRUD operations on local file system.
  *
  * @author jelinjon
  */

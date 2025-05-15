@@ -1,6 +1,7 @@
 package cz.cvut.fel.photomanagement.exception;
 
 /**
+ * A generic parent of {@link cz.cvut.fel.photomanagement.exception.PersistenceException}.
  *
  * @author jelinjon
  */

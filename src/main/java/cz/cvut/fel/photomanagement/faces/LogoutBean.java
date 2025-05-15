@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Handles user input from logout button present on every xhtml page.
  *
  * @author jelinjon
  */

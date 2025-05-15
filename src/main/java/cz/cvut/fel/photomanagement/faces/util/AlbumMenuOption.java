@@ -4,6 +4,7 @@ import cz.cvut.fel.photomanagement.entities.Album;
 import java.io.Serializable;
 
 /**
+ * Represents a dropdown menu option present on photos.xhtml.
  *
  * @author jelinjon
  */

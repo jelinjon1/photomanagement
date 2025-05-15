@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 /**
+ * Represents a piece of breadcrumb navigation present on photos.xhtml, with a value for displaying and a partial path
+ * to redirect to.
  *
  * @author jelinjon
  */

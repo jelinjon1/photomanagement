@@ -20,6 +20,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.primefaces.shaded.commons.io.FilenameUtils;
 
 /**
+ * Implements a servlet that hadles requests for photo files from server's file sysyem, and serves them to client.
  *
  * @author jelinjon
  */

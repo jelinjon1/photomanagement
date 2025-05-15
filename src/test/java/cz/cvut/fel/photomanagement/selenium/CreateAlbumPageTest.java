@@ -20,6 +20,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
+ * Integration tests using Selenium to test user input on albums-new.xhtml.
  *
  * @author jelinjon
  */

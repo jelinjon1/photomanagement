@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 /**
+ * Unit tests for CreateAlbumBean.
  *
  * @author jelinjon
  */

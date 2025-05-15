@@ -4,7 +4,6 @@ import cz.cvut.fel.photomanagement.entities.Photo;
 import cz.cvut.fel.photomanagement.exception.PersistenceException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.util.Collections;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * Implements methods for accessing the database table Photo.
  *
  * @author jelinjon
  */
@@ -33,11 +33,9 @@ public class PhotoDatabaseService implements Serializable {
     }
 
     public List<Photo> findAllPhotos() {
-        try {
-            return entityManager.createQuery("SELECT a FROM Photo a", Photo.class).getResultList();
-        } catch (RuntimeException e) {
-            throw new PersistenceException(e);
-        }
+        return entityManager
+                .createNamedQuery(Photo.QUERY_ALL, Photo.class)
+                .getResultList();
     }
 
     public void savePhoto(Photo photo) {
@@ -62,14 +60,14 @@ public class PhotoDatabaseService implements Serializable {
         }
     }
 
-    public List<Photo> findAllExistingPhotos(String relativePath) {
+    public List<Photo> findAllPhotosInADirectory(String relativePath) {
         return entityManager
                 .createNamedQuery(Photo.QUERY_BY_LOCAL_DIR, Photo.class)
                 .setParameter("localPath", relativePath)
                 .getResultList();
     }
 
-    public Photo update(Photo photo) {
+    public Photo merge(Photo photo) {
         Objects.requireNonNull(photo);
         try {
             return entityManager.merge(photo);
@@ -86,17 +84,6 @@ public class PhotoDatabaseService implements Serializable {
                 entityManager.remove(toRemove);
             }
         } catch (RuntimeException e) {
-            throw new PersistenceException(e);
-        }
-    }
-    public Photo getPhotoByHash(String hash) {
-        Objects.requireNonNull(hash);
-        try {
-            return entityManager.createQuery(
-                    "SELECT p FROM Photo p WHERE p.hash = :hash", Photo.class)
-                    .setParameter("hash", hash)
-                    .getSingleResult();
-        } catch (NoResultException e) {
             throw new PersistenceException(e);
         }
     }

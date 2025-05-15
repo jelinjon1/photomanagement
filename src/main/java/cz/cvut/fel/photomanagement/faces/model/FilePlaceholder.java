@@ -8,6 +8,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
+ * A placeholder class for {@link java.io.File}, to simplify data transfer when fetching a collection of Files to
+ * display.
  *
  * @author jelinjon
  */
