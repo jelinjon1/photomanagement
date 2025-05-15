@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @Entity
 public class Album implements Serializable {

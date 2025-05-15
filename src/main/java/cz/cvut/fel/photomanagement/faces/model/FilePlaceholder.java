@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 public class FilePlaceholder implements Serializable {
 

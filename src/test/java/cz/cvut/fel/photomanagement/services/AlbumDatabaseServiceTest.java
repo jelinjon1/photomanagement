@@ -16,7 +16,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @Testcontainers
 public class AlbumDatabaseServiceTest {

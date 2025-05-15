@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 public class PhotoByDate implements Comparator<Photo> {
 

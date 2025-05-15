@@ -19,7 +19,7 @@ import org.primefaces.model.file.UploadedFile;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @Singleton
 public class FileManager {

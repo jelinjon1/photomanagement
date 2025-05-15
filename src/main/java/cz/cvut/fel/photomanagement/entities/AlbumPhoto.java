@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @Entity
 public class AlbumPhoto implements Serializable {

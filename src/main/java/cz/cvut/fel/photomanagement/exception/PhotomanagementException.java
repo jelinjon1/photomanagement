@@ -2,7 +2,7 @@ package cz.cvut.fel.photomanagement.exception;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 public class PhotomanagementException extends RuntimeException {
 

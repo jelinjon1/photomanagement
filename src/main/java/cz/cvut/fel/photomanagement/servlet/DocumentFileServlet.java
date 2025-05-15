@@ -21,7 +21,7 @@ import org.primefaces.shaded.commons.io.FilenameUtils;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @WebServlet(name = "DocumentFileServlet", urlPatterns = {"/documentfiles/*"})
 public class DocumentFileServlet extends HttpServlet {

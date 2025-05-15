@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 public final class TestConstants {
 

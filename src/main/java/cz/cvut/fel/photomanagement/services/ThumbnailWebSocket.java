@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArraySet;
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 
 @ServerEndpoint("/thumbnailUpdates")

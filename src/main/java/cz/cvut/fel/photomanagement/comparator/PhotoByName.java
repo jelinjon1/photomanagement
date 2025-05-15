@@ -9,7 +9,7 @@ import java.util.Comparator;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 public class PhotoByName implements Comparator<Photo> {
 

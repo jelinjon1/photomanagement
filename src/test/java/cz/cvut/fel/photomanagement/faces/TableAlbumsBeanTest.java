@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @ExtendWith(MockitoExtension.class)
 public class TableAlbumsBeanTest {

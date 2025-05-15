@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 public class SmartWebDriver implements WebDriver, JavascriptExecutor {
 

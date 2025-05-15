@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @Named(value = "createAlbumBean")
 @RequestScoped

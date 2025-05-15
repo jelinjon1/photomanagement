@@ -21,7 +21,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CreateAlbumPageTest {

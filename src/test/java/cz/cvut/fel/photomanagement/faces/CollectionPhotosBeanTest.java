@@ -36,7 +36,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @Testcontainers
 @ExtendWith(MockitoExtension.class)

@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @Named(value = "logoutBean")
 @SessionScoped

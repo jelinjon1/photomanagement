@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 public class AlbumMenuOption implements Serializable {
 

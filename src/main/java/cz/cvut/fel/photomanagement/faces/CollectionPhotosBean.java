@@ -58,7 +58,7 @@ import org.primefaces.model.file.UploadedFiles;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @Named(value = "collectionPhotosBean")
 @SessionScoped

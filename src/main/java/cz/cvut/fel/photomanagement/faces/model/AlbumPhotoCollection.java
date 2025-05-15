@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 public class AlbumPhotoCollection {
 

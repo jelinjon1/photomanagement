@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @Entity
 @NamedQueries({

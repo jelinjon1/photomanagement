@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 @Stateless
 public class AlbumDatabaseService implements Serializable {

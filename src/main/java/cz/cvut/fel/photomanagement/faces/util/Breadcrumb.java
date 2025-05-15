@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /**
  *
- * @author Jonáš
+ * @author jelinjon
  */
 public class Breadcrumb {
 
