@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -40,6 +42,7 @@ public class TableAlbumsBean implements Serializable {
     private AlbumDatabaseService albumDatabaseService;
     @Inject
     private FileManager fileLoader;
+    private String photosDirectoryPath;
 
     private DataModel<Album> albumsDataModel;
     private Album selectedAlbum = null;
@@ -52,7 +55,7 @@ public class TableAlbumsBean implements Serializable {
     private Integer importanceIgnore = null;
     private long deletingAlbumId = 0;
     private long deletingPhotoId = 0;
-
+    private static final Logger log = Logger.getLogger(TableAlbumsBean.class.getName());
 
     public TableAlbumsBean() {
     }
@@ -60,13 +63,14 @@ public class TableAlbumsBean implements Serializable {
     @PostConstruct
     public void initDB() {
         refreshAlbums();
+        photosDirectoryPath = fileLoader.getPhotosDirectoryPath();
     }
 
     public void downloadAlbum() {
         try {
             List<AlbumPhoto> photos = selectedAlbum.getPhotos();
             if (photos.isEmpty()) {
-                System.out.println("No photos found for album: " + selectedAlbum.getName());
+                log.log(Level.INFO, "No photos found for album: " + selectedAlbum.getName());
                 return;
             }
 
@@ -77,10 +81,9 @@ public class TableAlbumsBean implements Serializable {
 
             ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
 
-            // todo many calls fetching a basically static variable
             for (AlbumPhoto photo : photos) {
-                String filePath = this.fileLoader.getPhotosDirectoryPath() + photo.getPhoto().getRelativePathFromRoot();
-                System.out.println("FILEPATH FOR " + photo.getPhoto().getFileName() + " is: " + filePath);
+//                String filePath = this.fileLoader.getPhotosDirectoryPath() + photo.getPhoto().getRelativePathFromRoot();
+                String filePath = photosDirectoryPath + photo.getPhoto().getRelativePathFromRoot();
                 File file = new File(filePath);
                 if (file.exists()) {
                     addToZip(file, zos);

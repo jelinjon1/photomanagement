@@ -115,8 +115,6 @@ public class CreateAlbumPageTest {
         waitForPageToLoadCompletely();
         List<WebElement> confirmAlbumButtons = driver.findElements(By.className("confirm"));
         List<WebElement> cancelAlbumButtons = driver.findElements(By.className("cancel"));
-        System.out.println(confirmAlbumButtons);
-        System.out.println(cancelAlbumButtons);
 
         Assertions.assertTrue(confirmAlbumButtons.size() != 0);
         confirmAlbumButtons.get(confirmAlbumButtons.size() - 1).click();
@@ -152,8 +150,6 @@ public class CreateAlbumPageTest {
         waitForPageToLoadCompletely();
         List<WebElement> confirmAlbumButtons = driver.findElements(By.className("confirm"));
         List<WebElement> cancelAlbumButtons = driver.findElements(By.className("cancel"));
-        System.out.println(confirmAlbumButtons);
-        System.out.println(cancelAlbumButtons);
 
         Assertions.assertTrue(confirmAlbumButtons.size() != 0);
         confirmAlbumButtons.get(confirmAlbumButtons.size() - 1).click();

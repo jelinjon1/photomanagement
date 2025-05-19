@@ -68,6 +68,7 @@ import org.primefaces.model.file.UploadedFiles;
         maxAsync = 5)
 public class CollectionPhotosBean implements Serializable {
 
+    private static final double DISPLAYED_PHOTO_HEIGHT = 300.0;
     private static final long serialVersionUID = 1L;
 
     @EJB
@@ -76,6 +77,8 @@ public class CollectionPhotosBean implements Serializable {
     private AlbumDatabaseService albumDatabaseService;
     @Inject
     private FileManager fileManager;
+    @Inject
+    private TableAlbumsBean tableAlbumsBean;
     @Resource(lookup = "java:app/concurrent/thumbnailGenerationExecutor")
     private ManagedExecutorService managedExecutor;
 
@@ -92,12 +95,13 @@ public class CollectionPhotosBean implements Serializable {
     private boolean handlingredirectToNewAlbum = false;
     private boolean locationIsBinDirectory = false;
     private UploadedFiles files;
-    private static final double DISPLAYED_PHOTO_HEIGHT = 300.0;
     private boolean hideThumbnails = true;
     private boolean hideBin = false;
     private String newDirectoryName = null;
     private boolean displayDialog = false;
     private String dialogError = null;
+
+    private static final Logger log = Logger.getLogger(CollectionPhotosBean.class.getName());
 
     @PostConstruct
     public void init() {
@@ -125,7 +129,6 @@ public class CollectionPhotosBean implements Serializable {
     }
 
     public DataModel<Breadcrumb> getBreadcrumbs() {
-
         Path partialPath = Path.of(filesPath);
         List<Breadcrumb> breadcrumbs = new ArrayList<>();
 
@@ -145,7 +148,6 @@ public class CollectionPhotosBean implements Serializable {
 
     public void loadFiles() {
         Path path = Path.of(filesPath);
-//        System.out.println("CALLING LOAD FILES WITH " + path.toString());
         boolean locationIsThumbnailsDirectory = false;
         this.locationIsBinDirectory = false;
 
@@ -219,7 +221,7 @@ public class CollectionPhotosBean implements Serializable {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error reading photo metadata: " + e.getMessage());
+            log.log(Level.SEVERE, "Error reading photo metadata: " + e.getMessage());
         }
 
         Instant creationTime;
@@ -232,7 +234,7 @@ public class CollectionPhotosBean implements Serializable {
                     .toInstant();
 
         } catch (IOException ex) {
-            Logger.getLogger(Photo.class.getName()).log(Level.SEVERE, null, ex);
+            log.log(Level.SEVERE, "Exception during readAttributes", ex);
             creationTime = Instant.ofEpochMilli(file.lastModified());
         }
         return LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
@@ -244,7 +246,7 @@ public class CollectionPhotosBean implements Serializable {
                 fileManager.saveUploadedFile(file, filesPath);
             }
         } else {
-            System.err.println("FILES IS NULL");
+            log.log(Level.SEVERE, "Files is numm");
         }
     }
 
@@ -257,7 +259,6 @@ public class CollectionPhotosBean implements Serializable {
 
     public void updatePhoto(Photo photo) {
         photoDatabaseService.merge(photo);
-        System.out.println(photo);
     }
 
     public void generateThumbnail(File inputFile, Long photoId) {
@@ -269,28 +270,29 @@ public class CollectionPhotosBean implements Serializable {
             if (thumbnailFile.exists()) {
                 return;
             }
+            // generate parent dir
             thumbnailFile.getParentFile().mkdirs();
 
-            // read original image, if unable to, return
+            // read and skip if cannot
             BufferedImage originalImage = ImageIO.read(inputFile);
             if (originalImage == null) {
-                System.err.println("Skipping: Unable to read " + inputFile.getName());
+                log.log(Level.SEVERE, "Skipping: Unable to read " + inputFile.getName());
                 return;
             }
 
-            rotateAndResize(originalImage, inputFile, thumbnailFilePath);
+            rotateAndResize(inputFile, thumbnailFilePath);
             ThumbnailWebSocket.sendThumbnailUpdate(photoId, thumbnailFilePath.toString());
 
         } catch (Exception | Error e) {
-            System.err.println("Failed to create thumbnail for: " + inputFile.getName());
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Album with the given id was not found.", e);
         }
     }
 
-    public static void rotateAndResize(BufferedImage img, File imageFile, Path thPath)
+    public static void rotateAndResize(File imageFile, Path thPath)
             throws IOException, ImageProcessingException, MetadataException {
         BufferedImage originalImage = ImageIO.read(imageFile);
 
+        // extract orientation and size from metadata
         Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
         ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
         JpegDirectory jpegDirectory = (JpegDirectory) metadata.getFirstDirectoryOfType(JpegDirectory.class);
@@ -301,14 +303,12 @@ public class CollectionPhotosBean implements Serializable {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
         int width = jpegDirectory.getImageWidth();
         int height = jpegDirectory.getImageHeight();
 
-        AffineTransform affineTransform = new AffineTransform();
-
         double scale;
         int thumbnailWidth;
+        // alter transformation based on extracted data
         if (orientation >= 5) {
             scale = DISPLAYED_PHOTO_HEIGHT / width;
             thumbnailWidth = (int) (height * scale);
@@ -316,8 +316,19 @@ public class CollectionPhotosBean implements Serializable {
             scale = DISPLAYED_PHOTO_HEIGHT / height;
             thumbnailWidth = (int) (width * scale);
         }
-        affineTransform.scale(scale, scale);
 
+        BufferedImage destinationImage = null;
+        AffineTransformOp affineTransformOp = configureAffineTransformOp(scale, orientation, width, height);
+
+        destinationImage = affineTransformOp.filter(originalImage, destinationImage);
+        destinationImage = destinationImage.getSubimage(0, 0, thumbnailWidth, (int) DISPLAYED_PHOTO_HEIGHT);
+
+        ImageIO.write(destinationImage, "png", thPath.toFile());
+    }
+
+    private static AffineTransformOp configureAffineTransformOp(double scale, int orientation, int width, int height) {
+        AffineTransform affineTransform = new AffineTransform();
+        affineTransform.scale(scale, scale);
         switch (orientation) {
             case 1:
                 break;
@@ -336,36 +347,26 @@ public class CollectionPhotosBean implements Serializable {
             case 5:
                 affineTransform.rotate(-Math.PI / 2);
                 affineTransform.scale(-1.0, 1.0);
-
                 break;
             case 6:
                 affineTransform.translate(height, 0);
                 affineTransform.rotate(Math.PI / 2);
-
                 break;
             case 7:
                 affineTransform.scale(-1.0, 1.0);
                 affineTransform.translate(-height, 0);
                 affineTransform.translate(0, width);
                 affineTransform.rotate(3 * Math.PI / 2);
-
                 break;
             case 8:
                 affineTransform.translate(0, width);
                 affineTransform.rotate(3 * Math.PI / 2);
-
                 break;
             default:
                 break;
         }
-
-
-        BufferedImage destinationImage = null;
-        AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform,
+        return new AffineTransformOp(affineTransform,
                 AffineTransformOp.TYPE_BILINEAR);
-        destinationImage = affineTransformOp.filter(originalImage, destinationImage);
-        destinationImage = destinationImage.getSubimage(0, 0, thumbnailWidth, 300);
-        ImageIO.write(destinationImage, "png", thPath.toFile());
     }
 
     private boolean isPhoto(File file) {
@@ -390,19 +391,21 @@ public class CollectionPhotosBean implements Serializable {
         }
     }
 
-    public String addToAlbum(Album album) {
+    public void addToAlbum(Album album) {
         handlingredirectToNewAlbum = false;
 
         if (album == null) {
-            System.out.println("Could not resolve addToAlbum, target album is null.");
-            return null;
+            log.log(Level.WARNING, "Could not resolve addToAlbum, target album is null.");
+            return;
         }
         for (Photo photo : photosDataModel) {
             album.addPhoto(photo);
         }
 
         albumDatabaseService.update(album);
-        return null;
+        tableAlbumsBean.refreshAlbums();
+        log.log(Level.INFO, photosDataModel.getRowCount() + " photos added to album successfully.");
+        return;
     }
 
     public String addToAlbum() {
@@ -417,7 +420,7 @@ public class CollectionPhotosBean implements Serializable {
 
         Album album = albumDatabaseService.findAlbumById(selectedAlbumId); // Retrieve album by selected ID
         if (album == null) {
-            System.err.println("Album with the given id was not found.");
+            log.log(Level.SEVERE, "Album with the given id was not found.");
             return null;
         }
 
@@ -426,7 +429,8 @@ public class CollectionPhotosBean implements Serializable {
         }
 
         albumDatabaseService.update(album);
-        System.out.println("photos added to album successfully");
+        tableAlbumsBean.refreshAlbums();
+        log.log(Level.INFO, photosDataModel.getRowCount() + " photos added to album successfully.");
         return null;
     }
 

@@ -4,6 +4,7 @@ import cz.cvut.fel.photomanagement.entities.Album;
 import cz.cvut.fel.photomanagement.exception.PersistenceException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.util.Collections;
@@ -28,10 +29,14 @@ public class AlbumDatabaseService implements Serializable {
     }
 
     public Album findByName(String name) {
-        return entityManager
-                .createNamedQuery(Album.QUERY_BY_ALBUM_NAME, Album.class)
-                .setParameter("givenName", name)
-                .getSingleResult();
+        try {
+            return entityManager
+                    .createNamedQuery(Album.QUERY_BY_ALBUM_NAME, Album.class)
+                    .setParameter("givenName", name)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public Album findAlbumById(Long id) {

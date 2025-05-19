@@ -2,6 +2,7 @@ package cz.cvut.fel.photomanagement.entities;
 
 import cz.cvut.fel.photomanagement.comparator.AlbumPhotoByDate;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Album.QUERY_ALL, query = "SELECT album FROM Album"),
+    @NamedQuery(name = Album.QUERY_ALL, query = "SELECT album FROM Album album"),
     @NamedQuery(name = Album.QUERY_BY_ALBUM_NAME, query = "SELECT album FROM Album album WHERE album.name = :givenName")
 })
 public class Album implements Serializable {
@@ -38,9 +39,12 @@ public class Album implements Serializable {
     private Long id;
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<AlbumPhoto> albumPhotos;
+    @Column(nullable = false, length = 20)
     private String name;
     private String description;
+//    @Column()
     private LocalDate created;
+//    @Column()
     private LocalDate lastEdited;
 
     public Album() {

@@ -98,37 +98,6 @@ public class CollectionPhotosBeanTest {
     }
 
     @Test
-    void loadFilesTest() {
-        // requires access to local file system
-        // could be done via redefining the variable that sets the path in the local system
-    }
-
-    @Test
-    void extractTime() {
-//        // needs an existing test file and an id
-//        // requires a different way to get access to the taken time to verify the read data
-//        String fileName = "trees.jpg";
-//        Path testPath = Paths.get("src", "test", "resources", "images", fileName);
-//        File testFile = testPath.toFile();
-//        if (testFile.exists()) {
-//            System.out.println(collectionPhotosBean.extractDate(testFile));
-//        }
-    }
-
-    @Test
-    void generateThumbnailTest() {
-        // sort of tested in the selenium upload photos test
-        // needs an existing test file and an id
-        // could try to fake with a redefined system path variable
-    }
-
-    @Test
-    void rotateAndResize() {
-        // dont know how to assert rotation
-        // could assert scaling down
-    }
-
-    @Test
     void testAddToNewAlbum() {
         this.collectionPhotosBean.setSelectedAlbumId(0L);
         String result = collectionPhotosBean.addToAlbum();

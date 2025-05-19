@@ -10,6 +10,8 @@ import jakarta.inject.Named;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A bean that feeds data regarding creation of new Album instances to Faces, handles user input from albums-new.xhtml.
@@ -36,6 +38,7 @@ public class CreateAlbumBean implements Serializable {
     private LocalDate lastEdited;
     private boolean displayAlert = false;
     private String alertMessage = "";
+    private static final Logger log = Logger.getLogger(CreateAlbumBean.class.getName());
 
     public CreateAlbumBean() {
     }
@@ -47,7 +50,7 @@ public class CreateAlbumBean implements Serializable {
         newAlbum.setDescription(this.description);
 
         albumDatabaseService.saveAlbum(newAlbum);
-        System.out.println("CREATED ALBUM: " + newAlbum);
+        log.log(Level.INFO, "CREATED ALBUM: " + newAlbum);
 
         // mozny problem s tim ze clovek utece, nenastavi se ze handling false a pak se pridavaj fotky i kdyz nechceme
         // potreba pridat ze handling false, kdykoliv kdyz odklikneme z toho okna
@@ -62,7 +65,7 @@ public class CreateAlbumBean implements Serializable {
 
         // check for duplicate name
         if (albumDatabaseService.findByName(this.name) != null) {
-            System.out.println("DUPLICATE NAME PROVIDED");
+            log.log(Level.WARNING, "DUPLICATE NAME PROVIDED");
             this.displayAlert = true;
             return null;
         }

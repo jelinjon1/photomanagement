@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -51,8 +53,7 @@ public final class TestConstants {
                     .collect(Collectors.toList());
             return filesList;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("DIRECTORIES: error pri nacitani");
+            Logger.getLogger(TestConstants.class.getName()).log(Level.SEVERE, "Exception during loadFiles", e);
             return new ArrayList<>();
         }
     }

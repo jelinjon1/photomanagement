@@ -12,6 +12,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.apache.commons.imaging.Imaging;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -29,6 +31,8 @@ public class FileManager {
     @ConfigProperty(name = "photos.directory.path")
     private String photosDirectoryPath;
 
+    private static final Logger log = Logger.getLogger(FileManager.class.getName());
+
     public void saveUploadedFile(UploadedFile file, String filesPath) {
         byte[] fileBytes = file.getContent();
 
@@ -38,12 +42,11 @@ public class FileManager {
         try {
             bufferedImage = Imaging.getBufferedImage(inputStream);
         } catch (IOException e) {
-            System.err.println("Exceptionn during reading of file: " + file.getFileName());
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Exceptionn during reading of file: " + file.getFileName(), e);
         }
 
         if (bufferedImage == null) {
-            System.out.println("Failed to decode image with Apache Imaging.");
+            log.log(Level.SEVERE, "Failed to decode image with Apache Imaging.");
             return;
         }
 
@@ -59,12 +62,12 @@ public class FileManager {
             boolean success = javax.imageio.ImageIO.write(bufferedImage, "png", outputFile);
 
             if (success) {
-                System.out.println("Image saved successfully: " + outputFile.getAbsolutePath());
+                log.log(Level.INFO, "Image saved successfully: {0}", outputFile.getAbsolutePath());
             } else {
-                System.out.println("Image writing failed.");
+                log.log(Level.SEVERE, "Image writing failed for {0}", file.toString());
             }
         } catch (IOException e) {
-            System.err.println("Exceptionn during writing of file: " + file.getFileName());
+            log.log(Level.SEVERE, "Exception during writing of file: " + file.getFileName(), e);
         }
     }
 
@@ -76,7 +79,7 @@ public class FileManager {
 
     public void cleanUpEmptyFile(File file) {
         if (file.listFiles().length == 0) {
-            System.out.println("FILE " + file.getName() + " IS EMPTY, MARKED FOR DELETION");
+            log.log(Level.INFO, "FILE {0} IS EMPTY, MARKED FOR DELETION", file.getName());
             file.delete();
         }
     }
@@ -126,21 +129,19 @@ public class FileManager {
 
         boolean success = sourceFile.renameTo(targetFile);
         if (!success) {
-            System.err.println("Failed to move file from " + sourceFile + " to " + targetFile);
+            log.log(Level.SEVERE, "Failed to move file from " + sourceFile + " to " + targetFile);
         }
         return success;
     }
 
     public void deletePhoto(String fileName, String localPath) {
         if (moveToBin(fileName, localPath)) {
-            System.out.println("GOING TO MOVE THUMBNAIL");
             Path thumbnailPath = Paths.get(photosDirectoryPath, localPath, "thumbnails", fileName);
             File thumbnailImageFile = thumbnailPath.toFile();
             if (thumbnailImageFile.exists()) {
                 // move thumbnail thumbnail file within bin to parent of bin thumbnail file
                 // check local thumbnail for empty
                 // check bin for empty
-                System.out.println("THUMBNAIL FOUND");
 
                 Path targetThumbnailPath = Paths.get(photosDirectoryPath, localPath, "bin", "thumbnails", fileName);
                 File newThumbnailImageFile = targetThumbnailPath.toFile();
@@ -166,7 +167,7 @@ public class FileManager {
         boolean success = sourceFile.renameTo(new File(targetPath));
 
         if (!success) {
-            System.err.println("Failed to move file from " + sourceFile + " to " + targetPath);
+            log.log(Level.WARNING, "Failed to move file from " + sourceFile + " to " + targetPath);
         }
         return success;
     }
@@ -188,8 +189,7 @@ public class FileManager {
                     .collect(Collectors.toList());
             return filesList;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("DIRECTORIES: error pri nacitani");
+            log.log(Level.SEVERE, "loadFiles error pri nacitani", e);
             return new ArrayList<>();
         }
     }

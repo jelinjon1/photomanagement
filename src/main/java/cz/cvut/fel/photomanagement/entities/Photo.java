@@ -1,5 +1,6 @@
 package cz.cvut.fel.photomanagement.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +21,7 @@ import java.util.List;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Photo.QUERY_ALL, query = "SELECT photo FROM Photo"),
+    @NamedQuery(name = Photo.QUERY_ALL, query = "SELECT photo FROM Photo photo"),
     @NamedQuery(name = Photo.QUERY_BY_LOCAL_DIR, query = "SELECT photo FROM Photo photo WHERE photo.localPath = :localPath")
 })
 public class Photo implements Serializable {
@@ -32,11 +33,14 @@ public class Photo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, length = 100)
     private String fileName; //example.jpg
+    @Column(nullable = false)
     private String localPath; //dir/dir
     @ElementCollection
     private List<String> tags = new ArrayList<>();
     private String description = null;
+    @Column(updatable = false)
     private LocalDateTime taken = LocalDateTime.now();
     private boolean selected = true;
     private Integer rating = null;
