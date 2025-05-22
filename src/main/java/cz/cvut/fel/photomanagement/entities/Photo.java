@@ -136,6 +136,10 @@ public class Photo implements Serializable {
         this.rating = rating;
     }
 
+    public void setLocalPath(String localPath) {
+        this.localPath = localPath;
+    }
+
     @Override
     public String toString() {
         return "Photo{" + "id=" + id + ", fileName=" + fileName + ", localPath=" + localPath + ", tags=" + tags + ", description=" + description + ", taken=" + taken + ", selected=" + selected + ", rating=" + rating + '}';

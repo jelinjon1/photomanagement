@@ -268,17 +268,13 @@
         </div>
         
         <script>
-            // kvuli reverzni proxy muze bejt kdekoliv
-            // neskladat z location, jen odriznout konec z .href
-            
+            // dynamic link from window location
             let match = window.location.href.match(/^.*?(?=photos.xhtml)/);
             if (match) {
                 match += "thumbnailUpdates"
             } else {
                 console.log('could not parse link to websocket from window.location..href')
             }
-            // "ws://localhost:8080/photo-management-app/thumbnailUpdates"
-            // console.log(match);
             
             const socket = new WebSocket(match);
 

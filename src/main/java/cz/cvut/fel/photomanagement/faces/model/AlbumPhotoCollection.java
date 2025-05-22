@@ -15,7 +15,6 @@ public class AlbumPhotoCollection {
 
     private List<AlbumPhoto> photos;
     private final boolean lowImportance;
-    // todo rethink boolean/int/enum for levels of importance
 
     public AlbumPhotoCollection(boolean lowImportance, List<AlbumPhoto> photos) {
         this.lowImportance = lowImportance;

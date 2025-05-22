@@ -19,10 +19,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -35,22 +34,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PhotosPageTest {
 
-    private WebDriver driver;
+    private RemoteWebDriver driver;
 
     @BeforeAll
     void setUp() throws Exception {
-        boolean useRemoteWebDriver = false; // change to true if using container browser
-
-        if (useRemoteWebDriver) {
-            // connect to chrome container
-            ChromeOptions options = new ChromeOptions();
-            driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
-        } else {
-            // use local installed Chrome
-            System.setProperty("webdriver.chrome.driver",
-                    "C:\\Users\\START\\Documents\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
-            driver = new ChromeDriver();
-        }
+        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), new ChromeOptions());
+        driver.setFileDetector(new LocalFileDetector());
     }
 
     private void waitForPageToLoadCompletely() {
@@ -125,6 +114,7 @@ public class PhotosPageTest {
         }
 
         WebElement fileInput = driver.findElement(By.id("upload-form:choose-files-button_input"));
+
         fileInput.sendKeys(uploadFile.getAbsolutePath());
         driver.findElement(By.id("upload-form:upload-button")).click();
         waitForPageToLoadCompletely();

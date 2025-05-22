@@ -8,13 +8,14 @@ import cz.cvut.fel.photomanagement.config.TestConstants;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -31,18 +32,7 @@ public class CreateAlbumPageTest {
 
     @BeforeAll
     void setUp() throws Exception {
-        boolean useRemoteWebDriver = false; // change to true if using container browser
-
-        if (useRemoteWebDriver) {
-            // connect to chrome container
-            ChromeOptions options = new ChromeOptions();
-            driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
-        } else {
-            // use local installed Chrome
-            System.setProperty("webdriver.chrome.driver",
-                    "C:\\Users\\START\\Documents\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
-            driver = new ChromeDriver();
-        }
+        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), new ChromeOptions());
     }
 
     private void login() {
@@ -179,6 +169,11 @@ public class CreateAlbumPageTest {
                 webDriver -> ((JavascriptExecutor) webDriver)
                         .executeScript("return document.readyState")
                         .equals("complete"));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(CreateAlbumPageTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 

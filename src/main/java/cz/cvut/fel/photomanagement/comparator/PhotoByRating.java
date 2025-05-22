@@ -35,6 +35,5 @@ public class PhotoByRating implements Comparator<Photo> {
             return -1;
         }
         return o1.getRating() - o2.getRating();
-//        return o1.getRating().compareTo(o2.getRating());
     }
 }

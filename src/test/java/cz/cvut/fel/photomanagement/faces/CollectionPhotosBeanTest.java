@@ -50,6 +50,9 @@ public class CollectionPhotosBeanTest {
     private AlbumDatabaseService albumDatabaseService;
 
     @InjectMocks
+    private TableAlbumsBean tableAlbumsBean;
+
+    @InjectMocks
     private CollectionPhotosBean collectionPhotosBean;
 
     private EntityManager entityManager;
@@ -68,6 +71,8 @@ public class CollectionPhotosBeanTest {
 
         photoDatabaseService.setEntityManager(entityManager);
         albumDatabaseService.setEntityManager(entityManager);
+        tableAlbumsBean.setAlbumDatabaseService(albumDatabaseService);
+        collectionPhotosBean.setTableAlbumsBean(tableAlbumsBean);
         collectionPhotosBean.setPhotoDatabaseService(photoDatabaseService);
         collectionPhotosBean.setAlbumDatabaseService(albumDatabaseService);
     }
@@ -122,6 +127,7 @@ public class CollectionPhotosBeanTest {
         for (int i = 0; i < 5; i++) {
             Photo temp = new Photo();
             temp.setFileName("photo-" + i);
+            temp.setLocalPath(Path.of("testpath", "photos").toString());
             photoDatabaseService.savePhoto(temp);
             expectedPhotos.add(temp);
         }

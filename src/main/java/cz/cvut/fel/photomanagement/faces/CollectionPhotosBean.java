@@ -418,7 +418,7 @@ public class CollectionPhotosBean implements Serializable {
             return "albums-new.xhtml?faces-redirect=true";
         }
 
-        Album album = albumDatabaseService.findAlbumById(selectedAlbumId); // Retrieve album by selected ID
+        Album album = albumDatabaseService.findAlbumById(selectedAlbumId);
         if (album == null) {
             log.log(Level.SEVERE, "Album with the given id was not found.");
             return null;
@@ -598,6 +598,10 @@ public class CollectionPhotosBean implements Serializable {
 
     public void setDialogError(String dialogError) {
         this.dialogError = dialogError;
+    }
+
+    public void setTableAlbumsBean(TableAlbumsBean tableAlbumsBean) {
+        this.tableAlbumsBean = tableAlbumsBean;
     }
 
 }

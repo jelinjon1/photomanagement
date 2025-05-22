@@ -42,9 +42,7 @@ public class Album implements Serializable {
     @Column(nullable = false, length = 20)
     private String name;
     private String description;
-//    @Column()
     private LocalDate created;
-//    @Column()
     private LocalDate lastEdited;
 
     public Album() {
@@ -52,7 +50,6 @@ public class Album implements Serializable {
         this.lastEdited = this.created;
     }
 
-    //todo maybe delete
     public Album(String name) {
         this.name = name;
     }

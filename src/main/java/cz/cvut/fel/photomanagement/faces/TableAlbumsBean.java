@@ -293,4 +293,8 @@ public class TableAlbumsBean implements Serializable {
         this.deletingPhotoId = deletingPhotoId;
     }
 
+    public void setAlbumDatabaseService(AlbumDatabaseService albumDatabaseService) {
+        this.albumDatabaseService = albumDatabaseService;
+    }
+
 }
