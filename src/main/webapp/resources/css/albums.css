@@ -1,7 +1,3 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
-*/
 /* 
     Created on : 8. 11. 2024, 19:27:31
     Author     : jelinjon
@@ -143,7 +139,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 
 
 .importance-gallery {
-    /*border: solid 2px red;*/
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
