@@ -82,7 +82,6 @@ public class TableAlbumsBean implements Serializable {
             ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
 
             for (AlbumPhoto photo : photos) {
-//                String filePath = this.fileLoader.getPhotosDirectoryPath() + photo.getPhoto().getRelativePathFromRoot();
                 String filePath = photosDirectoryPath + photo.getPhoto().getRelativePathFromRoot();
                 File file = new File(filePath);
                 if (file.exists()) {

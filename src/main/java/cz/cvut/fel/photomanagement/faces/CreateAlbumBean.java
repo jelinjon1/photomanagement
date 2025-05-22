@@ -52,8 +52,6 @@ public class CreateAlbumBean implements Serializable {
         albumDatabaseService.saveAlbum(newAlbum);
         log.log(Level.INFO, "CREATED ALBUM: " + newAlbum);
 
-        // mozny problem s tim ze clovek utece, nenastavi se ze handling false a pak se pridavaj fotky i kdyz nechceme
-        // potreba pridat ze handling false, kdykoliv kdyz odklikneme z toho okna
         //only add when coming from a redirect to create a new album
         if (collectionPhotosBean.isHandlingredirectToNewAlbum()) {
             collectionPhotosBean.addToAlbum(newAlbum);

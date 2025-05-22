@@ -68,41 +68,7 @@
         </h:form>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const startPresentationButton = document.getElementById("start-presentation");
-
-            let presentationIntervalId = null;
-
-            startPresentationButton.addEventListener("click", () => {
-                console.log("Button clicked");
-
-                if (presentationIntervalId) {
-                    console.log("Stopping the presentation");
-                    clearInterval(presentationIntervalId);
-                    presentationIntervalId = null;
-                } else {
-                    console.log("Starting the presentation");
-                    presentationIntervalId = setInterval(() => {
-                        document.getElementById("tab-views:carousel-form:next-photo-btn").click();
-                    }, 5000);
-                }
-            });
-}       );
-        
-        function startPresentation() {
-            presentationIntervalId = setInterval(clickNextButton, 5000);
-        }
-        
-        function stopPresentation() {
-            clearInterval(startPresentationButton);
-            presentationIntervalId = null;
-        }
-        
-        function clickNextButton() {
-            document.getElementById("tab-views:carousel-form:next-photo-btn").click();
-        }
-        
+    <script>        
         document.addEventListener("keydown", function(event) {
             console.log(event);
             if (event.key === "ArrowLeft") {

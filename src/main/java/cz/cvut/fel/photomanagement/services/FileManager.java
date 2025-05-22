@@ -71,7 +71,6 @@ public class FileManager {
         }
     }
 
-    // slo by otestovat pairwise
     public boolean createDirectory(String localPath, String name) {
         File directory = Paths.get(photosDirectoryPath, localPath, name).toFile();
         return directory.mkdirs();
