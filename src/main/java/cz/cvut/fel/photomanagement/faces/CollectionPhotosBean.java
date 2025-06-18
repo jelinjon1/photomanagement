@@ -181,9 +181,15 @@ public class CollectionPhotosBean implements Serializable {
                 .stream()
                 .collect(Collectors.toMap(p -> p.getFileName(), p -> p));
 
+        // for all loaded files
         for (File file : allFiles) {
+            // verify a file is a photo before proceeding
             if (file.isFile() && isPhoto(file)) {
+                // attemt to load photo data from the database
                 Photo existingPhoto = fileNameMap.get(file.getName());
+
+                // if current location is not inside the thumbnails direcotry, attempt to generate a thumbnail for
+                // the image (returns if thumbnails exists)
                 if (!locationIsThumbnailsDirectory) {
                     managedExecutor.submit(() -> generateThumbnail(file, existingPhoto.getId()));
                 }

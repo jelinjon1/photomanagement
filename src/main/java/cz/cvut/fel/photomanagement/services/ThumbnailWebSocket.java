@@ -28,8 +28,8 @@ public class ThumbnailWebSocket {
     public static void sendThumbnailUpdate(Long photoId, String thumbnailUrl) {
         for (Session session : sessions) {
             try {
-                String message = photoId + "|" + thumbnailUrl; // message format: photoId|thumbnailUrl
-                session.getBasicRemote().sendText(message);
+//                String message = photoId + "|" + thumbnailUrl; // message format: photoId|thumbnailUrl
+                session.getBasicRemote().sendText(String.valueOf(photoId));
             } catch (IOException e) {
                 e.printStackTrace();
             }

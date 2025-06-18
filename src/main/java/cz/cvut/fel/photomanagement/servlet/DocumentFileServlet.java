@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.primefaces.shaded.commons.io.FilenameUtils;
 
@@ -54,6 +55,12 @@ public class DocumentFileServlet extends HttpServlet {
             // file was not modified, just return 304
             response.sendError(304);
         } else {
+            // set client caching, valid for a year, Expires for backwards comp. with HTTP 1.0
+            // immutable because app should not modify files
+            response.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+            long expires = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365);
+            response.setDateHeader("Expires", expires);
+
             response.setContentType("image/" + extension);
             response.setContentLength(bytes.length);
             response.setDateHeader(HTTP_HEADER_LAST_MODIFIED_RESPONSE, new Date().getTime());

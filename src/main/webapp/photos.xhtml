@@ -280,14 +280,18 @@
 
             let lastUpdate = 0;
             const THROTTLE_INTERVAL = 500; //in milliseconds
+//            const THROTTLE_INTERVAL = 1; //in milliseconds
 
             socket.onmessage = function(event) {
                 const now = Date.now();
                 if (now - lastUpdate > THROTTLE_INTERVAL) {
-                    const data = event.data.split("|");
-                    const photoId = data[0];
-
+//                    const data = event.data.split("|");
+//                    const photoId = data[0];
+                    
+                    const photoId = event.data;
                     console.log('throttled update for ' + photoId);
+//                    const img = document.getElementById(`photo_${photoId}`);
+//                    console.log(img);
                     updateThumbnail();
                     lastUpdate = now;
                 }
